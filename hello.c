@@ -8,7 +8,6 @@ int main() {
     printf("hello");
     printf("number1 + number2 = %d", sumNumber(num1, num2));
     printf("number1 * number2 = %d", multiplyTwoIntegers(num1, num2));
-    reheasal;
     return 0;
 }
 int multiplyTwoIntegers(int number1, int number2){

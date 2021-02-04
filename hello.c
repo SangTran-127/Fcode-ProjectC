@@ -7,3 +7,6 @@ int main() {
     printf("number1 + number2 = %d", sumNumber(num1, num2));
     return 0;
 }
+int multiplyTwoIntegers(int number1, int number2){
+    return number1 * number2;
+}

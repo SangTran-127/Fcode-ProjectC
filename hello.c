@@ -1,13 +1,14 @@
 #include <stdio.h>
 
 int multiplyTwoIntegers(int number1, int number2);
-
 int sumNumber(int num1, int num2);
+void reheasal(void);
 
 int main() {
     printf("hello");
     printf("number1 + number2 = %d", sumNumber(num1, num2));
     printf("number1 * number2 = %d", multiplyTwoIntegers(num1, num2));
+    reheasal;
     return 0;
 }
 int multiplyTwoIntegers(int number1, int number2){
@@ -15,4 +16,8 @@ int multiplyTwoIntegers(int number1, int number2){
 }
 int sumNumber(int num1, int num2) {
     return num1 + num2;
+}
+
+void reheasal(void){
+    printf("\nHello World");
 }

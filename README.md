@@ -1,6 +1,5 @@
 # Fcode-ProjectC
-#include <stdio.h>
-main()
+int differenceTwoIntergers(int number1, int number2)
 {
-    printf("Hello ");
+return number1 - number2;
 }

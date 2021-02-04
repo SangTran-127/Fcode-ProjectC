@@ -2,7 +2,7 @@
 
 int multiplyTwoIntegers(int number1, int number2);
 int sumNumber(int num1, int num2);
-void reheasal(void);
+int differenceTwoIntergers(int number1, int number2);
 
 int main() {
     printf("hello");
@@ -20,6 +20,3 @@ int sumNumber(int num1, int num2) {
 int differenceTwoIntergers(int number1, int number2)
     return number1 - number2;
 
-void reheasal(void){
-    printf("\nHello World");
-}

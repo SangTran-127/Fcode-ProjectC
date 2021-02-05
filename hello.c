@@ -6,6 +6,7 @@ int differenceTwoIntergers(int number1, int number2);
 
 int main() {
     printf("hello");
+    int num1 = 10, num2 = 5;
     printf("number1 + number2 = %d", sumNumber(num1, num2));
     printf("number1 * number2 = %d", multiplyTwoIntegers(num1, num2));
     printf("number1 * number2 = %d", differenceTwoIntergers(num1, num2));

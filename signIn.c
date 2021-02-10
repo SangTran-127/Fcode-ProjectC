@@ -38,6 +38,7 @@ void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 
     name = NULL;
     wid = NULL;
+
 }
 
 void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
@@ -46,6 +47,7 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 
     gtk_label_set_text(GTK_LABEL(wid->greeterlabel), "Let's enjoy the shopping");
     gtk_entry_set_text(GTK_ENTRY(wid->nameentry), "");
+    gtk_entry_set_text(GTK_ENTRY(wid->nameentry1), "");
 
     wid = NULL;
 }
@@ -54,6 +56,7 @@ void entry_callback(GtkWidget *widget, gpointer data)
 {
     enter_callback(NULL, NULL, data);
 }
+
 
 /***************************************************************** GUI THREAD */
 static void
@@ -111,7 +114,6 @@ activate(GtkApplication *app, gpointer data)
     gtk_box_pack_start(GTK_BOX(hbox), wid->nameentry1, TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(wid->nameentry1), "activate",
                      G_CALLBACK(entry_callback), (gpointer)wid);
-
     // create a headerbar
     headerbar = gtk_header_bar_new();
     gtk_widget_show(headerbar);
@@ -137,7 +139,6 @@ activate(GtkApplication *app, gpointer data)
     gtk_style_context_add_class(context, "suggested-action");
     gtk_header_bar_pack_end(GTK_HEADER_BAR(headerbar), wid->enterbutton);
 
-    // connect actions with callbacks
     g_action_map_add_action_entries(G_ACTION_MAP(app), app_actions,
                                     G_N_ELEMENTS(app_actions), wid);
 

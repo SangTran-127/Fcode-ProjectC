@@ -6,6 +6,12 @@
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <string.h>
+
+static gchar *name;
+static gchar *password;
+const char* USERNAME = "user";
+const char* PASSWORD = "12345";
 
 typedef struct
 {
@@ -26,16 +32,22 @@ void entry_callback(GtkWidget *widget, gpointer data);
 /****************************************************************** CALLBACKS */
 void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    const gchar *name;
     gchar str[50];
     appWidgets *wid = (appWidgets *)data;
 
     name = gtk_entry_get_text(GTK_ENTRY(wid->nameentry));
-    g_sprintf(str, "Hello %s!", name);
-    gtk_widget_override_font(wid->greeterlabel,
-                             pango_font_description_from_string("Tahoma 20"));
-    gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
-
+    password = gtk_entry_get_text(GTK_ENTRY(wid->nameentry1));
+    if(strcmp(name, USERNAME) == 0 && strcmp(password, PASSWORD) == 0){
+        g_sprintf(str, "Hello %s!", name);
+        gtk_widget_override_font(wid->greeterlabel,
+                                 pango_font_description_from_string("Tahoma 20"));
+        gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
+    }else{
+        g_sprintf(str, "Hey %s! Invalid handle/email or password", name);
+        gtk_widget_override_font(wid->greeterlabel,
+                                 pango_font_description_from_string("Tahoma 20"));
+        gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
+    }
     name = NULL;
     wid = NULL;
 
@@ -45,7 +57,7 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     appWidgets *wid = (appWidgets *)data;
 
-    gtk_label_set_text(GTK_LABEL(wid->greeterlabel), "Let's enjoy the shopping");
+    gtk_label_set_text(GTK_LABEL(wid->greeterlabel), "Let's sign in again");
     gtk_entry_set_text(GTK_ENTRY(wid->nameentry), "");
     gtk_entry_set_text(GTK_ENTRY(wid->nameentry1), "");
 
@@ -57,10 +69,37 @@ void entry_callback(GtkWidget *widget, gpointer data)
     enter_callback(NULL, NULL, data);
 }
 
+void create_window(GtkWidget *button, gpointer window)
+{
+
+    GtkWidget *win, *label;
+
+    //Username and Password to validate credentials
+    const char* USERNAME = "u";
+    const char* PASSWORD = "1";
+    char* username = "user", password = "12345";
+
+    //Checking if user's entered credentials are equal to actual USERNAME and PASSWORD
+    if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
+    {
+        label = gtk_label_new("Username and Password is correct.");
+        win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(win), label);
+        gtk_widget_show_all(win);
+    }
+
+    else if (strcmp(username, USERNAME) != 0 || strcmp(password, PASSWORD) != 0)
+
+    {
+        label = gtk_label_new("Username and Password is incorrect.");
+        win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+        gtk_container_add(GTK_CONTAINER(win), label);
+        gtk_widget_show_all(win);
+    }
+}
 
 /***************************************************************** GUI THREAD */
-static void
-activate(GtkApplication *app, gpointer data)
+static void activate(GtkApplication *app, gpointer data)
 {
     GtkWidget *window;
     GtkWidget *vbox, *hbox;
@@ -76,7 +115,7 @@ activate(GtkApplication *app, gpointer data)
     // create a window with title, default size and icons
     window = gtk_application_window_new(app);
     gtk_window_set_application(GTK_WINDOW(window), GTK_APPLICATION(app));
-    gtk_window_set_title(GTK_WINDOW(window), "GNOME Greeter Demo");
+    gtk_window_set_title(GTK_WINDOW(window), "Sign in");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
     gtk_window_set_default_icon_from_file("icon.png", NULL);
@@ -160,4 +199,4 @@ int main(int argc, char **argv)
     wid = NULL;
     return status;
 }
-/** EOF */
+

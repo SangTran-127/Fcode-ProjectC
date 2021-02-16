@@ -1,25 +1,24 @@
-/**
- * GNOME/GTK+ Menu Demo Application using a GtkApplication class
- *
- * M. Horauer
- */
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <string.h>
 
-static gchar *name;
+static gchar *email;
 static gchar *password;
-const char* USERNAME = "user";
-const char* PASSWORD = "12345";
+static char *id;
+static char *firstName;
+static char *lastName;
+static int numberOfCustomers;
+char* USERNAME = "user";
+char* PASSWORD = "12345";
 
 typedef struct
 {
     GtkWidget *greeterlabel;
-    GtkWidget *namelabel;
-    GtkWidget *nameentry;
-    GtkWidget *namelabel1;
-    GtkWidget *nameentry1;
+    GtkWidget *maillabel;
+    GtkWidget *mailentry;
+    GtkWidget *pwdlabel;
+    GtkWidget *pwdentry;
     GtkWidget *enterbutton;
     GtkWidget *clearbutton;
 } appWidgets;
@@ -30,25 +29,41 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
 void entry_callback(GtkWidget *widget, gpointer data);
 
 /****************************************************************** CALLBACKS */
+int findCustomer(){
+    char* fileEmail = malloc(sizeof(email));
+    FILE *fptr = fopen("customers.txt","r");
+    fscanf("%d", &numberOfCustomers);
+    for(int i = 1; i <= numberOfCustomers; i++){
+        fgets(fileEmail);
+        if(strcmp(fileEmail, email) == 0){
+            strcpy(PASSWORD, fileEmail);
+            fclose(fptr);
+            return 1;
+        }
+    }
+    fclose(fptr);
+    return 0;
+}
+
 void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     gchar str[50];
     appWidgets *wid = (appWidgets *)data;
 
-    name = gtk_entry_get_text(GTK_ENTRY(wid->nameentry));
-    password = gtk_entry_get_text(GTK_ENTRY(wid->nameentry1));
-    if(strcmp(name, USERNAME) == 0 && strcmp(password, PASSWORD) == 0){
-        g_sprintf(str, "Hello %s!", name);
+    email = gtk_entry_get_text(GTK_ENTRY(wid->mailentry));
+    password = gtk_entry_get_text(GTK_ENTRY(wid->pwdentry));
+    if(strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0){
+        g_sprintf(str, "Hello %s!", email);
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
     }else{
-        g_sprintf(str, "Hey %s! Invalid handle/email or password", name);
+        g_sprintf(str, "Hey %s! Invalid email or password", email);
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
     }
-    name = NULL;
+    email = NULL;
     wid = NULL;
 
 }
@@ -58,8 +73,8 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
     appWidgets *wid = (appWidgets *)data;
 
     gtk_label_set_text(GTK_LABEL(wid->greeterlabel), "Let's sign in again");
-    gtk_entry_set_text(GTK_ENTRY(wid->nameentry), "");
-    gtk_entry_set_text(GTK_ENTRY(wid->nameentry1), "");
+    gtk_entry_set_text(GTK_ENTRY(wid->mailentry), "");
+    gtk_entry_set_text(GTK_ENTRY(wid->pwdentry), "");
 
     wid = NULL;
 }
@@ -133,30 +148,31 @@ static void activate(GtkApplication *app, gpointer data)
 
     hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
-    wid->namelabel = gtk_label_new_with_mnemonic("Username:");
-    gtk_widget_set_size_request(wid->namelabel, 60, 40);
-    gtk_box_pack_start(GTK_BOX(hbox), wid->namelabel, FALSE, FALSE, 0);
+    wid->maillabel = gtk_label_new_with_mnemonic("Email:");
+    gtk_widget_set_size_request(wid->maillabel, 60, 40);
+    gtk_box_pack_start(GTK_BOX(hbox), wid->maillabel, FALSE, FALSE, 0);
 
-    wid->nameentry = gtk_entry_new();
+    wid->mailentry = gtk_entry_new();
 
-    gtk_entry_set_placeholder_text(GTK_ENTRY(wid->nameentry), "tuankietbdsm21");
-    gtk_box_pack_start(GTK_BOX(hbox), wid->nameentry, TRUE, TRUE, 0);
-    g_signal_connect(G_OBJECT(wid->nameentry), "activate",
+    gtk_entry_set_placeholder_text(GTK_ENTRY(wid->mailentry), "tuankietbdsm21");
+    gtk_box_pack_start(GTK_BOX(hbox), wid->mailentry, TRUE, TRUE, 0);
+    g_signal_connect(G_OBJECT(wid->mailentry), "activate",
                      G_CALLBACK(entry_callback), (gpointer)wid);
 
-    wid->namelabel1 = gtk_label_new_with_mnemonic("Password:");
-    gtk_widget_set_size_request(wid->namelabel1, 60, 40);
-    gtk_box_pack_start(GTK_BOX(hbox), wid->namelabel1, FALSE, FALSE, 0);
-    wid->nameentry1 = gtk_entry_new();
-    gtk_entry_set_visibility(GTK_ENTRY(wid->nameentry1), FALSE);
-    gtk_entry_set_placeholder_text(GTK_ENTRY(wid->nameentry1), "");
-    gtk_box_pack_start(GTK_BOX(hbox), wid->nameentry1, TRUE, TRUE, 0);
-    g_signal_connect(G_OBJECT(wid->nameentry1), "activate",
+    wid->pwdlabel = gtk_label_new_with_mnemonic("Password:");
+    gtk_widget_set_size_request(wid->pwdlabel, 60, 40);
+    gtk_box_pack_start(GTK_BOX(hbox), wid->pwdlabel, FALSE, FALSE, 0);
+    wid->pwdentry = gtk_entry_new();
+
+    gtk_entry_set_visibility(GTK_ENTRY(wid->pwdentry), FALSE);
+    gtk_entry_set_placeholder_text(GTK_ENTRY(wid->pwdentry), "");
+    gtk_box_pack_start(GTK_BOX(hbox), wid->pwdentry, TRUE, TRUE, 0);
+    g_signal_connect(G_OBJECT(wid->pwdentry), "activate",
                      G_CALLBACK(entry_callback), (gpointer)wid);
     // create a headerbar
     headerbar = gtk_header_bar_new();
     gtk_widget_show(headerbar);
-    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "F CODE");
+    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "F CODE SHOPPING");
     gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar),
                                 "Code the Circus");
     gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(headerbar), TRUE);

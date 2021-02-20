@@ -27,7 +27,7 @@ typedef struct
 } appWidgets;
 
 /***************************************************************** PROTOTYPES */
-static void activate(GtkApplication *app, gpointer user_data);
+static void activate_signUp(GtkApplication *app, gpointer user_data);
 static void img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data);
 static void cancel_callback(GtkWidget *widget, gpointer user_data);
 static void clear_callback(GtkWidget *widget, gpointer user_data);
@@ -187,7 +187,7 @@ nameentry_callback(GtkWidget *widget, gpointer user_data)
 
 /***************************************************************** ADD WINDOW */
 static void
-activate(GtkApplication *app, gpointer user_data)
+activate_signUp(GtkApplication *app, gpointer user_data)
 {
     GtkWidget *box;
     GtkWidget *ebox;
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
     a->d = g_malloc(sizeof(diaWidgets));
 
     a->app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-    g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(activate),
+    g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(activate_signUp),
                      (gpointer)a);
     status = g_application_run(G_APPLICATION(a->app), argc, argv);
     g_object_unref(a->app);

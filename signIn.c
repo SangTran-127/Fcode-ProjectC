@@ -29,21 +29,6 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
 void entry_callback(GtkWidget *widget, gpointer data);
 
 /****************************************************************** CALLBACKS */
-int findCustomer(){
-    char* fileEmail = malloc(sizeof(email));
-    FILE *fptr = fopen("customers.txt","r");
-    fscanf("%d", &numberOfCustomers);
-    for(int i = 1; i <= numberOfCustomers; i++){
-        fgets(fileEmail);
-        if(strcmp(fileEmail, email) == 0){
-            strcpy(PASSWORD, fileEmail);
-            fclose(fptr);
-            return 1;
-        }
-    }
-    fclose(fptr);
-    return 0;
-}
 
 void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
@@ -114,7 +99,7 @@ void create_window(GtkWidget *button, gpointer window)
 }
 
 /***************************************************************** GUI THREAD */
-static void activate(GtkApplication *app, gpointer data)
+static void activate_signIn(GtkApplication *app, gpointer data)
 {
     GtkWidget *window;
     GtkWidget *vbox, *hbox;
@@ -203,12 +188,12 @@ static void activate(GtkApplication *app, gpointer data)
 /**************************************************************** MAIN THREAD */
 int main(int argc, char **argv)
 {
-    GtkApplication *app;
+    GtkAllocation *app;
     int status;
     appWidgets *wid = g_malloc(sizeof(appWidgets));
 
     app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-    g_signal_connect(app, "activate", G_CALLBACK(activate), (gpointer)wid);
+    g_signal_connect(app, "activate", G_CALLBACK(activate_signIn), (gpointer)wid);
     status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
     g_free(wid);

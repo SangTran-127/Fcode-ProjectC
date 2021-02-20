@@ -24,7 +24,7 @@ typedef struct
     GtkWidget *window;
     GtkWidget *img;
     diaWidgets *d;
-} appWidgets;
+} signUpAppWidgets;
 
 /***************************************************************** PROTOTYPES */
 static void activate_signUp(GtkApplication *app, gpointer user_data);
@@ -61,7 +61,7 @@ img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
     GtkWidget *imgDialog;
     GtkFileFilter *filter;
     gint res;
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     filter = gtk_file_filter_new();
     imgDialog = gtk_file_chooser_dialog_new("Open File", GTK_WINDOW(a->window),
@@ -114,7 +114,7 @@ img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 static void
 cancel_callback(GtkWidget *widget, gpointer user_data)
 {
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     g_print("Cancel pressed!\n");
     g_application_quit(G_APPLICATION(a->app));
@@ -124,7 +124,7 @@ cancel_callback(GtkWidget *widget, gpointer user_data)
 static void
 clear_callback(GtkWidget *widget, gpointer user_data)
 {
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     g_print("Clear pressed!\n");
     gtk_entry_set_text(GTK_ENTRY(a->d->tmpEntry), "");
@@ -141,7 +141,7 @@ clear_callback(GtkWidget *widget, gpointer user_data)
 static void
 add_callback(GtkWidget *widget, gpointer user_data)
 {
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     g_print("Add pressed!\n");
     g_print("-------------------------------\n");
@@ -168,7 +168,7 @@ nameentry_callback(GtkWidget *widget, gpointer user_data)
     gchar dateStamp[256];
     gchar *year;
     gchar id[256] = "";
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     /* construct the eMail address */
     gname = (gchar *)gtk_entry_get_text(GTK_ENTRY(a->d->tmpEntry));
@@ -200,7 +200,7 @@ activate_signUp(GtkApplication *app, gpointer user_data)
     GtkWidget *cButton;
     GtkWidget *lButton;
     GtkWidget *aButton;
-    appWidgets *a = (appWidgets *)user_data;
+    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
 
     /* create a window with title, default size,and icons */
     a->window = gtk_application_window_new(a->app);
@@ -293,7 +293,7 @@ activate_signUp(GtkApplication *app, gpointer user_data)
 int main(int argc, char **argv)
 {
     int status;
-    appWidgets *a = g_malloc(sizeof(appWidgets));
+    signUpAppWidgets *a = g_malloc(sizeof(signUpAppWidgets));
     a->d = g_malloc(sizeof(diaWidgets));
 
     a->app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);

@@ -56,10 +56,12 @@ typedef struct
 /****************************************************************** WINDOWS */
 /*1*/ static GtkWidget *openWindow;
 /*2*/ static GtkWidget *signInWindow;
+/*3*/ static GtkWidget *customerMapWindow;
+/*4*/ static GtkWidget *changePwdWindow;
 
 /****************************************************************** GLOBAL VARIABLES */
-int noCloseWindow = 1000;
-int noOpenWindow = 1000;
+static gint noCloseWindow = 1000;
+static gint noOpenWindow = 1000;
 
 /*Sign in*/
 static gchar *email;
@@ -86,8 +88,11 @@ static void signUp_add_callback(GtkWidget *widget, gpointer user_data);
 static void signUp_get_datestamp(gchar *ds);
 static gint signUp_get_next_id(void);
 /****************************************************************** CALLBACKS */
+
+
 static void switchWindow()
 {
+    g_printf("\n%d", noCloseWindow);
     switch (noCloseWindow)
     {
     case 1:
@@ -96,7 +101,14 @@ static void switchWindow()
     case 2:
         gtk_window_close(GTK_WIDGET(signInWindow));
         break;
+    case 3:
+        gtk_window_close(GTK_WIDGET(customerMapWindow));
+        break;
+    case 4:
+        gtk_window_close(GTK_WIDGET(changePwdWindow));
+        break;
     }
+    g_printf("\n%d", noOpenWindow);
     switch (noOpenWindow)
     {
     case 1:
@@ -105,7 +117,19 @@ static void switchWindow()
     case 2:
         gtk_widget_show_all(GTK_WIDGET(signInWindow));
         break;
+    case 3:
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+        break;
+    case 4:
+        gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
+        break;
     }
+    noCloseWindow = noOpenWindow;
+}
+
+static void r_switchWindow(gint tmp){
+    noOpenWindow = tmp;
+    switchWindow();
 }
 /*Sign in*/
 void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
@@ -118,6 +142,9 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
     if (strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
     {
         g_sprintf(str, "Hello %s!", email);
+        noCloseWindow = 2;
+        noOpenWindow = 3;
+        switchWindow();
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
@@ -510,6 +537,99 @@ static void signUpActivate(GtkApplication *app, gpointer user_data)
     gtk_widget_show_all(GTK_WIDGET(a->window));
 }
 
+static void customerMapActivate(GtkApplication *app, gpointer user_data)
+{
+
+    GtkWidget *clientMenu; //grid
+    GtkWidget *helloLabel, *balanceLabel;
+    GtkWidget *buyHistoryButton, *changePassButton, *changeInforButton, *shoppingButton, *logoutButton, *showInforButton;
+    GtkWidget *headerClientBox, *topContainBox, *containerClient;
+    // khoi tao
+    clientMenu = gtk_grid_new();
+    gtk_widget_set_name(clientMenu, "clientMenu");
+    containerClient = gtk_vbox_new(0, 0);
+    helloLabel = gtk_label_new("Hello customer!");
+    balanceLabel = gtk_label_new("Balance: $0.00");
+    buyHistoryButton = gtk_button_new_with_label("Purchase history");
+    changePassButton = gtk_button_new_with_label("Change password");
+    g_signal_connect(G_OBJECT(changePassButton), "clicked", G_CALLBACK(r_switchWindow), 4);
+    changeInforButton = gtk_button_new_with_label("Change information");
+    shoppingButton = gtk_button_new_with_label("Go shopping");
+    showInforButton = gtk_button_new_with_label("Show informatiom");
+    logoutButton = gtk_button_new_with_label("Log out");
+
+
+    topContainBox = gtk_hbox_new(0, 20);
+    gtk_box_pack_start(topContainBox, helloLabel, 0, 0, 0);
+    gtk_box_pack_end(topContainBox, balanceLabel, 0, 0, 0);
+
+    headerClientBox = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(headerClientBox, topContainBox, 0, 0, 0);
+    gtk_widget_set_name(headerClientBox, "headerClientBox");
+
+    gtk_grid_attach(clientMenu, buyHistoryButton, 0, 0, 1, 1);
+    gtk_grid_attach(clientMenu, changePassButton, 1, 0, 1, 1);
+    gtk_grid_attach(clientMenu, changeInforButton, 2, 0, 1, 1);
+    gtk_grid_attach(clientMenu, shoppingButton, 0, 1, 1, 1);
+    gtk_grid_attach(clientMenu, showInforButton, 1, 1, 1, 1);
+    gtk_grid_attach(clientMenu, logoutButton, 2, 1, 1, 1);
+
+    gtk_box_pack_start(containerClient, headerClientBox, 0, 0, 20);
+    gtk_box_pack_end(containerClient, clientMenu, 0, 0, 0);
+
+    customerMapWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(customerMapWindow), "Client site");
+	gtk_window_set_default_size(GTK_WINDOW(customerMapWindow),400, 200);
+	gtk_window_set_resizable(GTK_WINDOW(customerMapWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(customerMapWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(customerMapWindow, containerClient);
+	//gtk_widget_show_all(customerMapWindow);
+}
+
+static void changePwdActivate(GtkApplication *app, gpointer user_data)
+{
+    GtkWidget *oldPasswordChangeLabel, *newPasswordChangeLabel, *confirmNewPasswordChangeLabel;
+
+    GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
+
+    GtkWidget *updateChangePasswordButton;
+    GtkWidget *gridChangePassword;
+    //set up
+    gridChangePassword = gtk_grid_new();
+    //
+    oldPasswordChangeEntry = gtk_entry_new();
+    newPasswordChangeEntry = gtk_entry_new();
+    confirmNewPasswordChangeEntry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(oldPasswordChangeEntry, "Enter your old password");
+    gtk_entry_set_placeholder_text(newPasswordChangeEntry, "Enter your new password");
+    gtk_entry_set_placeholder_text(confirmNewPasswordChangeEntry, "Enter your new password again");
+    //
+    oldPasswordChangeLabel = gtk_label_new("Last password: ");
+    newPasswordChangeLabel = gtk_label_new("New password: ");
+    confirmNewPasswordChangeLabel = gtk_label_new("Confirm new password: ");
+    updateChangePasswordButton = gtk_button_new_with_label("Update");
+    //
+    gtk_entry_set_visibility(oldPasswordChangeEntry, FALSE);
+    gtk_entry_set_visibility(newPasswordChangeEntry, FALSE);
+    gtk_entry_set_visibility(confirmNewPasswordChangeEntry, FALSE);
+    gtk_grid_attach(gridChangePassword, oldPasswordChangeLabel, 0, 0, 1, 1);
+    gtk_grid_attach(gridChangePassword, oldPasswordChangeEntry, 1, 0, 1, 1);
+    gtk_grid_attach(gridChangePassword, newPasswordChangeLabel, 0, 1, 1, 1);
+    gtk_grid_attach(gridChangePassword, newPasswordChangeEntry, 1, 1, 1, 1);
+    gtk_grid_attach(gridChangePassword, confirmNewPasswordChangeLabel, 0, 2, 1, 1);
+    gtk_grid_attach(gridChangePassword, confirmNewPasswordChangeEntry, 1, 2, 1, 1);
+    gtk_grid_attach(gridChangePassword, updateChangePasswordButton, 1, 3, 1, 1);
+    gtk_grid_set_column_spacing(gridChangePassword, 10);
+    gtk_grid_set_row_spacing(gridChangePassword, 10);
+    gtk_widget_set_name(gridChangePassword, "gridChangePassword");
+    changePwdWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(changePwdWindow), "Change Password");
+	gtk_window_set_default_size(GTK_WINDOW(changePwdWindow), 350, 200);
+	gtk_window_set_resizable(GTK_WINDOW(changePwdWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(changePwdWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(changePwdWindow, gridChangePassword);
+
+}
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
@@ -521,13 +641,17 @@ int main(int argc, char **argv)
 
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*Change pwd window*/
+    g_signal_connect(app, "activate", G_CALLBACK(changePwdActivate), NULL);
     /*Sign Up*/
     signUp_appWidgets *a = g_malloc(sizeof(signUp_appWidgets));
     a->d = g_malloc(sizeof(signUp_diaWidgets));
-    g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(signUpActivate), (gpointer)a);
+    //g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(signUpActivate), (gpointer)a);
     /*Sign in*/
     appWidgets *wid = g_malloc(sizeof(appWidgets));
     g_signal_connect(app, "activate", G_CALLBACK(signInActivate), (gpointer)wid);
+    /*Customer Map window*/
+    g_signal_connect(app, "activate", G_CALLBACK(customerMapActivate), NULL);
     /*Open window*/
     g_signal_connect(app, "activate", G_CALLBACK(activate), NULL);
 

@@ -3,3 +3,13 @@
     padding: 10px;
     border: 1px solid #585858;
 }
+#clientMenu {
+    margin: 10px;
+}
+#headerClientBox {
+    margin: 10px;
+}
+button:hover {
+    background: #295939;
+    color: white;
+}

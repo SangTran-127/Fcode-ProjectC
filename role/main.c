@@ -21,6 +21,16 @@ static void load_css(void)
 }
 
 /****************************************************************** TYPEDEF */
+/**/
+typedef struct
+{
+    gint id;
+    gchar *email;
+    gchar *pwd;
+    gchar *firstName;
+    gchar *lastName;
+    gint *type;
+} Customer;
 /*Sign in*/
 typedef struct
 {
@@ -58,10 +68,14 @@ typedef struct
 /*2*/ static GtkWidget *signInWindow;
 /*3*/ static GtkWidget *customerMapWindow;
 /*4*/ static GtkWidget *changePwdWindow;
+/*5*/ static GtkWidget *changeInformationWindow;
 
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
 static gint noOpenWindow = 1000;
+
+/*Customer*/
+Customer admin;
 
 /*Sign in*/
 static gchar *email;
@@ -96,16 +110,16 @@ static void switchWindow()
     switch (noCloseWindow)
     {
     case 1:
-        gtk_window_close(openWindow);
+        gtk_widget_hide(openWindow);
         break;
     case 2:
-        gtk_window_close(GTK_WIDGET(signInWindow));
+        gtk_widget_hide(GTK_WIDGET(signInWindow));
         break;
     case 3:
-        gtk_window_close(GTK_WIDGET(customerMapWindow));
+        gtk_widget_hide(GTK_WIDGET(customerMapWindow));
         break;
     case 4:
-        gtk_window_close(GTK_WIDGET(changePwdWindow));
+        gtk_widget_hide(GTK_WIDGET(changePwdWindow));
         break;
     }
     g_printf("\n%d", noOpenWindow);
@@ -124,13 +138,23 @@ static void switchWindow()
         gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
         break;
     }
-    noCloseWindow = noOpenWindow;
 }
 
-static void r_switchWindow(gint tmp){
-    noOpenWindow = tmp;
-    switchWindow();
+static void s34(){
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
 }
+
+static void s41(){
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(openWindow));
+}
+
+static void s35(){
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
+}
+
 /*Sign in*/
 void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
@@ -552,12 +576,13 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     balanceLabel = gtk_label_new("Balance: $0.00");
     buyHistoryButton = gtk_button_new_with_label("Purchase history");
     changePassButton = gtk_button_new_with_label("Change password");
-    g_signal_connect(G_OBJECT(changePassButton), "clicked", G_CALLBACK(r_switchWindow), 4);
+    g_signal_connect(G_OBJECT(changePassButton), "clicked", G_CALLBACK(s34), NULL);
     changeInforButton = gtk_button_new_with_label("Change information");
+    g_signal_connect(G_OBJECT(changeInforButton), "clicked", G_CALLBACK(s35), NULL);
     shoppingButton = gtk_button_new_with_label("Go shopping");
     showInforButton = gtk_button_new_with_label("Show informatiom");
     logoutButton = gtk_button_new_with_label("Log out");
-
+    g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s41), NULL);
 
     topContainBox = gtk_hbox_new(0, 20);
     gtk_box_pack_start(topContainBox, helloLabel, 0, 0, 0);
@@ -588,47 +613,95 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
 
 static void changePwdActivate(GtkApplication *app, gpointer user_data)
 {
-    GtkWidget *oldPasswordChangeLabel, *newPasswordChangeLabel, *confirmNewPasswordChangeLabel;
-
+    GtkWidget *containerLogin, *containerLeftSideLogin;
+    GtkWidget *changePassWordLabel;
     GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
-
     GtkWidget *updateChangePasswordButton;
-    GtkWidget *gridChangePassword;
-    //set up
-    gridChangePassword = gtk_grid_new();
-    //
+    GtkWidget *loginImg;
+
+    changePassWordLabel = gtk_label_new("Change your password");
+    gtk_widget_set_name(changePassWordLabel, "changePassLabel");
+    loginImg = gtk_image_new_from_file("login.png");
+
     oldPasswordChangeEntry = gtk_entry_new();
-    newPasswordChangeEntry = gtk_entry_new();
-    confirmNewPasswordChangeEntry = gtk_entry_new();
     gtk_entry_set_placeholder_text(oldPasswordChangeEntry, "Enter your old password");
-    gtk_entry_set_placeholder_text(newPasswordChangeEntry, "Enter your new password");
-    gtk_entry_set_placeholder_text(confirmNewPasswordChangeEntry, "Enter your new password again");
-    //
-    oldPasswordChangeLabel = gtk_label_new("Last password: ");
-    newPasswordChangeLabel = gtk_label_new("New password: ");
-    confirmNewPasswordChangeLabel = gtk_label_new("Confirm new password: ");
-    updateChangePasswordButton = gtk_button_new_with_label("Update");
-    //
     gtk_entry_set_visibility(oldPasswordChangeEntry, FALSE);
+    newPasswordChangeEntry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(newPasswordChangeEntry, "Enter your new password");
     gtk_entry_set_visibility(newPasswordChangeEntry, FALSE);
+    confirmNewPasswordChangeEntry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(confirmNewPasswordChangeEntry, "Confirm your new password");
     gtk_entry_set_visibility(confirmNewPasswordChangeEntry, FALSE);
-    gtk_grid_attach(gridChangePassword, oldPasswordChangeLabel, 0, 0, 1, 1);
-    gtk_grid_attach(gridChangePassword, oldPasswordChangeEntry, 1, 0, 1, 1);
-    gtk_grid_attach(gridChangePassword, newPasswordChangeLabel, 0, 1, 1, 1);
-    gtk_grid_attach(gridChangePassword, newPasswordChangeEntry, 1, 1, 1, 1);
-    gtk_grid_attach(gridChangePassword, confirmNewPasswordChangeLabel, 0, 2, 1, 1);
-    gtk_grid_attach(gridChangePassword, confirmNewPasswordChangeEntry, 1, 2, 1, 1);
-    gtk_grid_attach(gridChangePassword, updateChangePasswordButton, 1, 3, 1, 1);
-    gtk_grid_set_column_spacing(gridChangePassword, 10);
-    gtk_grid_set_row_spacing(gridChangePassword, 10);
-    gtk_widget_set_name(gridChangePassword, "gridChangePassword");
+    updateChangePasswordButton = gtk_button_new_with_label("Update");
+    gtk_widget_set_name(updateChangePasswordButton, "updateButton");
+    containerLeftSideLogin = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(containerLeftSideLogin, changePassWordLabel, 0, 0 ,20);
+    gtk_box_pack_start(containerLeftSideLogin, oldPasswordChangeEntry, 0, 0 ,5);
+    gtk_box_pack_start(containerLeftSideLogin, newPasswordChangeEntry, 0, 0 ,5);
+    gtk_box_pack_start(containerLeftSideLogin, confirmNewPasswordChangeEntry, 0, 0 , 5);
+    gtk_box_pack_start(containerLeftSideLogin, updateChangePasswordButton, 0 , 0, 20);
+    gtk_widget_set_name(containerLeftSideLogin, "containerLeftSideLogin");
+    containerLogin = gtk_hbox_new(1, 0);
+    gtk_box_pack_start(containerLogin, loginImg, 0, 0, 0);
+    gtk_box_pack_end(containerLogin, containerLeftSideLogin, 0, 0, 0);
+
     changePwdWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(changePwdWindow), "Change Password");
-	gtk_window_set_default_size(GTK_WINDOW(changePwdWindow), 350, 200);
+	gtk_window_set_title(GTK_WINDOW(changePwdWindow), "Saler site");
+	gtk_window_set_default_size(GTK_WINDOW(changePwdWindow),500, 300);
 	gtk_window_set_resizable(GTK_WINDOW(changePwdWindow), FALSE);
 	gtk_window_set_position(GTK_WINDOW(changePwdWindow), GTK_WIN_POS_CENTER);
-	gtk_container_add(changePwdWindow, gridChangePassword);
+	gtk_container_add(changePwdWindow, containerLogin);
+}
 
+static void changeInformationActivate(GtkApplication *app, gpointer user_data)
+{
+    GtkWidget *addressChangeInforLabel, *nameChangeInforLabel, *phoneChangeInforLabel;
+
+    GtkWidget *addressChangeInforEntry, *nameChangeInforEntry, *phoneChangeInforEntry;
+
+    GtkWidget *updateChangeInforButton;
+    GtkWidget *gridChangeInfor, *containerChangeInfor;
+    GtkWidget *changeInforImg;
+    //set up
+    containerChangeInfor = gtk_hbox_new(1, 0);
+    gridChangeInfor = gtk_grid_new();
+    //
+    changeInforImg = gtk_image_new_from_file("change_infor.png");
+    addressChangeInforEntry = gtk_entry_new();
+    nameChangeInforEntry = gtk_entry_new();
+    phoneChangeInforEntry = gtk_entry_new();
+    gtk_entry_set_icon_from_icon_name(addressChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "emblem-mail");
+    gtk_entry_set_placeholder_text(addressChangeInforEntry, "Enter your address");
+    gtk_entry_set_icon_from_icon_name(nameChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "contact-new");
+    gtk_entry_set_placeholder_text(nameChangeInforEntry, "Enter your full name");
+    gtk_entry_set_icon_from_icon_name(phoneChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "phone");
+    gtk_entry_set_placeholder_text(phoneChangeInforEntry, "Enter your phone number");
+    //
+    addressChangeInforLabel = gtk_label_new("Address: ");
+    nameChangeInforLabel = gtk_label_new("Full name: ");
+    phoneChangeInforLabel = gtk_label_new("Phone number: ");
+    updateChangeInforButton = gtk_button_new_with_label("Update");
+    //
+    gtk_grid_attach(gridChangeInfor, nameChangeInforLabel, 0, 0, 1, 1);
+    gtk_grid_attach(gridChangeInfor, nameChangeInforEntry, 1, 0, 1, 1);
+    gtk_grid_attach(gridChangeInfor, phoneChangeInforLabel, 0, 1, 1, 1);
+    gtk_grid_attach(gridChangeInfor, phoneChangeInforEntry, 1, 1, 1, 1);
+    gtk_grid_attach(gridChangeInfor, addressChangeInforLabel, 0, 2, 1, 1);
+    gtk_grid_attach(gridChangeInfor, addressChangeInforEntry, 1, 2, 1, 1);
+    gtk_grid_attach(gridChangeInfor, updateChangeInforButton, 1, 3, 1, 1);
+    gtk_grid_set_column_spacing(gridChangeInfor, 10);
+    gtk_grid_set_row_spacing(gridChangeInfor, 10);
+    gtk_widget_set_name(gridChangeInfor, "gridChangeInfor");
+    gtk_box_pack_start(containerChangeInfor, gridChangeInfor, 0, 0, 0);
+    gtk_box_pack_end(containerChangeInfor, changeInforImg, 0, 0, 0);
+    gtk_widget_set_name(updateChangeInforButton, "changeInforButton");
+    changeInformationWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(changeInformationWindow), "Change Information");
+	gtk_window_set_default_size(GTK_WINDOW(changeInformationWindow), 350, 200);
+	gtk_window_set_resizable(GTK_WINDOW(changeInformationWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(changeInformationWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(changeInformationWindow, containerChangeInfor);
+	//gtk_widget_show_all(changeInformationWindow);
 }
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
@@ -641,6 +714,8 @@ int main(int argc, char **argv)
 
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*Change Information Window*/
+    g_signal_connect(app, "activate", G_CALLBACK(changeInformationActivate), NULL);
     /*Change pwd window*/
     g_signal_connect(app, "activate", G_CALLBACK(changePwdActivate), NULL);
     /*Sign Up*/

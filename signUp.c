@@ -16,35 +16,35 @@ typedef struct
     GtkWidget *byearSpin;
     GtkWidget *bmonthSpin;
     GtkWidget *bdaySpin;
-} diaWidgets;
+} signUp_diaWidgets;
 
 typedef struct
 {
     GtkApplication *app;
     GtkWidget *window;
     GtkWidget *img;
-    diaWidgets *d;
-} signUpAppWidgets;
+    signUp_diaWidgets *d;
+} signUp_appWidgets;
 
 /***************************************************************** PROTOTYPES */
-static void activate_signUp(GtkApplication *app, gpointer user_data);
-static void img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-static void cancel_callback(GtkWidget *widget, gpointer user_data);
-static void clear_callback(GtkWidget *widget, gpointer user_data);
-static void add_callback(GtkWidget *widget, gpointer user_data);
-static void get_datestamp(gchar *ds);
-static gint get_next_id(void);
+static void signUpActivate(GtkApplication *app, gpointer user_data);
+static void signUp_img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data);
+static void signUp_cancel_callback(GtkWidget *widget, gpointer user_data);
+static void signUp_clear_callback(GtkWidget *widget, gpointer user_data);
+static void signUp_add_callback(GtkWidget *widget, gpointer user_data);
+static void signUp_get_datestamp(gchar *ds);
+static gint signUp_get_next_id(void);
 
-/**************************************************************** get_next_id */
+/**************************************************************** signUp_get_next_id */
 static gint
-get_next_id(void)
+signUp_get_next_id(void)
 {
     return 12;
 }
 
-/************************************************************** get_datestamp */
+/************************************************************** signUp_get_datestamp */
 static void
-get_datestamp(gchar *ds)
+signUp_get_datestamp(gchar *ds)
 {
     GTimeVal time;
     GDate date;
@@ -56,12 +56,12 @@ get_datestamp(gchar *ds)
 }
 /**************************************************************** imgCallback */
 static void
-img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
+signUp_img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 {
     GtkWidget *imgDialog;
     GtkFileFilter *filter;
     gint res;
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     filter = gtk_file_filter_new();
     imgDialog = gtk_file_chooser_dialog_new("Open File", GTK_WINDOW(a->window),
@@ -112,9 +112,9 @@ img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
 
 /************************************************************ Cancel Callback */
 static void
-cancel_callback(GtkWidget *widget, gpointer user_data)
+signUp_cancel_callback(GtkWidget *widget, gpointer user_data)
 {
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     g_print("Cancel pressed!\n");
     g_application_quit(G_APPLICATION(a->app));
@@ -122,9 +122,9 @@ cancel_callback(GtkWidget *widget, gpointer user_data)
 
 /************************************************************* Clear Callback */
 static void
-clear_callback(GtkWidget *widget, gpointer user_data)
+signUp_clear_callback(GtkWidget *widget, gpointer user_data)
 {
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     g_print("Clear pressed!\n");
     gtk_entry_set_text(GTK_ENTRY(a->d->tmpEntry), "");
@@ -139,9 +139,9 @@ clear_callback(GtkWidget *widget, gpointer user_data)
 
 /*************************************************************** Add Callback */
 static void
-add_callback(GtkWidget *widget, gpointer user_data)
+signUp_add_callback(GtkWidget *widget, gpointer user_data)
 {
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     g_print("Add pressed!\n");
     g_print("-------------------------------\n");
@@ -168,7 +168,7 @@ nameentry_callback(GtkWidget *widget, gpointer user_data)
     gchar dateStamp[256];
     gchar *year;
     gchar id[256] = "";
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     /* construct the eMail address */
     gname = (gchar *)gtk_entry_get_text(GTK_ENTRY(a->d->tmpEntry));
@@ -178,16 +178,16 @@ nameentry_callback(GtkWidget *widget, gpointer user_data)
     {
         g_sprintf(email, "%s.%s@%s.%s", gname, fname, org, cnt);
         /* update date info when Family Name was entered */
-        get_datestamp(dateStamp);
+        signUp_get_datestamp(dateStamp);
         /* construct matrnum when Family Name was entered */
         year = g_strndup(dateStamp, 4);
-        g_snprintf(id, 10, "%s%d%03d", year, studyProgNr, get_next_id());
+        g_snprintf(id, 10, "%s%d%03d", year, studyProgNr, signUp_get_next_id());
     }
 }
 
 /***************************************************************** ADD WINDOW */
 static void
-activate_signUp(GtkApplication *app, gpointer user_data)
+signUpActivate(GtkApplication *app, gpointer user_data)
 {
     GtkWidget *box;
     GtkWidget *ebox;
@@ -200,7 +200,7 @@ activate_signUp(GtkApplication *app, gpointer user_data)
     GtkWidget *cButton;
     GtkWidget *lButton;
     GtkWidget *aButton;
-    signUpAppWidgets *a = (signUpAppWidgets *)user_data;
+    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
     /* create a window with title, default size,and icons */
     a->window = gtk_application_window_new(a->app);
@@ -232,7 +232,7 @@ activate_signUp(GtkApplication *app, gpointer user_data)
     gtk_container_add(GTK_CONTAINER(ebox), a->img);
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(ebox), 1, 0, 1, 3);
     g_signal_connect(G_OBJECT(ebox), "button_press_event",
-                     G_CALLBACK(img_callback), (gpointer)a);
+                     G_CALLBACK(signUp_img_callback), (gpointer)a);
 
     tmpLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Given Name:",
                                 "xalign", 1.0, "yalign", 0.5, NULL);
@@ -274,15 +274,15 @@ activate_signUp(GtkApplication *app, gpointer user_data)
     /* lowerbox: buttons */
     cButton = gtk_button_new_with_mnemonic("_Cancel");
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(cButton), 1, 7, 1, 1);
-    g_signal_connect(G_OBJECT(cButton), "clicked", G_CALLBACK(cancel_callback),
+    g_signal_connect(G_OBJECT(cButton), "clicked", G_CALLBACK(signUp_cancel_callback),
                      (gpointer)a);
     lButton = gtk_button_new_with_mnemonic("C_lear");
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(lButton), 2, 7, 1, 1);
-    g_signal_connect(G_OBJECT(lButton), "clicked", G_CALLBACK(clear_callback),
+    g_signal_connect(G_OBJECT(lButton), "clicked", G_CALLBACK(signUp_clear_callback),
                      (gpointer)a);
     aButton = gtk_button_new_with_mnemonic("_Add");
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(aButton), 3, 7, 1, 1);
-    g_signal_connect(G_OBJECT(aButton), "clicked", G_CALLBACK(add_callback),
+    g_signal_connect(G_OBJECT(aButton), "clicked", G_CALLBACK(signUp_add_callback),
                      (gpointer)a);
 
     /* display all widgets */
@@ -293,11 +293,11 @@ activate_signUp(GtkApplication *app, gpointer user_data)
 int main(int argc, char **argv)
 {
     int status;
-    signUpAppWidgets *a = g_malloc(sizeof(signUpAppWidgets));
-    a->d = g_malloc(sizeof(diaWidgets));
+    signUp_appWidgets *a = g_malloc(sizeof(signUp_appWidgets));
+    a->d = g_malloc(sizeof(signUp_diaWidgets));
 
     a->app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-    g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(activate_signUp),
+    g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(signUpActivate),
                      (gpointer)a);
     status = g_application_run(G_APPLICATION(a->app), argc, argv);
     g_object_unref(a->app);

@@ -24,13 +24,13 @@ typedef struct
 } appWidgets;
 
 /***************************************************************** PROTOTYPES */
-void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
+void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
 void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
-void entry_callback(GtkWidget *widget, gpointer data);
+void signIn_entry_callback(GtkWidget *widget, gpointer data);
 
 /****************************************************************** CALLBACKS */
 
-void enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
+void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
     gchar str[50];
     appWidgets *wid = (appWidgets *)data;
@@ -64,9 +64,9 @@ void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
     wid = NULL;
 }
 
-void entry_callback(GtkWidget *widget, gpointer data)
+void signIn_entry_callback(GtkWidget *widget, gpointer data)
 {
-    enter_callback(NULL, NULL, data);
+    signIn_enter_callback(NULL, NULL, data);
 }
 
 void create_window(GtkWidget *button, gpointer window)
@@ -99,7 +99,7 @@ void create_window(GtkWidget *button, gpointer window)
 }
 
 /***************************************************************** GUI THREAD */
-static void activate_signIn(GtkApplication *app, gpointer data)
+static void signInActivate(GtkApplication *app, gpointer data)
 {
     GtkWidget *window;
     GtkWidget *vbox, *hbox;
@@ -109,7 +109,7 @@ static void activate_signIn(GtkApplication *app, gpointer data)
     appWidgets *wid = (appWidgets *)data;
     // map menu actions to callbacks
     const GActionEntry app_actions[] = {
-        {"enter", enter_callback, NULL, NULL, NULL},
+        {"enter", signIn_enter_callback, NULL, NULL, NULL},
         {"clear", clear_callback, NULL, NULL, NULL}};
 
     // create a window with title, default size and icons
@@ -142,7 +142,7 @@ static void activate_signIn(GtkApplication *app, gpointer data)
     gtk_entry_set_placeholder_text(GTK_ENTRY(wid->mailentry), "tuankietbdsm21");
     gtk_box_pack_start(GTK_BOX(hbox), wid->mailentry, TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(wid->mailentry), "activate",
-                     G_CALLBACK(entry_callback), (gpointer)wid);
+                     G_CALLBACK(signIn_entry_callback), (gpointer)wid);
 
     wid->pwdlabel = gtk_label_new_with_mnemonic("Password:");
     gtk_widget_set_size_request(wid->pwdlabel, 60, 40);
@@ -153,7 +153,7 @@ static void activate_signIn(GtkApplication *app, gpointer data)
     gtk_entry_set_placeholder_text(GTK_ENTRY(wid->pwdentry), "");
     gtk_box_pack_start(GTK_BOX(hbox), wid->pwdentry, TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(wid->pwdentry), "activate",
-                     G_CALLBACK(entry_callback), (gpointer)wid);
+                     G_CALLBACK(signIn_entry_callback), (gpointer)wid);
     // create a headerbar
     headerbar = gtk_header_bar_new();
     gtk_widget_show(headerbar);
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
     appWidgets *wid = g_malloc(sizeof(appWidgets));
 
     app = gtk_application_new("org.gtk.example", G_APPLICATION_FLAGS_NONE);
-    g_signal_connect(app, "activate", G_CALLBACK(activate_signIn), (gpointer)wid);
+    g_signal_connect(app, "activate", G_CALLBACK(signInActivate), (gpointer)wid);
     status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
     g_free(wid);

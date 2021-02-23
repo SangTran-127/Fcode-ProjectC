@@ -301,7 +301,6 @@ int main(int argc, char **argv)
                      (gpointer)a);
     status = g_application_run(G_APPLICATION(a->app), argc, argv);
     g_object_unref(a->app);
-
     g_free(a->d);
     g_free(a);
     return status;

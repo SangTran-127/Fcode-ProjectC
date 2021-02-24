@@ -1,8 +1,3 @@
-/**
- * Demo GTK+ Application that illustrates data entry.
- *
- * M. Horauer
- */
 #include <gtk/gtk.h>
 #include <glib.h>
 #include <glib/gprintf.h>

@@ -103,41 +103,14 @@ static void signUp_get_datestamp(gchar *ds);
 static gint signUp_get_next_id(void);
 /****************************************************************** CALLBACKS */
 
+static void s23(){
+    gtk_widget_hide(GTK_WIDGET(signInWindow));
+    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+}
 
-static void switchWindow()
-{
-    g_printf("\n%d", noCloseWindow);
-    switch (noCloseWindow)
-    {
-    case 1:
-        gtk_widget_hide(openWindow);
-        break;
-    case 2:
-        gtk_widget_hide(GTK_WIDGET(signInWindow));
-        break;
-    case 3:
-        gtk_widget_hide(GTK_WIDGET(customerMapWindow));
-        break;
-    case 4:
-        gtk_widget_hide(GTK_WIDGET(changePwdWindow));
-        break;
-    }
-    g_printf("\n%d", noOpenWindow);
-    switch (noOpenWindow)
-    {
-    case 1:
-        gtk_widget_show_all(openWindow);
-        break;
-    case 2:
-        gtk_widget_show_all(GTK_WIDGET(signInWindow));
-        break;
-    case 3:
-        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
-        break;
-    case 4:
-        gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
-        break;
-    }
+static void s12(){
+    gtk_widget_hide(GTK_WIDGET(openWindow));
+    gtk_widget_show_all(GTK_WIDGET(signInWindow));
 }
 
 static void s34(){
@@ -166,9 +139,8 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
     if (strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
     {
         g_sprintf(str, "Hello %s!", email);
-        noCloseWindow = 2;
-        noOpenWindow = 3;
-        switchWindow();
+        s23();
+        signIn_clear_callback(action, parameter, data);
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
@@ -353,9 +325,7 @@ static void activate(GtkApplication *app, gpointer data)
 
     askRoleLabel = gtk_label_new("What do you want?");
     chooseSignInButton = gtk_button_new_with_label("Sign in");
-    noOpenWindow = 2;
-    noCloseWindow = 1;
-    g_signal_connect(G_OBJECT(chooseSignInButton), "clicked", G_CALLBACK(switchWindow), NULL);
+    g_signal_connect(G_OBJECT(chooseSignInButton), "clicked", G_CALLBACK(s12), NULL);
 
     chooseSignUpButton = gtk_button_new_with_label("Sign up");
 

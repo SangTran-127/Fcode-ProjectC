@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1614178402 source:c:\msys64\mingw64\change_infor\main.c
+	<gtk/gtk.h>
+

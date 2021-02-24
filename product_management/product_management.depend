@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1614180987 source:c:\msys64\mingw64\project_c_manage_product\product_management\main.c
+	<gtk/gtk.h>
+

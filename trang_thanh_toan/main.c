@@ -86,6 +86,10 @@ static void activate(GtkApplication *app, gpointer data) {
     gtk_widget_set_name(moneyTotal, "moneyTotal");
     gtk_widget_set_name(gridPayment, "gridPayment");
     gtk_widget_set_name(buttonOrder, "buttonOrder");
+    gtk_widget_set_name(entryAddress, "entryAddress");
+    gtk_widget_set_name(entryCoupon, "entryCoupon");
+    gtk_widget_set_name(entryPhone, "entryPhone");
+    gtk_widget_set_name(entryReciName, "entryReciName");
     gtk_container_add(GTK_CONTAINER(window), gridPayment);
     gtk_widget_show_all (window);
 }

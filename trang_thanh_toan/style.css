@@ -1,0 +1,37 @@
+#gridPayment {
+    margin: 30px;
+    border: 1px solid #585858;
+    padding: 20px;
+    background:white;
+}
+#buttonBackPayment {
+    background: transparent;
+    color: #585855;
+    border: 1px solid #585855;
+}
+#buttonBackPayment:hover {
+    background: #585855;
+    color: white;
+}
+window {
+    background: #8ac4d0;
+}
+#buttonOrder {
+    border: 2px solid red;
+    background: salmon;
+    color: black;
+    font-weight: 900;
+}
+#buttonOrder:hover {
+    color: red;
+    background: yellow;
+    font-style: italic;
+}
+#buttonCoupon:hover {
+    background: #8ac4d0;
+    border: 1px solid black;
+}
+#moneyCost, #moneyDiscount, #moneyTotal {
+    font-weight: 700;
+    font-style: italic;
+}

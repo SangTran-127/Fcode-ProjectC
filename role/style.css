@@ -14,7 +14,7 @@ button:hover {
     color: white;
 }
 #containerLeftSideLogin {
-    margin-top: 50px;
+    margin: 20px;
 }
 window {
     background:white;
@@ -49,4 +49,18 @@ window {
     background: #ec4646;
     border: 1px solid black;
     font-weight: 800;
+}
+#updateButton:hover {
+    background: #ec4646;
+    border: 1px solid black;
+}
+#backChangePasswordButton {
+    background: transparent;
+    border: 1px solid #585858;
+    color: #585858;
+}
+#backChangePasswordButton:hover {
+    background: #585858;
+    border: 1px solid #585858;
+    color: white;
 }

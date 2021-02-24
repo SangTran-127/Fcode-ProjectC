@@ -102,28 +102,43 @@ static void signUp_add_callback(GtkWidget *widget, gpointer user_data);
 static void signUp_get_datestamp(gchar *ds);
 static gint signUp_get_next_id(void);
 /****************************************************************** CALLBACKS */
-
-static void s23(){
-    gtk_widget_hide(GTK_WIDGET(signInWindow));
-    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
-}
-
-static void s12(){
-    gtk_widget_hide(GTK_WIDGET(openWindow));
-    gtk_widget_show_all(GTK_WIDGET(signInWindow));
-}
-
-static void s34(){
-    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
-    gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
-}
-
-static void s41(){
+static void s31()
+{
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
 
-static void s35(){
+static void s43()
+{
+    gtk_widget_hide(GTK_WIDGET(changePwdWindow));
+    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+}
+static void s23()
+{
+    gtk_widget_hide(GTK_WIDGET(signInWindow));
+    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+}
+
+static void s12()
+{
+    gtk_widget_hide(GTK_WIDGET(openWindow));
+    gtk_widget_show_all(GTK_WIDGET(signInWindow));
+}
+
+static void s34()
+{
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
+}
+
+static void s41()
+{
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(openWindow));
+}
+
+static void s35()
+{
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
 }
@@ -179,7 +194,8 @@ static gint signUp_get_next_id(void)
 }
 
 static void
-signUp_get_datestamp(gchar *ds){
+signUp_get_datestamp(gchar *ds)
+{
     GTimeVal time;
     GDate date;
 
@@ -477,7 +493,7 @@ static void signUpActivate(GtkApplication *app, gpointer user_data)
                      G_CALLBACK(signUp_img_callback), (gpointer)a);
 
     tmpLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Given Name:",
-                                "xalign", 1.0, "yalign", 0.5, NULL);
+                              "xalign", 1.0, "yalign", 0.5, NULL);
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(tmpLabel), 0, 3, 1, 1);
     a->d->tmpEntry = gtk_entry_new();
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->tmpEntry), 1, 3, 1, 1);
@@ -491,7 +507,7 @@ static void signUpActivate(GtkApplication *app, gpointer user_data)
                      G_CALLBACK(nameentry_callback), (gpointer)a);
 
     gnameLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Street:",
-                                 "xalign", 1.0, "yalign", 0.5, NULL);
+                                "xalign", 1.0, "yalign", 0.5, NULL);
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(gnameLabel), 0, 4, 1, 1);
     a->d->gnameEntry = gtk_entry_new();
     gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->gnameEntry), 1, 4, 1, 1);
@@ -552,7 +568,7 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     shoppingButton = gtk_button_new_with_label("Go shopping");
     showInforButton = gtk_button_new_with_label("Show informatiom");
     logoutButton = gtk_button_new_with_label("Log out");
-    g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s41), NULL);
+    g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s31), NULL);
 
     topContainBox = gtk_hbox_new(0, 20);
     gtk_box_pack_start(topContainBox, helloLabel, 0, 0, 0);
@@ -573,25 +589,33 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     gtk_box_pack_end(containerClient, clientMenu, 0, 0, 0);
 
     customerMapWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(customerMapWindow), "Client site");
-	gtk_window_set_default_size(GTK_WINDOW(customerMapWindow),400, 200);
-	gtk_window_set_resizable(GTK_WINDOW(customerMapWindow), FALSE);
-	gtk_window_set_position(GTK_WINDOW(customerMapWindow), GTK_WIN_POS_CENTER);
-	gtk_container_add(customerMapWindow, containerClient);
-	//gtk_widget_show_all(customerMapWindow);
+    gtk_window_set_title(GTK_WINDOW(customerMapWindow), "Client site");
+    gtk_window_set_default_size(GTK_WINDOW(customerMapWindow), 400, 200);
+    gtk_window_set_resizable(GTK_WINDOW(customerMapWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(customerMapWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(customerMapWindow, containerClient);
+    //gtk_widget_show_all(customerMapWindow);
 }
 
 static void changePwdActivate(GtkApplication *app, gpointer user_data)
 {
-    GtkWidget *containerLogin, *containerLeftSideLogin;
-    GtkWidget *changePassWordLabel;
+    GtkWidget *containerLogin, *containerLeftSideLogin, *footerBox;
+    GtkWidget *changePassWordLabel, *askBackLabel;
     GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
-    GtkWidget *updateChangePasswordButton;
+    GtkWidget *updateChangePasswordButton, *backChangePasswordButton;
     GtkWidget *loginImg;
 
     changePassWordLabel = gtk_label_new("Change your password");
     gtk_widget_set_name(changePassWordLabel, "changePassLabel");
     loginImg = gtk_image_new_from_file("login.png");
+
+    backChangePasswordButton = gtk_button_new_with_label("Back");
+    gtk_widget_set_name(backChangePasswordButton, "backChangePasswordButton");
+    g_signal_connect(G_OBJECT(backChangePasswordButton), "clicked", G_CALLBACK(s43), NULL);
+    askBackLabel = gtk_label_new("Change your mind?");
+    footerBox = gtk_hbox_new(1, 0);
+    gtk_box_pack_start(footerBox, askBackLabel, 0, 0, 10);
+    gtk_box_pack_end(footerBox, backChangePasswordButton, 0, 0, 0);
 
     oldPasswordChangeEntry = gtk_entry_new();
     gtk_entry_set_placeholder_text(oldPasswordChangeEntry, "Enter your old password");
@@ -604,23 +628,25 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
     gtk_entry_set_visibility(confirmNewPasswordChangeEntry, FALSE);
     updateChangePasswordButton = gtk_button_new_with_label("Update");
     gtk_widget_set_name(updateChangePasswordButton, "updateButton");
+
     containerLeftSideLogin = gtk_vbox_new(0, 0);
-    gtk_box_pack_start(containerLeftSideLogin, changePassWordLabel, 0, 0 ,20);
-    gtk_box_pack_start(containerLeftSideLogin, oldPasswordChangeEntry, 0, 0 ,5);
-    gtk_box_pack_start(containerLeftSideLogin, newPasswordChangeEntry, 0, 0 ,5);
-    gtk_box_pack_start(containerLeftSideLogin, confirmNewPasswordChangeEntry, 0, 0 , 5);
-    gtk_box_pack_start(containerLeftSideLogin, updateChangePasswordButton, 0 , 0, 20);
+    gtk_box_pack_start(containerLeftSideLogin, changePassWordLabel, 0, 0, 20);
+    gtk_box_pack_start(containerLeftSideLogin, oldPasswordChangeEntry, 0, 0, 5);
+    gtk_box_pack_start(containerLeftSideLogin, newPasswordChangeEntry, 0, 0, 5);
+    gtk_box_pack_start(containerLeftSideLogin, confirmNewPasswordChangeEntry, 0, 0, 5);
+    gtk_box_pack_start(containerLeftSideLogin, updateChangePasswordButton, 0, 0, 20);
+    gtk_box_pack_end(containerLeftSideLogin, footerBox, 0, 0, 0);
     gtk_widget_set_name(containerLeftSideLogin, "containerLeftSideLogin");
     containerLogin = gtk_hbox_new(1, 0);
     gtk_box_pack_start(containerLogin, loginImg, 0, 0, 0);
     gtk_box_pack_end(containerLogin, containerLeftSideLogin, 0, 0, 0);
 
     changePwdWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(changePwdWindow), "Saler site");
-	gtk_window_set_default_size(GTK_WINDOW(changePwdWindow),500, 300);
-	gtk_window_set_resizable(GTK_WINDOW(changePwdWindow), FALSE);
-	gtk_window_set_position(GTK_WINDOW(changePwdWindow), GTK_WIN_POS_CENTER);
-	gtk_container_add(changePwdWindow, containerLogin);
+    gtk_window_set_title(GTK_WINDOW(changePwdWindow), "Saler site");
+    gtk_window_set_default_size(GTK_WINDOW(changePwdWindow), 500, 300);
+    gtk_window_set_resizable(GTK_WINDOW(changePwdWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(changePwdWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(changePwdWindow, containerLogin);
 }
 
 static void changeInformationActivate(GtkApplication *app, gpointer user_data)
@@ -666,12 +692,12 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_box_pack_end(containerChangeInfor, changeInforImg, 0, 0, 0);
     gtk_widget_set_name(updateChangeInforButton, "changeInforButton");
     changeInformationWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(changeInformationWindow), "Change Information");
-	gtk_window_set_default_size(GTK_WINDOW(changeInformationWindow), 350, 200);
-	gtk_window_set_resizable(GTK_WINDOW(changeInformationWindow), FALSE);
-	gtk_window_set_position(GTK_WINDOW(changeInformationWindow), GTK_WIN_POS_CENTER);
-	gtk_container_add(changeInformationWindow, containerChangeInfor);
-	//gtk_widget_show_all(changeInformationWindow);
+    gtk_window_set_title(GTK_WINDOW(changeInformationWindow), "Change Information");
+    gtk_window_set_default_size(GTK_WINDOW(changeInformationWindow), 350, 200);
+    gtk_window_set_resizable(GTK_WINDOW(changeInformationWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(changeInformationWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(changeInformationWindow, containerChangeInfor);
+    //gtk_widget_show_all(changeInformationWindow);
 }
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
@@ -681,7 +707,6 @@ int main(int argc, char **argv)
     app = gtk_application_new("app.shopping.cart", G_APPLICATION_FLAGS_NONE);
 
     /**/
-
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
     /*Change Information Window*/

@@ -36,7 +36,9 @@ typedef struct
     gchar *pwd;
     gchar *firstName;
     gchar *lastName;
-    gint *type;
+    gchar *address;
+    gint type;
+    gint tikuCoin;
 } Customer;
 
 typedef struct
@@ -88,6 +90,9 @@ Customer admin;
 
 static Customer customer;
 static int numberOfCustomers;
+
+/*Change pwd*/
+GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
@@ -158,17 +163,20 @@ int findAccount(char *inputEmail)
     strcpy(customer.firstName, "");
     strcpy(customer.lastName, "");
     strcpy(customer.pwd, "");
+    strcpy(customer.address, "");
     strcat(tmpStr, ",");
     strcat(str, tmpStr);
     strcpy(tmpStr, str);
     while (fgets(str, 60, fp) != NULL)
     {
+        printf("\n%s", str);
         if (strstr(str, tmpStr) == NULL)
         {
             continue;
         }
         int pos = 0;
         customer.id = 0;
+        customer.tikuCoin = 0;
         while (str[pos] != ',')
         {
             int tmp = (int)str[pos] - '0';
@@ -209,7 +217,25 @@ int findAccount(char *inputEmail)
         }
 
         pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos];
+            strcat(customer.address, &tmp);
+            pos++;
+        }
+
+        pos++;
         customer.type = (int)str[pos] - '0';
+        pos += 2;
+        printf("\n-------%c", str[pos]);
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            customer.tikuCoin = customer.tikuCoin * 10 + tmp;
+            printf("\nDuma");
+            pos++;
+        }
+        printf("\n%d", customer.tikuCoin);
         fclose(fp);
         return 1;
     }
@@ -426,7 +452,7 @@ int changeLine(int line, char* inputString){
     strcpy(newline, inputString);
     strcat(newline, "\n");
     int count;
-    strcpy(path, "C:\\msys64\\home\\snowi\\Fcode-ProjectC\\role\\customers.txt");
+    strcpy(path, "C:\\msys64\\home\\snowi\\Fcode-ProjectC\\role\\customers.csv");
     /* Remove extra new line character from stdin */
     fflush(stdin);
     /*  Open all required files */
@@ -472,6 +498,40 @@ int changeLine(int line, char* inputString){
     printf("\nSuccessfully replaced '%d' line with '%s'.", line, newline);
 
     return 0;
+}
+void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+    char *entryOldPwd = gtk_entry_get_text(GTK_ENTRY(oldPasswordChangeEntry));
+    char *entryNewPwd = gtk_entry_get_text(GTK_ENTRY(newPasswordChangeEntry));
+    char *entryConfirmPwd = gtk_entry_get_text(GTK_ENTRY(confirmNewPasswordChangeEntry));
+    if(strcmp(entryOldPwd, customer.pwd) == 0){
+        if(strcmp(entryNewPwd, entryConfirmPwd) == 0 && strcmp(entryNewPwd, "") != 0){
+            printf("\nOke ban nha");
+            char* newInfor = malloc(200);
+            strcpy(newInfor, "");
+            char* tmpStr = malloc(20);
+            itoa(customer.id, tmpStr, 10);
+            strcat(newInfor, tmpStr);
+            strcat(newInfor, ","); strcat(newInfor, customer.email);
+            strcat(newInfor, ","); strcat(newInfor, entryConfirmPwd);
+            strcat(newInfor, ","); strcat(newInfor, customer.firstName);
+            strcat(newInfor, ","); strcat(newInfor, customer.lastName);
+            strcat(newInfor, ","); strcat(newInfor, customer.address);
+            strcpy(tmpStr, ""); itoa(customer.type, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.tikuCoin, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcat(newInfor, ",");
+            strcpy(customer.pwd, entryConfirmPwd);
+            changeLine(customer.id, newInfor);
+
+        }else{
+            printf("\nKhong trung kia ma");
+        }
+    }else{
+        printf("\nSai mat khau roi ban eiii");
+    }
+
 }
 /****************************************************************** GUI THREAD */
 /*Openning window*/
@@ -744,7 +804,6 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
 {
     GtkWidget *containerLogin, *containerLeftSideLogin, *footerBox;
     GtkWidget *changePassWordLabel, *askBackLabel;
-    GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
     GtkWidget *updateChangePasswordButton, *backChangePasswordButton;
     GtkWidget *loginImg;
 
@@ -764,6 +823,7 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
     gtk_entry_set_placeholder_text(oldPasswordChangeEntry, "Enter your old password");
     gtk_entry_set_visibility(oldPasswordChangeEntry, FALSE);
     newPasswordChangeEntry = gtk_entry_new();
+
     gtk_entry_set_placeholder_text(newPasswordChangeEntry, "Enter your new password");
     gtk_entry_set_visibility(newPasswordChangeEntry, FALSE);
     confirmNewPasswordChangeEntry = gtk_entry_new();
@@ -771,6 +831,9 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
     gtk_entry_set_visibility(confirmNewPasswordChangeEntry, FALSE);
     updateChangePasswordButton = gtk_button_new_with_label("Update");
     gtk_widget_set_name(updateChangePasswordButton, "updateButton");
+    g_signal_connect(G_OBJECT(updateChangePasswordButton), "clicked", G_CALLBACK(changePwd_enter_callback), NULL);
+
+
 
     containerLeftSideLogin = gtk_vbox_new(0, 0);
     gtk_box_pack_start(containerLeftSideLogin, changePassWordLabel, 0, 0, 20);
@@ -865,12 +928,14 @@ int main(int argc, char **argv)
     customer.firstName = malloc(200);
     customer.lastName = malloc(200);
     customer.pwd = malloc(200);
+    customer.address = malloc(200);
     /**/
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
     /*Change Information Window*/
     g_signal_connect(app, "activate", G_CALLBACK(changeInformationActivate), NULL);
     /*Change pwd window*/
+
     g_signal_connect(app, "activate", G_CALLBACK(changePwdActivate), NULL);
     /*Sign Up*/
     signUp_appWidgets *a = g_malloc(sizeof(signUp_appWidgets));

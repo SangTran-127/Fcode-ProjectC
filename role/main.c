@@ -78,6 +78,7 @@ typedef struct
 /*3*/ static GtkWidget *customerMapWindow;
 /*4*/ static GtkWidget *changePwdWindow;
 /*5*/ static GtkWidget *changeInformationWindow;
+/*6*/ static GtkWidget *notiWindow;
 
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
@@ -93,6 +94,9 @@ static int numberOfCustomers;
 
 /*Change pwd*/
 GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
+
+/*Notification*/
+GtkWidget *alert;
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
@@ -110,6 +114,16 @@ static void signUp_add_callback(GtkWidget *widget, gpointer user_data);
 static void signUp_get_datestamp(gchar *ds);
 static gint signUp_get_next_id(void);
 /****************************************************************** CALLBACKS */
+static void onNoti()
+{
+    gtk_widget_show_all(GTK_WIDGET(notiWindow));
+}
+
+static void offNoti()
+{
+    gtk_widget_hide(GTK_WIDGET(notiWindow));
+}
+
 static void s31()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
@@ -524,12 +538,20 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
             strcat(newInfor, ",");
             strcpy(customer.pwd, entryConfirmPwd);
             changeLine(customer.id, newInfor);
-
+            gtk_entry_set_text(GTK_ENTRY(oldPasswordChangeEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(newPasswordChangeEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(confirmNewPasswordChangeEntry), "");
+            gtk_label_set_text(alert, "Doi thanh cong");
+            onNoti();
         }else{
             printf("\nKhong trung kia ma");
+            gtk_label_set_text(alert, "Khong trung kia ma");
+            onNoti();
         }
     }else{
         printf("\nSai mat khau roi ban eiii");
+        gtk_label_set_text(alert, "Sai mat khau roi ban eiii");
+        onNoti();
     }
 
 }
@@ -917,6 +939,37 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_container_add(changeInformationWindow, containerChangeInfor);
 }
 
+static void notiActivate(GtkApplication *app, gpointer data) {
+    load_css();
+
+    GtkWidget *alertButton;
+    GtkWidget *vboxAlert;
+    GtkWidget *hboxAlert;
+    GtkWidget *nonLabelAlert;
+    nonLabelAlert = gtk_label_new("             ");
+    vboxAlert = gtk_vbox_new(1, 0);
+    alertButton = gtk_button_new_with_label("close");
+    g_signal_connect(G_OBJECT(alertButton), "clicked", G_CALLBACK(offNoti), NULL);
+    alert = gtk_label_new("Hello!!!");
+    gtk_widget_set_name(alert, "alert");
+    /*alert = gtk_label_new_with_mnemonic("Let's sign in!");
+    gtk_widget_override_font(alert,
+                             pango_font_description_from_string("Tahoma 20"));*/
+    hboxAlert = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(hboxAlert, nonLabelAlert, 0, 0, 0);
+    gtk_box_pack_end(hboxAlert, alertButton, 0, 0, 0);
+    gtk_box_pack_start(vboxAlert, alert, 0, 0, 10);
+    gtk_box_pack_start(vboxAlert, hboxAlert, 0, 0, 0);
+    gtk_widget_set_name(alertButton, "alertButton");
+    gtk_widget_set_name(vboxAlert, "vboxAlert");
+    notiWindow = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(notiWindow), "");
+    gtk_window_set_default_size(GTK_WINDOW(notiWindow),200,20);
+    gtk_window_set_resizable(GTK_WINDOW(notiWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(notiWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(notiWindow, vboxAlert);
+}
+
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
@@ -932,6 +985,8 @@ int main(int argc, char **argv)
     /**/
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*notification window*/
+    g_signal_connect(app, "activate", G_CALLBACK(notiActivate), NULL);
     /*Change Information Window*/
     g_signal_connect(app, "activate", G_CALLBACK(changeInformationActivate), NULL);
     /*Change pwd window*/

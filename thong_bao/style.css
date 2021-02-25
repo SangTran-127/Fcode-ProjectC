@@ -1,6 +1,6 @@
 #alertButton {
-    background:white;
-    color: blue;
+    background:#adeecf;
+    color: #295939;
     border: none;
     margin: 5px;
 }
@@ -8,6 +8,6 @@
     background: white;
 }
 #alertButton:hover {
-    border: 1px solid blue;
+    border: 1px solid #295939;
     font-weight: 200;
 }

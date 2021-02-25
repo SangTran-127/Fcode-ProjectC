@@ -20,10 +20,12 @@ static void activate(GtkApplication *app, gpointer data)
     GtkWidget *window;
     //box
     GtkWidget *section1, *section2, *section3;
+    GtkWidget *addPicture;
     GtkWidget *headerManage, *containerMange, *mainSectionMange, *addBox, *changeBox, *updateBox;
     GtkWidget *contentNameAdd, *contentPriceAdd, *contentIdChange, *contentNameChange, *contentPriceChange, *contentIdDelete, *contentIdUpdate, *contentPercent;
     //label
     GtkWidget *helloManageLabel, *nameAddLabel, *nameChangeLabel, *priceAddLabel, *priceChangeLabel, *idChangeLabel, *idDeleteLabel, *idUpdateLabel, *percentSaleLabel;
+    GtkWidget *addPictureLabel, *addPictureButton;
     //img
     GtkWidget *img1, *img2, *img3;
     //button
@@ -40,7 +42,8 @@ static void activate(GtkApplication *app, gpointer data)
     idDeleteLabel = gtk_label_new("Id product: ");
     idUpdateLabel = gtk_label_new("Id product: ");
     percentSaleLabel = gtk_label_new("%sale: ");
-
+    addPictureLabel = gtk_label_new("Add your product image: ");
+    addPictureButton = gtk_button_new_from_icon_name("list-add", 0);
     backManageButton = gtk_button_new_with_label("Back");
     gtk_widget_set_name(backManageButton, "backManageButton");
     addManageButton = gtk_button_new_with_label("Add");
@@ -87,6 +90,9 @@ static void activate(GtkApplication *app, gpointer data)
     contentPercent = gtk_hbox_new(0, 10);
     gtk_box_pack_start(contentPercent, percentSaleLabel, 0, 0, 0);
     gtk_box_pack_end(contentPercent, percentSaleEntry, 0, 0, 0);
+    addPicture = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(addPicture, addPictureLabel, 0, 0, 0);
+    gtk_box_pack_start(addPicture, addPictureButton, 0, 0, 0);
     //
     headerManage = gtk_hbox_new(0, 0);
     gtk_box_pack_start(headerManage, helloManageLabel, 0, 0, 0);
@@ -95,6 +101,7 @@ static void activate(GtkApplication *app, gpointer data)
     addBox = gtk_vbox_new(0, 10);
     gtk_box_pack_start(addBox, contentNameAdd, 0, 0, 0);
     gtk_box_pack_start(addBox, contentPriceAdd, 0, 0, 0);
+    gtk_box_pack_start(addBox, addPicture, 0 ,0, 0);
     gtk_box_pack_start(addBox, addManageButton, 0, 0, 0);
     gtk_widget_set_name(addBox, "addBox");
 

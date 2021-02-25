@@ -25,6 +25,12 @@ static void load_css(void)
 /*Sign in*/
 typedef struct
 {
+    int id;
+    char* name;
+} Product;
+
+typedef struct
+{
     gint id;
     gchar *email;
     gchar *pwd;
@@ -79,6 +85,7 @@ static gint noOpenWindow = 1000;
 Customer admin;
 
 /*Sign in*/
+
 static Customer customer;
 static int numberOfCustomers;
 
@@ -407,6 +414,65 @@ nameentry_callback(GtkWidget *widget, gpointer user_data)
     }
 }
 
+/*Change pwd*/
+int changeLine(int line, char* inputString){
+    /* File pointer to hold reference of input file */
+    FILE * fPtr;
+    FILE * fTemp;
+    char path[100];
+
+    char buffer[1000];
+    char newline[1000];
+    strcpy(newline, inputString);
+    strcat(newline, "\n");
+    int count;
+    strcpy(path, "C:\\msys64\\home\\snowi\\Fcode-ProjectC\\role\\customers.txt");
+    /* Remove extra new line character from stdin */
+    fflush(stdin);
+    /*  Open all required files */
+    fPtr  = fopen(path, "r");
+    fTemp = fopen("inp.c", "w");
+    /* fopen() return NULL if unable to open file in given mode. */
+    if (fPtr == NULL || fTemp == NULL)
+    {
+        /* Unable to open file hence exit */
+        printf("\nUnable to open file.\n");
+        printf("Please check whether file exists and you have read/write privilege.\n");
+        return 0;
+    }
+
+     /*
+     * Read line from source file and write to destination
+     * file after replacing given line.
+     */
+    count = 0;
+    while ((fgets(buffer, 1000, fPtr)) != NULL)
+    {
+        count++;
+
+        /* If current line is line to replace */
+        if (count == line)
+            fputs(newline, fTemp);
+        else
+            fputs(buffer, fTemp);
+    }
+
+
+    /* Close all files to release resource */
+    fclose(fPtr);
+    fclose(fTemp);
+
+
+    /* Delete original source file */
+    remove(path);
+
+    /* Rename temporary file as original file */
+    rename("inp.c", path);
+
+    printf("\nSuccessfully replaced '%d' line with '%s'.", line, newline);
+
+    return 0;
+}
 /****************************************************************** GUI THREAD */
 /*Openning window*/
 static void activate(GtkApplication *app, gpointer data)

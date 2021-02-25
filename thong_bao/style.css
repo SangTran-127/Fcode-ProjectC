@@ -1,0 +1,13 @@
+#alertButton {
+    background:white;
+    color: blue;
+    border: none;
+    margin: 5px;
+}
+#vboxAlert {
+    background: white;
+}
+#alertButton:hover {
+    border: 1px solid blue;
+    font-weight: 200;
+}

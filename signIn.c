@@ -9,8 +9,8 @@ static char *id;
 static char *firstName;
 static char *lastName;
 static int numberOfCustomers;
-char* USERNAME = "user";
-char* PASSWORD = "12345";
+char *USERNAME = "user";
+char *PASSWORD = "12345";
 
 typedef struct
 {
@@ -37,12 +37,15 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
 
     email = gtk_entry_get_text(GTK_ENTRY(wid->mailentry));
     password = gtk_entry_get_text(GTK_ENTRY(wid->pwdentry));
-    if(strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0){
+    if (strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
+    {
         g_sprintf(str, "Hello %s!", email);
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
-    }else{
+    }
+    else
+    {
         g_sprintf(str, "Hey %s! Invalid email or password", email);
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
@@ -50,7 +53,6 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
     }
     email = NULL;
     wid = NULL;
-
 }
 
 void clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
@@ -75,9 +77,9 @@ void create_window(GtkWidget *button, gpointer window)
     GtkWidget *win, *label;
 
     //Username and Password to validate credentials
-    const char* USERNAME = "u";
-    const char* PASSWORD = "1";
-    char* username = "user", password = "12345";
+    const char *USERNAME = "u";
+    const char *PASSWORD = "1";
+    char *username = "user", password = "12345";
 
     //Checking if user's entered credentials are equal to actual USERNAME and PASSWORD
     if (strcmp(username, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
@@ -200,4 +202,3 @@ int main(int argc, char **argv)
     wid = NULL;
     return status;
 }
-

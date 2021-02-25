@@ -20,8 +20,9 @@ static void load_css(void)
     g_object_unref(provider);
 }
 
-/****************************************************************** TYPEDEF */
-/**/
+/****************************************************************** TYPEDEF *
+
+/*Sign in*/
 typedef struct
 {
     gint id;
@@ -31,7 +32,7 @@ typedef struct
     gchar *lastName;
     gint *type;
 } Customer;
-/*Sign in*/
+
 typedef struct
 {
     GtkWidget *greeterlabel;
@@ -78,17 +79,12 @@ static gint noOpenWindow = 1000;
 Customer admin;
 
 /*Sign in*/
-static gchar *email;
-static gchar *password;
-static char *id;
-static char *firstName;
-static char *lastName;
+static Customer customer;
 static int numberOfCustomers;
-char *USERNAME = "user";
-char *PASSWORD = "12345";
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
+int findAccount(char *inputEmail);
 void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
 void signIn_clear_callback(GSimpleAction *action, GVariant *parameter, gpointer data);
 void signIn_entry_callback(GtkWidget *widget, gpointer data);
@@ -107,7 +103,6 @@ static void s31()
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
-
 static void s43()
 {
     gtk_widget_hide(GTK_WIDGET(changePwdWindow));
@@ -118,56 +113,138 @@ static void s23()
     gtk_widget_hide(GTK_WIDGET(signInWindow));
     gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
 }
-
 static void s12()
 {
     gtk_widget_hide(GTK_WIDGET(openWindow));
     gtk_widget_show_all(GTK_WIDGET(signInWindow));
 }
-
 static void s34()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
 }
-
 static void s41()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
-
 static void s35()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
 }
+static void s53()
+{
+    gtk_widget_hide(GTK_WIDGET(changeInformationWindow));
+    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+}
 
 /*Sign in*/
+int findAccount(char *inputEmail)
+{
+    FILE *fp = fopen("customers.csv", "r");
+    char *tmpStr = malloc(100);
+    strcpy(tmpStr, inputEmail);
+    char *str = malloc(100);
+    strcpy(str, ",");
+    strcpy(customer.email, "");
+    strcpy(customer.firstName, "");
+    strcpy(customer.lastName, "");
+    strcpy(customer.pwd, "");
+    strcat(tmpStr, ",");
+    strcat(str, tmpStr);
+    strcpy(tmpStr, str);
+    while (fgets(str, 60, fp) != NULL)
+    {
+        if (strstr(str, tmpStr) == NULL)
+        {
+            continue;
+        }
+        int pos = 0;
+        customer.id = 0;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            customer.id = customer.id * 10 + tmp;
+            pos++;
+        }
+
+        pos++;
+        while (str[pos] != ',')
+        {
+            pos++;
+        }
+
+        strcpy(customer.email, inputEmail);
+        pos++;
+        printf("\n%s", customer.email);
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos];
+            strcat(customer.pwd, &tmp);
+            pos++;
+        }
+        printf("\n%s", customer.pwd);
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos];
+            strcat(customer.firstName, &tmp);
+            pos++;
+        }
+        pos++;
+        printf("\n%d", customer.id);
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos];
+            strcat(customer.lastName, &tmp);
+            pos++;
+        }
+
+        pos++;
+        customer.type = (int)str[pos] - '0';
+        fclose(fp);
+        return 1;
+    }
+
+    fclose(fp);
+    strcpy(customer.email, "");
+    strcpy(customer.firstName, "");
+    strcpy(customer.lastName, "");
+    strcpy(customer.pwd, "");
+    return 0;
+}
+
 void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
+
     gchar str[50];
     appWidgets *wid = (appWidgets *)data;
-
-    email = gtk_entry_get_text(GTK_ENTRY(wid->mailentry));
-    password = gtk_entry_get_text(GTK_ENTRY(wid->pwdentry));
-    if (strcmp(email, USERNAME) == 0 && strcmp(password, PASSWORD) == 0)
+    char *entry_email = gtk_entry_get_text(GTK_ENTRY(wid->mailentry));
+    char *entry_password = gtk_entry_get_text(GTK_ENTRY(wid->pwdentry));
+    if (findAccount(entry_email) == 1)
     {
-        g_sprintf(str, "Hello %s!", email);
-        s23();
-        signIn_clear_callback(action, parameter, data);
-        gtk_widget_override_font(wid->greeterlabel,
-                                 pango_font_description_from_string("Tahoma 20"));
-        gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
+        if (strcmp(entry_password, customer.pwd) == 0)
+        {
+            signIn_clear_callback(action, parameter, data);
+            s23();
+        }
+        else
+        {
+            g_sprintf(str, "Hello %s %s! Wrong password!", customer.firstName, customer.lastName);
+            gtk_widget_override_font(wid->greeterlabel,
+                                     pango_font_description_from_string("Tahoma 20"));
+            gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
+        }
     }
     else
     {
-        g_sprintf(str, "Hey %s! Invalid email or password", email);
+        g_sprintf(str, "Mail not found. Please check again!");
         gtk_widget_override_font(wid->greeterlabel,
                                  pango_font_description_from_string("Tahoma 20"));
         gtk_label_set_text(GTK_LABEL(wid->greeterlabel), (const gchar *)str);
     }
-    email = NULL;
+    entry_email = NULL;
     wid = NULL;
 }
 
@@ -655,8 +732,9 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
 
     GtkWidget *addressChangeInforEntry, *nameChangeInforEntry, *phoneChangeInforEntry;
 
-    GtkWidget *updateChangeInforButton;
-    GtkWidget *gridChangeInfor, *containerChangeInfor;
+    GtkWidget *updateChangeInforButton, *backChangeInforButton;
+    GtkWidget *askBackChangeInforLabel;
+    GtkWidget *gridChangeInfor, *containerChangeInfor, *hboxFooter;
     GtkWidget *changeInforImg;
     //set up
     containerChangeInfor = gtk_hbox_new(1, 0);
@@ -673,10 +751,20 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_entry_set_icon_from_icon_name(phoneChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "phone");
     gtk_entry_set_placeholder_text(phoneChangeInforEntry, "Enter your phone number");
     //
+    askBackChangeInforLabel = gtk_label_new("Change your mind ?");
+    backChangeInforButton = gtk_button_new_with_label("Back");
+    g_signal_connect(G_OBJECT(backChangeInforButton), "clicked", G_CALLBACK(s53), NULL);
+    gtk_widget_set_name(backChangeInforButton, "backChangeInforButton");
+
+    hboxFooter = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(hboxFooter, askBackChangeInforLabel, 0, 0, 10);
+    gtk_box_pack_end(hboxFooter, backChangeInforButton, 0, 0, 0);
+
     addressChangeInforLabel = gtk_label_new("Address: ");
     nameChangeInforLabel = gtk_label_new("Full name: ");
     phoneChangeInforLabel = gtk_label_new("Phone number: ");
     updateChangeInforButton = gtk_button_new_with_label("Update");
+
     //
     gtk_grid_attach(gridChangeInfor, nameChangeInforLabel, 0, 0, 1, 1);
     gtk_grid_attach(gridChangeInfor, nameChangeInforEntry, 1, 0, 1, 1);
@@ -685,6 +773,7 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_grid_attach(gridChangeInfor, addressChangeInforLabel, 0, 2, 1, 1);
     gtk_grid_attach(gridChangeInfor, addressChangeInforEntry, 1, 2, 1, 1);
     gtk_grid_attach(gridChangeInfor, updateChangeInforButton, 1, 3, 1, 1);
+    gtk_grid_attach(gridChangeInfor, hboxFooter, 1, 4, 1, 1);
     gtk_grid_set_column_spacing(gridChangeInfor, 10);
     gtk_grid_set_row_spacing(gridChangeInfor, 10);
     gtk_widget_set_name(gridChangeInfor, "gridChangeInfor");
@@ -697,15 +786,19 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_window_set_resizable(GTK_WINDOW(changeInformationWindow), FALSE);
     gtk_window_set_position(GTK_WINDOW(changeInformationWindow), GTK_WIN_POS_CENTER);
     gtk_container_add(changeInformationWindow, containerChangeInfor);
-    //gtk_widget_show_all(changeInformationWindow);
 }
+
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
     GtkAllocation *app;
     int status;
     app = gtk_application_new("app.shopping.cart", G_APPLICATION_FLAGS_NONE);
-
+    /*Sign in*/
+    customer.email = malloc(200);
+    customer.firstName = malloc(200);
+    customer.lastName = malloc(200);
+    customer.pwd = malloc(200);
     /**/
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/

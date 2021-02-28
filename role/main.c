@@ -83,7 +83,12 @@ typedef struct
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
 static gint noOpenWindow = 1000;
-
+/*Show hang*/
+Product * products = malloc();
+void searchProduct(char * key, char * category){
+    ""
+}
+Product * current_products =
 /*Customer*/
 Customer admin;
 
@@ -91,6 +96,7 @@ Customer admin;
 
 static Customer customer;
 static int numberOfCustomers;
+static int numberOfProducts;
 
 /*Change pwd*/
 GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
@@ -203,7 +209,6 @@ int findAccount(char *inputEmail)
         {
             pos++;
         }
-
         strcpy(customer.email, inputEmail);
         pos++;
         printf("\n%s", customer.email);
@@ -237,7 +242,6 @@ int findAccount(char *inputEmail)
             strcat(customer.address, &tmp);
             pos++;
         }
-
         pos++;
         customer.type = (int)str[pos] - '0';
         pos += 2;
@@ -246,7 +250,6 @@ int findAccount(char *inputEmail)
         {
             int tmp = (int)str[pos] - '0';
             customer.tikuCoin = customer.tikuCoin * 10 + tmp;
-            printf("\nDuma");
             pos++;
         }
         printf("\n%d", customer.tikuCoin);

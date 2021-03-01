@@ -84,7 +84,7 @@ typedef struct
 static gint noCloseWindow = 1000;
 static gint noOpenWindow = 1000;
 /*Show hang*/
-Product * products = malloc();
+/*Product * products = malloc();
 void searchProduct(char * key, char * category){
     ""
 }

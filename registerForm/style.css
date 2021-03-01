@@ -1,0 +1,25 @@
+#boxAllRegister {
+    margin: 20px;
+}
+#registerLabel {
+    font-size: 1.5rem;
+    font-style: italic;
+}
+#registerButton {
+    background: #23689b;
+    color: white;
+}
+#registerButton:hover {
+    background: tomato;
+    color: white;
+}
+#backRegisterButton {
+    background: transparent;
+    border: 1px solid #585858;
+    color: #585858;
+}
+#backRegisterButton:hover {
+    background: #585858;
+    border: 1px solid black;
+    color: white;
+}

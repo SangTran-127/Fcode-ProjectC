@@ -1,0 +1,4 @@
+# depslib dependency file v1.0
+1614621393 source:c:\msys64\mingw64\registerform\main.c
+	<gtk/gtk.h>
+

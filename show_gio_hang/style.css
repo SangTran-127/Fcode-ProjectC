@@ -1,0 +1,71 @@
+grid {
+    /* border: 1px solid black; */
+    margin: 3px;
+    background: white;
+    margin-left: 10px;
+    padding: 5px;
+}
+#box1, #box2, #box3, #box4, #box5, #box6, #box7, #box8, #box9, #box10, #box11, #box12, #box13, #box14, #box15, #box16, #box17, #box18, #box19, #box20, #box21, #box22, #box23, #box24, #box25, #box26, #box27, #box28, #box29, #box30, #box31, #box32, #box33, #box34, #box35, #box36, #box37, #box38, #box39, #box40, #box41, #box42, #box43, #box44, #box45, #box46, #box47, #box48, #box49, #box50 {
+     border: 1px solid black; 
+    margin-left: 10px;
+    margin: 2px;
+    margin-right: 10px;
+    background: white;
+    padding: 10px;
+} 
+window {
+    background: white;
+} 
+#hboxSearch {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+#vboxContain {
+    border-right: 5px solid black;
+}
+#textView {
+
+}
+#menuLabel {
+    background: #23689b;
+    color: white;
+}
+#leftSidevBox {
+    border-right: 5px solid black;
+}
+#backCart {
+    background: transparent;
+    border: 1px solid #585858;
+    color: #585858;
+}
+#backCart:hover {
+    background: #585858;
+    border: 1px solid #585858;
+    color: white;
+}
+#paymentButton {
+    background: #23689b;
+    color: white;
+    font-weight: 900;
+}
+#paymentButton:hover {
+    color: red;
+    background: yellow;
+    font-style: italic;
+}
+#delId, #search {
+    border-radius: 0px;
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid #23689b;
+}
+#Delete {
+    background: #585858;
+    color: white;
+    font-weight: 500;
+} 
+#id1, #id2, #id3, #id4, #id5, #id6, #id7, #id8, #id9, #id10 {
+    background: #23689b;
+    color: white;
+    margin: 0;
+} 

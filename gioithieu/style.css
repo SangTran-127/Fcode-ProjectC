@@ -1,0 +1,63 @@
+#logo {
+    font-size: 2rem;
+    font-style: italic;
+    color: #23689b;
+}
+#vboxIntro {
+    margin-top: 100px;
+    margin-left: 50px;
+}
+#tiku {
+    font-size: 4rem;
+    color: #23689b;
+    font-style: italic;
+}
+
+#header {
+    margin: 10px;
+}
+#loginButton:hover {
+    background: #23689b;
+    color: white;
+    
+}
+#loginButton {
+    border: 1px solid #23689b;
+    color: #23689b;
+    background: white;
+    font-style: italic;
+    border-radius: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+#contact, #about, #home, #signup {
+    margin-left: 20px;
+    border-radius: 0px;
+    border: none;
+    border-bottom: 2px solid #23689b;
+    background: transparent;
+}
+#contact:hover, #about:hover, #home:hover, #signup:hover {
+    border: 2px solid #23689b;
+}
+#shoppingLabel {
+    margin-top: 5px;
+    font-size: 3rem;
+    color: #23689b;
+    margin-bottom: 15px;
+}
+#goShopping {
+    margin-top: 20px;
+    background: #23689b;
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+#goShopping:hover {
+    background: white;
+    color: #23689b;
+    border: 1px solid #23689b;
+}

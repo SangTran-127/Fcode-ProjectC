@@ -1,0 +1,36 @@
+#headerTiku {
+    background: #23689b;
+    padding: 20px;
+    border-bottom: 1px solid black;
+}
+#mainSectionInfor {
+    margin-right: 20px;
+    padding-bottom: 10px;
+}
+#pictureInfor {
+    margin-left: 40px;
+    margin-right: 0px;
+    padding-right: 0px;
+}
+#containerShowInfor {
+    background: white;
+}
+#nameInforLabel, #addressLabel, #dobLabel {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+#welcomeChangeInforLabel, #nameShopLabel {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: white;
+}
+#backShowInforButton {
+    background: transparent;
+    border: 1px solid #585858;
+    color: #585858;
+}
+#backShowInforButton:hover {
+    background: #585858;
+    border: 1px solid #585858;
+    color: white;
+}

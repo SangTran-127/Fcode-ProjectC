@@ -2,6 +2,7 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <string.h>
+#include <stdlib.h>
 
 /****************************************************************** LOAD CSS */
 static void load_css(void)
@@ -39,6 +40,9 @@ typedef struct
     gchar *address;
     gint type;
     gint tikuCoin;
+    gint dob;
+    gint mob;
+    gint yob;
 } Customer;
 
 typedef struct
@@ -79,6 +83,7 @@ typedef struct
 /*4*/ static GtkWidget *changePwdWindow;
 /*5*/ static GtkWidget *changeInformationWindow;
 /*6*/ static GtkWidget *notiWindow;
+/*7*/ static GtkWidget *signUpWindow;
 
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
@@ -89,14 +94,16 @@ void searchProduct(char * key, char * category){
     ""
 }
 Product * current_products =
-/*Customer*/
-Customer admin;
 
 /*Sign in*/
 
 static Customer customer;
 static int numberOfCustomers;
 static int numberOfProducts;
+
+/*Sign up*/
+static Customer newAccount;
+GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
 
 /*Change pwd*/
 GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
@@ -124,12 +131,20 @@ static void onNoti()
 {
     gtk_widget_show_all(GTK_WIDGET(notiWindow));
 }
-
 static void offNoti()
 {
     gtk_widget_hide(GTK_WIDGET(notiWindow));
 }
-
+static void s17()
+{
+    gtk_widget_hide(GTK_WIDGET(openWindow));
+    gtk_widget_show_all(GTK_WIDGET(signUpWindow));
+}
+static void s71()
+{
+    gtk_widget_hide(GTK_WIDGET(signUpWindow));
+    gtk_widget_show_all(GTK_WIDGET(openWindow));
+}
 static void s31()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
@@ -197,6 +212,9 @@ int findAccount(char *inputEmail)
         int pos = 0;
         customer.id = 0;
         customer.tikuCoin = 0;
+        customer.dob = 0;
+        customer.mob = 0;
+        customer.yob = 0;
         while (str[pos] != ',')
         {
             int tmp = (int)str[pos] - '0';
@@ -234,7 +252,28 @@ int findAccount(char *inputEmail)
             strcat(customer.lastName, &tmp);
             pos++;
         }
+        pos++;
 
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            customer.dob = customer.dob * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            customer.mob = customer.mob * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            customer.yob = customer.yob * 10 + tmp;
+            pos++;
+        }
         pos++;
         while (str[pos] != ',')
         {
@@ -315,146 +354,26 @@ void signIn_entry_callback(GtkWidget *widget, gpointer data)
 }
 
 /*Sign up*/
-static gint signUp_get_next_id(void)
+
+void signUp_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
 {
-    return 12;
-}
-
-static void
-signUp_get_datestamp(gchar *ds)
-{
-    GTimeVal time;
-    GDate date;
-
-    g_get_current_time(&time);
-    g_date_clear(&date, 1);
-    g_date_set_time_val(&date, &time);
-    g_date_strftime(ds, 256, "%F", &date);
-}
-
-static void
-signUp_img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data)
-{
-    GtkWidget *imgDialog;
-    GtkFileFilter *filter;
-    gint res;
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
-
-    filter = gtk_file_filter_new();
-    imgDialog = gtk_file_chooser_dialog_new("Open File", GTK_WINDOW(a->window),
-                                            GTK_FILE_CHOOSER_ACTION_OPEN,
-                                            "_Cancel", GTK_RESPONSE_CANCEL,
-                                            "_Open", GTK_RESPONSE_ACCEPT, NULL);
-    gtk_file_filter_add_mime_type(GTK_FILE_FILTER(filter), "image/png");
-    gtk_file_filter_add_mime_type(GTK_FILE_FILTER(filter), "image/jpg");
-    gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(imgDialog), filter);
-
-    res = gtk_dialog_run(GTK_DIALOG(imgDialog));
-    if (res == GTK_RESPONSE_ACCEPT)
-    {
-        char *filename, *tfilename;
-        char ofilename[256] = "";
-        GFile *in, *out;
-        GtkWidget *image;
-        const GdkPixbuf *pb;
-        GError **error = NULL;
-
-        GtkFileChooser *chooser = GTK_FILE_CHOOSER(imgDialog);
-        filename = gtk_file_chooser_get_filename(chooser);
-
-        // get size of image
-        image = gtk_image_new_from_file(filename);
-        pb = gtk_image_get_pixbuf(GTK_IMAGE(image));
-        /* if size matches w=80 && h=90 copy it to destination and load it */
-        if (gdk_pixbuf_get_width(pb) == 80 && gdk_pixbuf_get_height(pb) == 90)
-        {
-            /* remove the path & add a new default one "./img/" where we store all
-           images */
-            tfilename = g_strrstr(filename, "/");
-            g_sprintf(ofilename, "./img/%s", &tfilename[1]);
-            /* copy the image */
-            in = g_file_new_for_path(filename);
-            out = g_file_new_for_path(ofilename);
-            g_file_copy(in, out, G_FILE_COPY_NONE, NULL, NULL, NULL, error);
-            gtk_image_set_from_file(GTK_IMAGE(a->img), ofilename);
+    GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
+    char* firstName = gtk_entry_get_text(GTK_ENTRY(oldPasswordChangeEntry));
+    char* lastName = gtk_entry_get_text(GTK_ENTRY(lastNameEntry));
+    char* email = gtk_entry_get_text(GTK_ENTRY(emailEntry));
+    char* password = gtk_entry_get_text(GTK_ENTRY(passwordEntry));
+    char* reenterPassword = gtk_entry_get_text(GTK_ENTRY(reenterPasswordEntry));
+    if(){
+        if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
+            printf("\nOke ban nha");
+            onNoti();
+        }else{
+            printf("\nKhong trung kia ma");
         }
-        else
-        {
-            gtk_image_set_from_file(GTK_IMAGE(a->img), "src/avatar2.png");
-        }
-        g_free(filename);
+    }else{
+        printf("\nSai mat khau roi ban eiii");
     }
-    gtk_widget_destroy(imgDialog);
-}
 
-static void
-signUp_cancel_callback(GtkWidget *widget, gpointer user_data)
-{
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
-
-    g_print("Cancel pressed!\n");
-    g_application_quit(G_APPLICATION(a->app));
-}
-
-static void signUp_clear_callback(GtkWidget *widget, gpointer user_data)
-{
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
-
-    g_print("Clear pressed!\n");
-    gtk_entry_set_text(GTK_ENTRY(a->d->tmpEntry), "");
-    gtk_entry_set_text(GTK_ENTRY(a->d->fnameEntry), "");
-    gtk_entry_set_text(GTK_ENTRY(a->d->gnameEntry), "");
-    gtk_entry_set_text(GTK_ENTRY(a->d->cityEntry), "");
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(a->d->byearSpin), 1990);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(a->d->bmonthSpin), 1);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(a->d->bdaySpin), 1);
-    gtk_image_set_from_file(GTK_IMAGE(a->img), "src/avatar.png");
-}
-
-static void
-signUp_add_callback(GtkWidget *widget, gpointer user_data)
-{
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
-
-    g_print("Add pressed!\n");
-    g_print("-------------------------------\n");
-    g_print("Given Name: %s\n", gtk_entry_get_text(GTK_ENTRY(a->d->tmpEntry)));
-    g_print("Family Name: %s\n", gtk_entry_get_text(GTK_ENTRY(a->d->fnameEntry)));
-    g_print("Street: %s\n", gtk_entry_get_text(GTK_ENTRY(a->d->gnameEntry)));
-    g_print("City: %s\n", gtk_entry_get_text(GTK_ENTRY(a->d->cityEntry)));
-    g_print("Birth: %.0lf-%.0lf-%.0lf\n",
-            gtk_spin_button_get_value(GTK_SPIN_BUTTON(a->d->byearSpin)),
-            gtk_spin_button_get_value(GTK_SPIN_BUTTON(a->d->bmonthSpin)),
-            gtk_spin_button_get_value(GTK_SPIN_BUTTON(a->d->bdaySpin)));
-    g_print("-------------------------------\n");
-}
-
-static void
-nameentry_callback(GtkWidget *widget, gpointer user_data)
-{
-    gint studyProgNr = 54;
-    gchar *org = "uni";
-    gchar *cnt = "net";
-    gchar *gname, *fname;
-    gchar email[256];
-    gchar dateStamp[256];
-    gchar *year;
-    gchar id[256] = "";
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
-
-    /* construct the eMail address */
-    gname = (gchar *)gtk_entry_get_text(GTK_ENTRY(a->d->tmpEntry));
-    fname = (gchar *)gtk_entry_get_text(GTK_ENTRY(a->d->fnameEntry));
-    /* we update the fields on the top only when we got a family name */
-    if ((g_strcmp0(gname, "") != 0) && (g_strcmp0(fname, "") != 0))
-    {
-        g_sprintf(email, "%s.%s@%s.%s", gname, fname, org, cnt);
-        /* update date info when Family Name was entered */
-        signUp_get_datestamp(dateStamp);
-        /* construct matrnum when Family Name was entered */
-        year = g_strndup(dateStamp, 4);
-        g_snprintf(id, 10, "%s%d%03d", year, studyProgNr, signUp_get_next_id());
-    }
 }
 
 /*Change pwd*/
@@ -533,6 +452,12 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
             strcat(newInfor, ","); strcat(newInfor, entryConfirmPwd);
             strcat(newInfor, ","); strcat(newInfor, customer.firstName);
             strcat(newInfor, ","); strcat(newInfor, customer.lastName);
+            strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
             strcat(newInfor, ","); strcat(newInfor, customer.address);
             strcpy(tmpStr, ""); itoa(customer.type, tmpStr, 10);
             strcat(newInfor, ","); strcat(newInfor, tmpStr);
@@ -572,7 +497,7 @@ static void activate(GtkApplication *app, gpointer data)
     g_signal_connect(G_OBJECT(chooseSignInButton), "clicked", G_CALLBACK(s12), NULL);
 
     chooseSignUpButton = gtk_button_new_with_label("Sign up");
-
+    g_signal_connect(G_OBJECT(chooseSignUpButton), "clicked", G_CALLBACK(s17), NULL);
     vBoxRoleContainer = gtk_vbox_new(0, 20);
     gtk_box_pack_start(vBoxRoleContainer, askRoleLabel, 0, 0, 40);
     gtk_box_pack_start(vBoxRoleContainer, chooseSignInButton, 0, 0, 0);
@@ -673,106 +598,92 @@ static void signInActivate(GtkApplication *app, gpointer data)
 }
 
 /*Sign up window*/
-static void signUpActivate(GtkApplication *app, gpointer user_data)
+static void signUpActivate(GtkApplication *app, gpointer data)
 {
-    GtkWidget *box;
-    GtkWidget *ebox;
-    GtkWidget *grid;
-    GtkWidget *tmpLabel;
-    GtkWidget *fnameLabel;
-    GtkWidget *gnameLabel;
-    GtkWidget *cityLabel;
-    GtkWidget *birthLabel;
-    GtkWidget *cButton;
-    GtkWidget *lButton;
-    GtkWidget *aButton;
-    signUp_appWidgets *a = (signUp_appWidgets *)user_data;
 
-    /* create a window with title, default size,and icons */
-    a->window = gtk_application_window_new(a->app);
-    gtk_window_set_application(GTK_WINDOW(a->window), GTK_APPLICATION(a->app));
-    gtk_window_set_title(GTK_WINDOW(a->window), "Student Management Toolbox");
-    gtk_window_set_default_size(GTK_WINDOW(a->window), 400, 300);
-    gtk_window_set_default_icon_from_file("icon.png", NULL);
-    gtk_window_set_resizable(GTK_WINDOW(a->window), FALSE);
+    GtkWidget *changeOption, *registerBackground;
+    GtkWidget *registerLabel, *inforRegisterLabel, *askRegisterLabel, *dayLabel, *monthLabel, *yearLabel, *imgLabel;
+    GtkWidget *vboxRegisterContainer, *headerBox, *userNamehBox, *dateRegisterBox, *boxAllRegister, *imgBox;
+    GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
+    GtkWidget *registerButton, *backRegisterButton, *imgButton, *clearButton;
+    GtkWidget *monthSpinButton, *yearSpinButton, *daySpinButton;
+    boxAllRegister = gtk_hbox_new(0, 10);
+    firstNameEntry = gtk_entry_new();
+    lastNameEntry = gtk_entry_new();
+    emailEntry = gtk_entry_new();
+    registerBackground = gtk_image_new_from_file("background.png");
+    imgButton = gtk_button_new_from_icon_name("user-home", 0);
+    imgLabel = gtk_label_new("Add your first avatar");
+    dayLabel =  gtk_label_new("Date");
+    monthLabel = gtk_label_new("Month");
+    yearLabel = gtk_label_new("Year");
+    monthSpinButton = gtk_spin_button_new_with_range(1, 12, 1);
+    daySpinButton = gtk_spin_button_new_with_range(1, 31, 1);
+    yearSpinButton = gtk_spin_button_new_with_range(1900, 2021, 1);
+    passwordEntry = gtk_entry_new();
+    reenterPasswordEntry = gtk_entry_new();
+    registerLabel = gtk_label_new("------------Register------------");
+    gtk_widget_set_name(registerLabel, "registerLabel");
+    inforRegisterLabel = gtk_label_new("Create your account. It's free and only takes a minute");
+    registerButton = gtk_button_new_with_label("Register Now");
+    gtk_widget_set_name(registerButton, "registerButton");
+    askRegisterLabel = gtk_label_new("Wanna change your option?");
+    backRegisterButton = gtk_button_new_with_label("Back");
+    g_signal_connect(G_OBJECT(backRegisterButton), "clicked", G_CALLBACK(s71), NULL);
 
-    box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
-    gtk_container_add(GTK_CONTAINER(a->window), GTK_WIDGET(box));
-    gtk_container_set_border_width(GTK_CONTAINER(a->window), 10);
+    clearButton = gtk_button_new_with_label("Clear");
+    gtk_widget_set_name(clearButton, "clearButton");
+    gtk_widget_set_name(backRegisterButton,"backRegisterButton");
+    gtk_entry_set_placeholder_text(firstNameEntry, "First name");
+    gtk_entry_set_placeholder_text(lastNameEntry, "Last name");
+    gtk_entry_set_placeholder_text(emailEntry, "Email address");
+    gtk_entry_set_icon_from_icon_name(emailEntry, GTK_POS_RIGHT, "mail-read");
+    gtk_entry_set_placeholder_text(passwordEntry, "Password");
+    gtk_entry_set_icon_from_icon_name(passwordEntry, GTK_POS_RIGHT, "dialog-password");
+    gtk_entry_set_visibility(passwordEntry, FALSE);
+    gtk_entry_set_placeholder_text(reenterPasswordEntry, "Confirm password");
+    gtk_entry_set_icon_from_icon_name(reenterPasswordEntry, GTK_POS_RIGHT, "dialog-password");
+    gtk_entry_set_visibility(reenterPasswordEntry, FALSE);
+    imgBox = gtk_hbox_new(0, 20);
+    gtk_box_pack_start(imgBox, imgLabel, 0, 0, 0);
+    gtk_box_pack_start(imgBox, imgButton, 0, 0, 0);
+    changeOption = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(changeOption, clearButton, 0, 0, 0);
+    gtk_box_pack_end(changeOption, backRegisterButton, 0, 0, 0);
+    gtk_box_pack_end(changeOption, askRegisterLabel, 0, 0, 0);
+    headerBox = gtk_vbox_new(0, 15);
+    gtk_box_pack_start(headerBox, registerLabel, 0, 0, 0);
+    gtk_box_pack_start(headerBox, inforRegisterLabel, 0, 0, 0);
+    userNamehBox = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(userNamehBox, firstNameEntry, 0, 0, 0);
+    gtk_box_pack_start(userNamehBox, lastNameEntry, 0, 0, 0);
+    dateRegisterBox = gtk_hbox_new(0, 5);
+    gtk_box_pack_start(dateRegisterBox, dayLabel, 0, 0, 0);
+    gtk_box_pack_start(dateRegisterBox, daySpinButton, 0, 0, 0);
+    gtk_box_pack_start(dateRegisterBox, monthLabel, 0, 0, 0);
+    gtk_box_pack_start(dateRegisterBox, monthSpinButton, 0, 0, 0);
+    gtk_box_pack_start(dateRegisterBox, yearLabel, 0, 0, 0);
+    gtk_box_pack_start(dateRegisterBox, yearSpinButton, 0, 0, 0);
 
-    /* grid: image and labels */
-    grid = gtk_grid_new();
-    gtk_grid_set_column_spacing(GTK_GRID(grid), 5);
-    gtk_grid_set_row_spacing(GTK_GRID(grid), 5);
-    gtk_widget_set_size_request(GTK_WIDGET(grid), 400, 90);
-    gtk_widget_set_valign(GTK_WIDGET(grid), GTK_ALIGN_CENTER);
-    gtk_widget_set_halign(GTK_WIDGET(grid), GTK_ALIGN_CENTER);
-    gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(grid), TRUE, TRUE, 0);
-
-    /* clickable image top left */
-    ebox = gtk_event_box_new();
-    gtk_widget_set_size_request(GTK_WIDGET(ebox), 150, 90);
-    gtk_widget_set_valign(GTK_WIDGET(ebox), GTK_ALIGN_CENTER);
-    gtk_widget_set_halign(GTK_WIDGET(ebox), GTK_ALIGN_CENTER);
-    a->img = gtk_image_new_from_file("src/avatar.png");
-    gtk_container_add(GTK_CONTAINER(ebox), a->img);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(ebox), 1, 0, 1, 3);
-    g_signal_connect(G_OBJECT(ebox), "button_press_event",
-                     G_CALLBACK(signUp_img_callback), (gpointer)a);
-
-    tmpLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Given Name:",
-                              "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(tmpLabel), 0, 3, 1, 1);
-    a->d->tmpEntry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->tmpEntry), 1, 3, 1, 1);
-
-    fnameLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Family Name:",
-                                "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(fnameLabel), 2, 3, 1, 1);
-    a->d->fnameEntry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->fnameEntry), 3, 3, 1, 1);
-    g_signal_connect(G_OBJECT(a->d->fnameEntry), "activate",
-                     G_CALLBACK(nameentry_callback), (gpointer)a);
-
-    gnameLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Street:",
-                                "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(gnameLabel), 0, 4, 1, 1);
-    a->d->gnameEntry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->gnameEntry), 1, 4, 1, 1);
-
-    cityLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "City:",
-                               "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(cityLabel), 2, 4, 1, 1);
-    a->d->cityEntry = gtk_entry_new();
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->cityEntry), 3, 4, 1, 1);
-
-    birthLabel = gtk_widget_new(GTK_TYPE_LABEL, "label", "Date of Birth:",
-                                "xalign", 1.0, "yalign", 0.5, NULL);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(birthLabel), 0, 6, 1, 1);
-    a->d->byearSpin = gtk_spin_button_new_with_range(1900, 2000, 1);
-    gtk_spin_button_set_value(GTK_SPIN_BUTTON(a->d->byearSpin), 1990);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->byearSpin), 1, 6, 1, 1);
-    a->d->bmonthSpin = gtk_spin_button_new_with_range(1, 12, 1);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->bmonthSpin), 2, 6, 1, 1);
-    a->d->bdaySpin = gtk_spin_button_new_with_range(1, 31, 1);
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(a->d->bdaySpin), 3, 6, 1, 1);
-
-    /* lowerbox: buttons */
-    cButton = gtk_button_new_with_mnemonic("_Cancel");
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(cButton), 1, 7, 1, 1);
-    g_signal_connect(G_OBJECT(cButton), "clicked", G_CALLBACK(signUp_cancel_callback),
-                     (gpointer)a);
-    lButton = gtk_button_new_with_mnemonic("C_lear");
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(lButton), 2, 7, 1, 1);
-    g_signal_connect(G_OBJECT(lButton), "clicked", G_CALLBACK(signUp_clear_callback),
-                     (gpointer)a);
-    aButton = gtk_button_new_with_mnemonic("_Add");
-    gtk_grid_attach(GTK_GRID(grid), GTK_WIDGET(aButton), 3, 7, 1, 1);
-    g_signal_connect(G_OBJECT(aButton), "clicked", G_CALLBACK(signUp_add_callback),
-                     (gpointer)a);
-
-    /* display all widgets */
-    gtk_widget_show_all(GTK_WIDGET(a->window));
+    vboxRegisterContainer = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(vboxRegisterContainer, headerBox, 0, 0, 30);
+    gtk_box_pack_start(vboxRegisterContainer, userNamehBox, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, emailEntry, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, dateRegisterBox, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, imgBox, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, passwordEntry, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, reenterPasswordEntry, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, registerButton, 0, 0, 10);
+    gtk_box_pack_start(vboxRegisterContainer, changeOption, 0, 0, 10);
+    gtk_box_pack_start(boxAllRegister, registerBackground, 0, 0, 0);
+    gtk_box_pack_start(boxAllRegister, vboxRegisterContainer, 0, 0, 0);
+    gtk_widget_set_name(boxAllRegister,"boxAllRegister");
+    signUpWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(signUpWindow), "Register-Form");
+	gtk_window_set_default_size(GTK_WINDOW(signUpWindow), 500, 500);
+	gtk_window_set_resizable(GTK_WINDOW(signUpWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(signUpWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(signUpWindow, boxAllRegister);
 }
 
 static void customerMapActivate(GtkApplication *app, gpointer user_data)
@@ -966,6 +877,7 @@ static void notiActivate(GtkApplication *app, gpointer data) {
     gtk_widget_set_name(alertButton, "alertButton");
     gtk_widget_set_name(vboxAlert, "vboxAlert");
     notiWindow = gtk_application_window_new(app);
+    notiWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(notiWindow), "");
     gtk_window_set_default_size(GTK_WINDOW(notiWindow),200,20);
     gtk_window_set_resizable(GTK_WINDOW(notiWindow), FALSE);
@@ -985,6 +897,12 @@ int main(int argc, char **argv)
     customer.lastName = malloc(200);
     customer.pwd = malloc(200);
     customer.address = malloc(200);
+    /*sign up*/
+    newAccount.email = malloc(200);
+    newAccount.firstName = malloc(200);
+    newAccount.lastName = malloc(200);
+    newAccount.pwd = malloc(200);
+    newAccount.address = malloc(200);
     /**/
 
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
@@ -996,9 +914,7 @@ int main(int argc, char **argv)
 
     g_signal_connect(app, "activate", G_CALLBACK(changePwdActivate), NULL);
     /*Sign Up*/
-    signUp_appWidgets *a = g_malloc(sizeof(signUp_appWidgets));
-    a->d = g_malloc(sizeof(signUp_diaWidgets));
-    //g_signal_connect(G_OBJECT(a->app), "activate", G_CALLBACK(signUpActivate), (gpointer)a);
+    g_signal_connect(app, "activate", G_CALLBACK(signUpActivate), NULL);
     /*Sign in*/
     appWidgets *wid = g_malloc(sizeof(appWidgets));
     g_signal_connect(app, "activate", G_CALLBACK(signInActivate), (gpointer)wid);
@@ -1011,9 +927,5 @@ int main(int argc, char **argv)
 
     status = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
-    /*Sign up*/
-    g_object_unref(G_OBJECT(a->app));
-    g_free(a->d);
-    g_free(a);
     return status;
 }

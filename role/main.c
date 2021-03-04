@@ -84,6 +84,9 @@ typedef struct
 /*5*/ static GtkWidget *changeInformationWindow;
 /*6*/ static GtkWidget *notiWindow;
 /*7*/ static GtkWidget *signUpWindow;
+/*8*/ static GtkWidget *showProductsWindow;
+/*9*/ static GtkWidget *supplierMapWindow;
+
 
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
@@ -140,6 +143,29 @@ static void s17()
     gtk_widget_hide(GTK_WIDGET(openWindow));
     gtk_widget_show_all(GTK_WIDGET(signUpWindow));
 }
+static void s38()
+{
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+}
+static void s83()
+{
+    gtk_widget_hide(GTK_WIDGET(showProductsWindow));
+    printf("\ns83: customer.type: %d", customer.type);
+    if(customer.type == 0){
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    }else if(customer.type == 1){
+        gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+    }else{
+        gtk_widget_show_all(GTK_WIDGET(openWindow));
+    }
+}
+static void s18()
+{
+    customer.type = -1;
+    gtk_widget_hide(GTK_WIDGET(openWindow));
+    gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+}
 static void s71()
 {
     gtk_widget_hide(GTK_WIDGET(signUpWindow));
@@ -158,17 +184,41 @@ static void s43()
 static void s23()
 {
     gtk_widget_hide(GTK_WIDGET(signInWindow));
-    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    if(customer.type == 0){
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    }else{
+        gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+    }
 }
 static void s12()
 {
     gtk_widget_hide(GTK_WIDGET(openWindow));
     gtk_widget_show_all(GTK_WIDGET(signInWindow));
 }
+static void s94()
+{
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
+}
+static void s95()
+{
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
+}
 static void s34()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
+}
+static void s98()
+{
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+}
+static void s91()
+{
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
 static void s41()
 {
@@ -363,7 +413,7 @@ void signUp_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
     char* email = gtk_entry_get_text(GTK_ENTRY(emailEntry));
     char* password = gtk_entry_get_text(GTK_ENTRY(passwordEntry));
     char* reenterPassword = gtk_entry_get_text(GTK_ENTRY(reenterPasswordEntry));
-    if(){
+    if(1 == 1){
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
             printf("\nOke ban nha");
             onNoti();
@@ -488,28 +538,81 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
 static void activate(GtkApplication *app, gpointer data)
 {
     load_css();
-    GtkWidget *vBoxRoleContainer;
-    GtkWidget *chooseSignInButton, *chooseSignUpButton;
-    GtkWidget *askRoleLabel;
+    GtkWidget *vboxIntro;
+    GtkWidget *hboxSection;
+    GtkWidget *vBoxContainer;
+    GtkWidget *navbar;
+    GtkWidget *logo;
+    GtkWidget *header; //hbox
+    GtkWidget *main;
+    GtkWidget *picture;
+    GtkWidget *contactButton, *aboutButton, *homeButton, *loginButton, *signUpButton;
+    GtkWidget *goShoppingNow; //button
+    GtkWidget *tikuLabel;
+    GtkWidget *shoppingLabel;
+    GtkWidget *slogan;
+    tikuLabel = gtk_label_new("Tiku");
+    gtk_widget_set_name(tikuLabel, "tiku");
+    shoppingLabel = gtk_label_new("Shopping online");
+    gtk_widget_set_name(shoppingLabel, "shoppingLabel");
+    slogan = gtk_label_new("A few clicks is all it takes.\n\Life is hard enough already. Let us make it a little easier.\n\The quality service you expect.");
+    contactButton = gtk_button_new_with_label("Contact");
+    gtk_widget_set_name(contactButton, "contact");
+    aboutButton = gtk_button_new_with_label("About");
+    gtk_widget_set_name(aboutButton, "about");
+    homeButton = gtk_button_new_with_label("Home");
+    gtk_widget_set_name(homeButton, "home");
+    signUpButton = gtk_button_new_with_label("Sign Up");
+    gtk_widget_set_name(signUpButton, "signup");
+    g_signal_connect(G_OBJECT(signUpButton), "clicked", G_CALLBACK(s17), NULL);
+    loginButton = gtk_button_new_with_label("Login");
+    gtk_widget_set_name(loginButton, "loginButton");
+    g_signal_connect(G_OBJECT(loginButton), "clicked", G_CALLBACK(s12), NULL);
+    goShoppingNow = gtk_button_new_with_label("Go Shopping Now --->");
+    gtk_widget_set_name(goShoppingNow, "goShopping");
+    logo = gtk_label_new("Tiku");
 
-    askRoleLabel = gtk_label_new("What do you want?");
-    chooseSignInButton = gtk_button_new_with_label("Sign in");
-    g_signal_connect(G_OBJECT(chooseSignInButton), "clicked", G_CALLBACK(s12), NULL);
+    gtk_widget_set_name(logo, "logo");
 
-    chooseSignUpButton = gtk_button_new_with_label("Sign up");
-    g_signal_connect(G_OBJECT(chooseSignUpButton), "clicked", G_CALLBACK(s17), NULL);
-    vBoxRoleContainer = gtk_vbox_new(0, 20);
-    gtk_box_pack_start(vBoxRoleContainer, askRoleLabel, 0, 0, 40);
-    gtk_box_pack_start(vBoxRoleContainer, chooseSignInButton, 0, 0, 0);
-    gtk_box_pack_start(vBoxRoleContainer, chooseSignUpButton, 0, 0, 0);
-    gtk_widget_set_name(vBoxRoleContainer, "vBoxRoleContainer");
+    navbar = gtk_hbox_new(0, 0);
+
+    gtk_box_pack_start(navbar, homeButton, 0, 0, 0);
+    gtk_box_pack_start(navbar, aboutButton, 0, 0, 0);
+    gtk_box_pack_start(navbar, contactButton, 0, 0, 0);
+    gtk_box_pack_start(navbar, signUpButton, 0, 0, 0);
+    gtk_box_pack_start(navbar, loginButton, 0, 0, 0);
+
+    header = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(header, logo, 0, 0, 0);
+    gtk_box_pack_end(header, navbar, 0, 0, 0);
+    gtk_widget_set_name(header, "header");
+
+    vboxIntro = gtk_vbox_new(0, 0);
+    gtk_widget_set_name(vboxIntro, "vboxIntro");
+    gtk_box_pack_start(vboxIntro, tikuLabel, 0, 0, 0);
+    gtk_box_pack_start(vboxIntro, shoppingLabel, 0, 0, 0);
+    gtk_box_pack_start(vboxIntro, slogan, 0, 0, 0);
+    gtk_box_pack_start(vboxIntro, goShoppingNow, 0, 0, 0);
+    g_signal_connect(G_OBJECT(goShoppingNow), "clicked", G_CALLBACK(s18), NULL);
+
+
+    picture = gtk_image_new_from_file("background_landing_page.png");
+
+    hboxSection = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(hboxSection, vboxIntro, 0, 0, 0);
+    gtk_box_pack_start(hboxSection, picture, 0, 0, 0);
+
+    vBoxContainer = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(vBoxContainer, header, 0, 0, 0);
+    gtk_box_pack_start(vBoxContainer, hboxSection, 0, 0, 0);
+
     openWindow = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(openWindow), "Shopping role");
-    gtk_window_set_default_size(GTK_WINDOW(openWindow), 300, 300);
-    gtk_window_set_resizable(GTK_WINDOW(openWindow), FALSE);
-    gtk_window_set_position(GTK_WINDOW(openWindow), GTK_WIN_POS_CENTER);
-    gtk_container_add(openWindow, vBoxRoleContainer);
-    gtk_widget_show_all(openWindow);
+	gtk_window_set_title(GTK_WINDOW(openWindow), "Tiku");
+	gtk_window_set_default_size(GTK_WINDOW(openWindow), 350, 200);
+	gtk_window_set_resizable(GTK_WINDOW(openWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(openWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(openWindow, vBoxContainer);
+	gtk_widget_show_all(openWindow);
 }
 /*Sign in window*/
 static void signInActivate(GtkApplication *app, gpointer data)
@@ -705,6 +808,7 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     changeInforButton = gtk_button_new_with_label("Change information");
     g_signal_connect(G_OBJECT(changeInforButton), "clicked", G_CALLBACK(s35), NULL);
     shoppingButton = gtk_button_new_with_label("Go shopping");
+    g_signal_connect(G_OBJECT(shoppingButton), "clicked", G_CALLBACK(s38), NULL);
     showInforButton = gtk_button_new_with_label("Show informatiom");
     logoutButton = gtk_button_new_with_label("Log out");
     g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s31), NULL);
@@ -733,6 +837,57 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     gtk_window_set_resizable(GTK_WINDOW(customerMapWindow), FALSE);
     gtk_window_set_position(GTK_WINDOW(customerMapWindow), GTK_WIN_POS_CENTER);
     gtk_container_add(customerMapWindow, containerClient);
+    //gtk_widget_show_all(customerMapWindow);
+}
+
+static void supplierMapActivate(GtkApplication *app, gpointer user_data)
+{
+
+    GtkWidget *clientMenu; //grid
+    GtkWidget *helloLabel, *balanceLabel;
+    GtkWidget *buyHistoryButton, *changePassButton, *changeInforButton, *shoppingButton, *logoutButton, *showInforButton;
+    GtkWidget *headerClientBox, *topContainBox, *containerClient;
+    // khoi tao
+    clientMenu = gtk_grid_new();
+    gtk_widget_set_name(clientMenu, "clientMenu");
+    containerClient = gtk_vbox_new(0, 0);
+    helloLabel = gtk_label_new("Hello customer!");
+    balanceLabel = gtk_label_new("Balance: $0.00");
+    buyHistoryButton = gtk_button_new_with_label("Products Managerment");
+    changePassButton = gtk_button_new_with_label("Change password");
+    g_signal_connect(G_OBJECT(changePassButton), "clicked", G_CALLBACK(s94), NULL);
+    changeInforButton = gtk_button_new_with_label("Change information");
+    g_signal_connect(G_OBJECT(changeInforButton), "clicked", G_CALLBACK(s95), NULL);
+    shoppingButton = gtk_button_new_with_label("See your products");
+    g_signal_connect(G_OBJECT(shoppingButton), "clicked", G_CALLBACK(s98), NULL);
+    showInforButton = gtk_button_new_with_label("Show informatiom");
+    logoutButton = gtk_button_new_with_label("Log out");
+    g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s91), NULL);
+
+    topContainBox = gtk_hbox_new(0, 20);
+    gtk_box_pack_start(topContainBox, helloLabel, 0, 0, 0);
+    gtk_box_pack_end(topContainBox, balanceLabel, 0, 0, 0);
+
+    headerClientBox = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(headerClientBox, topContainBox, 0, 0, 0);
+    gtk_widget_set_name(headerClientBox, "headerClientBox");
+
+    gtk_grid_attach(clientMenu, buyHistoryButton, 0, 0, 1, 1);
+    gtk_grid_attach(clientMenu, changePassButton, 1, 0, 1, 1);
+    gtk_grid_attach(clientMenu, changeInforButton, 2, 0, 1, 1);
+    gtk_grid_attach(clientMenu, shoppingButton, 0, 1, 1, 1);
+    gtk_grid_attach(clientMenu, showInforButton, 1, 1, 1, 1);
+    gtk_grid_attach(clientMenu, logoutButton, 2, 1, 1, 1);
+
+    gtk_box_pack_start(containerClient, headerClientBox, 0, 0, 20);
+    gtk_box_pack_end(containerClient, clientMenu, 0, 0, 0);
+
+    supplierMapWindow = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(supplierMapWindow), "Client site");
+    gtk_window_set_default_size(GTK_WINDOW(supplierMapWindow), 400, 200);
+    gtk_window_set_resizable(GTK_WINDOW(supplierMapWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(supplierMapWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(supplierMapWindow, containerClient);
     //gtk_widget_show_all(customerMapWindow);
 }
 
@@ -884,7 +1039,254 @@ static void notiActivate(GtkApplication *app, gpointer data) {
     gtk_window_set_position(GTK_WINDOW(notiWindow), GTK_WIN_POS_CENTER);
     gtk_container_add(notiWindow, vboxAlert);
 }
+/*Show products*/
+static void showProductsActivate(GtkApplication *app, gpointer data)
+{
+    GtkTextBuffer *buffer;
+    GtkWidget *menuLabel;
+    GtkWidget *textView, *leftSidevBox, *gridButton, *idDelEntry, *confirmDelButton, *backShowCartButton, *paymentButton;
+    GtkWidget *hboxContainer, *hboxSearch, *hboxPage, *boxTop, *vboxContain; //container
+    GtkWidget *GridItem;
+    GtkWidget *box1, *box2, *box3, *box4, *box5, *box6, *box7, *box8, *box9, *box10; //box_gio_hang
+    GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10; //img gio hang
+    GtkWidget *searchLabel;
+    GtkWidget *searchProducts;
+    GtkWidget *searchButton;
+    GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
+    GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
 
+    GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
+
+    GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8, *buttonAdd9, *buttonAdd10;
+
+    GtkWidget *nextPage, *previousPage;
+    //
+    textView = gtk_text_view_new();
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textView));
+    gtk_text_view_set_wrap_mode(textView, GTK_WRAP_WORD);
+    gtk_text_buffer_set_text (buffer, "                1                  Book1              $0", -1);
+    gtk_text_view_set_editable(textView, FALSE);
+    //
+    searchLabel = gtk_label_new("Search product: ");
+    searchButton = gtk_button_new_from_icon_name("system-search", 1);
+    searchProducts = gtk_search_entry_new();
+    gtk_widget_set_name(searchProducts, "search");
+
+    menuLabel = gtk_label_new("ID               NAME              PRICE");
+    gtk_widget_set_name(menuLabel, "menuLabel");
+    nextPage = gtk_button_new_with_label(">>>>>");
+    previousPage = gtk_button_new_with_label("<<<<<");
+
+    gridButton = gtk_grid_new();
+    confirmDelButton = gtk_button_new_with_label("Delete");
+    gtk_widget_set_name(confirmDelButton, "Delete");
+    backShowCartButton = gtk_button_new_with_label("Back");
+    paymentButton = gtk_button_new_with_label("Payment");
+    idDelEntry = gtk_entry_new();
+    gtk_entry_set_placeholder_text(idDelEntry,"Enter ID that you want to Delete");
+    gtk_widget_set_name(idDelEntry, "delId");
+    gtk_grid_attach(gridButton, idDelEntry, 0, 0, 2, 1);
+    gtk_grid_attach(gridButton, confirmDelButton, 3, 0, 1, 1);
+    gtk_grid_attach(gridButton, paymentButton, 0, 1, 1, 1);
+    gtk_grid_attach(gridButton, backShowCartButton, 3, 1, 1, 1);
+    gtk_grid_set_column_spacing(gridButton, 20);
+    gtk_grid_set_row_spacing(gridButton, 20);
+
+    gtk_widget_set_name(textView, "textView");
+    leftSidevBox = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(leftSidevBox, menuLabel, 0, 0, 0);
+    gtk_box_pack_start(leftSidevBox, textView, TRUE, TRUE, 20);
+    gtk_box_pack_end(leftSidevBox, gridButton, 0, 0, 0);
+
+    gtk_widget_set_name(leftSidevBox, "leftSidevBox");
+    gtk_widget_set_name(backShowCartButton, "backCart");
+    g_signal_connect(G_OBJECT(backShowCartButton), "clicked", G_CALLBACK(s83), NULL);
+    gtk_widget_set_name(paymentButton, "paymentButton");
+    id1 = gtk_label_new("ID1");
+    gtk_widget_set_name(id1, "id1");
+    id2 = gtk_label_new("ID2");
+    gtk_widget_set_name(id2, "id2");
+    id3 = gtk_label_new("ID3");
+    gtk_widget_set_name(id3, "id3");
+    id4 = gtk_label_new("ID4");
+    gtk_widget_set_name(id4, "id4");
+    id5 = gtk_label_new("ID5");
+    gtk_widget_set_name(id5, "id5");
+    id6 = gtk_label_new("ID6");
+    gtk_widget_set_name(id6, "id6");
+    id7 = gtk_label_new("ID7");
+    gtk_widget_set_name(id7, "id7");
+    id8 = gtk_label_new("ID8");
+    gtk_widget_set_name(id8, "id8");
+    id9 = gtk_label_new("ID9");
+    gtk_widget_set_name(id9, "id9");
+    id10 = gtk_label_new("ID10");
+    gtk_widget_set_name(id10, "id10");
+
+    product1 = gtk_label_new("product 1");
+    product2 = gtk_label_new("product 2");
+    product3 = gtk_label_new("product 3");
+    product4 = gtk_label_new("product 4");
+    product5 = gtk_label_new("product 5");
+    product6 = gtk_label_new("product 6");
+    product7 = gtk_label_new("product 7");
+    product8 = gtk_label_new("product 8");
+    product9 = gtk_label_new("product 9");
+    product10 = gtk_label_new("product 10");
+
+
+    price1 = gtk_label_new("$0.00");
+    price2 = gtk_label_new("$0.00");
+    price3 = gtk_label_new("$0.00");
+    price4 = gtk_label_new("$0.00");
+    price5 = gtk_label_new("$0.00");
+    price6 = gtk_label_new("$0.00");
+    price7 = gtk_label_new("$0.00");
+    price8 = gtk_label_new("$0.00");
+    price9 = gtk_label_new("$0.00");
+    price10 = gtk_label_new("$0.00");
+
+    buttonAdd1 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd2 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd3 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd4 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd5 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd6 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd7 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd8 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd9 = gtk_button_new_from_icon_name("list-add", 0);
+    buttonAdd10 = gtk_button_new_from_icon_name("list-add", 0);
+
+    img1 = gtk_image_new_from_file("images/0001.png");
+    img2 = gtk_image_new_from_file("images/0001.png");
+    img3 = gtk_image_new_from_file("images/0001.png");
+    img4 = gtk_image_new_from_file("images/0001.png");
+    img5 = gtk_image_new_from_file("images/0001.png");
+    img6 = gtk_image_new_from_file("images/0001.png");
+    img7 = gtk_image_new_from_file("images/0001.png");
+    img8 = gtk_image_new_from_file("images/0001.png");
+    img9 = gtk_image_new_from_file("images/0001.png");
+    img10 = gtk_image_new_from_file("images/0001.png");
+
+    box1 = gtk_vbox_new(0, 0);
+    box2 = gtk_vbox_new(0, 0);
+    box3 = gtk_vbox_new(0, 0);
+    box4 = gtk_vbox_new(0, 0);
+    box5 = gtk_vbox_new(0, 0);
+    box6 = gtk_vbox_new(0, 0);
+    box7 = gtk_vbox_new(0, 0);
+    box8 = gtk_vbox_new(0, 0);
+    box9 = gtk_vbox_new(0, 0);
+    box10 = gtk_vbox_new(0, 0);
+
+    gtk_box_pack_start(box1, id1, 0, 0, 5);
+    gtk_box_pack_start(box1, img1, 0, 0, 5);
+    gtk_box_pack_start(box1, product1, 0, 0, 5);
+    gtk_box_pack_start(box1, price1, 0, 0, 5);
+    gtk_box_pack_end(box1, buttonAdd1, 0, 0, 5);
+
+    gtk_box_pack_start(box2, id2, 0, 0, 5);
+    gtk_box_pack_start(box2, img2, 0, 0, 5);
+    gtk_box_pack_start(box2, product2, 0, 0, 5);
+    gtk_box_pack_start(box2, price2, 0, 0, 5);
+    gtk_box_pack_end(box2, buttonAdd2, 0, 0, 5);
+
+    gtk_box_pack_start(box3, id3, 0, 0, 5);
+    gtk_box_pack_start(box3, img3, 0, 0, 5);
+    gtk_box_pack_start(box3, product3, 0, 0, 5);
+    gtk_box_pack_start(box3, price3, 0, 0, 5);
+    gtk_box_pack_end(box3, buttonAdd3, 0, 0, 5);
+
+    gtk_box_pack_start(box4, id4, 0, 0, 5);
+    gtk_box_pack_start(box4, img4, 0, 0, 5);
+    gtk_box_pack_start(box4, product4, 0, 0, 5);
+    gtk_box_pack_start(box4, price4, 0, 0, 5);
+    gtk_box_pack_end(box4, buttonAdd4, 0, 0, 5);
+
+    gtk_box_pack_start(box5, id5, 0, 0, 5);
+    gtk_box_pack_start(box5, img5, 0, 0, 5);
+    gtk_box_pack_start(box5, product5, 0, 0, 5);
+    gtk_box_pack_start(box5, price5, 0, 0, 5);
+    gtk_box_pack_end(box5, buttonAdd5, 0, 0, 5);
+
+    gtk_box_pack_start(box6, id6, 0, 0, 5);
+    gtk_box_pack_start(box6, img6, 0, 0, 5);
+    gtk_box_pack_start(box6, product6, 0, 0, 5);
+    gtk_box_pack_start(box6, price6, 0, 0, 5);
+    gtk_box_pack_end(box6, buttonAdd6, 0, 0, 5);
+
+
+    gtk_box_pack_start(box7, id7, 0, 0, 5);
+    gtk_box_pack_start(box7, img7, 0, 0, 5);
+    gtk_box_pack_start(box7, product7, 0, 0, 5);
+    gtk_box_pack_start(box7, price7, 0, 0, 5);
+    gtk_box_pack_end(box7, buttonAdd7, 0, 0, 5);
+
+    gtk_box_pack_start(box8, id8, 0, 0, 5);
+    gtk_box_pack_start(box8, img8, 0, 0, 5);
+    gtk_box_pack_start(box8, product8, 0, 0, 5);
+    gtk_box_pack_start(box8, price8, 0, 0, 5);
+    gtk_box_pack_end(box8, buttonAdd8, 0, 0, 5);
+
+    gtk_box_pack_start(box9, id9, 0, 0, 5);
+    gtk_box_pack_start(box9, img9, 0, 0, 5);
+    gtk_box_pack_start(box9, product9, 0, 0, 5);
+    gtk_box_pack_start(box9, price9, 0, 0, 5);
+    gtk_box_pack_end(box9, buttonAdd9, 0, 0, 5);
+
+    gtk_box_pack_start(box10, id10, 0, 0, 5);
+    gtk_box_pack_start(box10, img10, 0, 0, 5);
+    gtk_box_pack_start(box10, product10, 0, 0, 5);
+    gtk_box_pack_start(box10, price10, 0, 0, 5);
+    gtk_box_pack_end(box10, buttonAdd10, 0, 0, 5);
+
+    gtk_widget_set_name(box1 ,"box1");
+    gtk_widget_set_name(box2 ,"box2");
+    gtk_widget_set_name(box3 ,"box3");
+    gtk_widget_set_name(box4 ,"box4");
+    gtk_widget_set_name(box5 ,"box5");
+    gtk_widget_set_name(box6 ,"box6");
+    gtk_widget_set_name(box7 ,"box7");
+    gtk_widget_set_name(box8 ,"box8");
+    gtk_widget_set_name(box9 ,"box9");
+    gtk_widget_set_name(box10 ,"box10");
+
+
+    GridItem = gtk_grid_new();
+    gtk_grid_attach(GridItem, box1, 0, 0, 1, 1);
+    gtk_grid_attach(GridItem, box2, 1, 0, 1, 1);
+    gtk_grid_attach(GridItem, box3, 2, 0, 1, 1);
+    gtk_grid_attach(GridItem, box4, 3, 0, 1, 1);
+    gtk_grid_attach(GridItem, box5, 4, 0, 1, 1);
+    gtk_grid_attach(GridItem, box6, 0, 1, 1, 1);
+    gtk_grid_attach(GridItem, box7, 1, 1, 1, 1);
+    gtk_grid_attach(GridItem, box8, 2, 1, 1, 1);
+    gtk_grid_attach(GridItem, box9, 3, 1, 1, 1);
+    gtk_grid_attach(GridItem, box10, 4, 1, 1, 1);
+
+    hboxSearch = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(hboxSearch, searchLabel, 0, 0, 0);
+    gtk_box_pack_start(hboxSearch, searchProducts, 0, 0, 0);
+    gtk_box_pack_start(hboxSearch, searchButton, 0, 0, 0);
+    gtk_box_pack_end(hboxSearch, nextPage, 0, 0, 0);
+    gtk_box_pack_end(hboxSearch, previousPage, 0, 0, 0);
+
+    vboxContain = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(vboxContain, hboxSearch, 0, 0, 0);
+    gtk_box_pack_start(vboxContain, GridItem, 0, 0, 0);
+
+    hboxContainer = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(hboxContainer, vboxContain, 0, 0, 0);
+    gtk_box_pack_start(hboxContainer, leftSidevBox, 0, 0, 0);
+    gtk_widget_set_name(hboxSearch, "hboxSearch");
+    gtk_widget_set_name(vboxContain, "vboxContain");
+    showProductsWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(showProductsWindow), "shopping cart");
+	gtk_window_set_default_size(GTK_WINDOW(showProductsWindow),1000, 700);
+	gtk_window_set_resizable(GTK_WINDOW(showProductsWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(showProductsWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(showProductsWindow, hboxContainer);
+}
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
@@ -903,9 +1305,11 @@ int main(int argc, char **argv)
     newAccount.lastName = malloc(200);
     newAccount.pwd = malloc(200);
     newAccount.address = malloc(200);
-    /**/
-
+    /*supplierMapActivate*/
+    g_signal_connect(app, "activate", G_CALLBACK(supplierMapActivate), NULL);
     /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*show products window*/
+    g_signal_connect(app, "activate", G_CALLBACK(showProductsActivate), NULL);
     /*notification window*/
     g_signal_connect(app, "activate", G_CALLBACK(notiActivate), NULL);
     /*Change Information Window*/

@@ -473,7 +473,7 @@ static void signUp_enter_callback()
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
 <<<<<<< HEAD
             int xxx = findAccount("");
-            printf("\nOke ban nha");
+            printf("\nSuccessfully");
             char* newInfor = malloc(200);
             strcpy(newInfor, "");
             char* tmpStr = malloc(20);

@@ -415,13 +415,13 @@ void signUp_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
     char* reenterPassword = gtk_entry_get_text(GTK_ENTRY(reenterPasswordEntry));
     if(1 == 1){
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
-            printf("\nOke ban nha");
+            printf("\nSuccessfully");
             onNoti();
         }else{
-            printf("\nKhong trung kia ma");
+            printf("\nPassword does not match");
         }
     }else{
-        printf("\nSai mat khau roi ban eiii");
+        printf("\nWrong password");
     }
 
 }
@@ -492,7 +492,7 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
     char *entryConfirmPwd = gtk_entry_get_text(GTK_ENTRY(confirmNewPasswordChangeEntry));
     if(strcmp(entryOldPwd, customer.pwd) == 0){
         if(strcmp(entryNewPwd, entryConfirmPwd) == 0 && strcmp(entryNewPwd, "") != 0){
-            printf("\nOke ban nha");
+            printf("\nSuccessfully");
             char* newInfor = malloc(200);
             strcpy(newInfor, "");
             char* tmpStr = malloc(20);
@@ -519,16 +519,16 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
             gtk_entry_set_text(GTK_ENTRY(oldPasswordChangeEntry), "");
             gtk_entry_set_text(GTK_ENTRY(newPasswordChangeEntry), "");
             gtk_entry_set_text(GTK_ENTRY(confirmNewPasswordChangeEntry), "");
-            gtk_label_set_text(alert, "Doi thanh cong");
+            gtk_label_set_text(alert, "Successfully");
             onNoti();
         }else{
-            printf("\nKhong trung kia ma");
-            gtk_label_set_text(alert, "Khong trung kia ma");
+            printf("\nPassword does not match");
+            gtk_label_set_text(alert, "Password does not match");
             onNoti();
         }
     }else{
-        printf("\nSai mat khau roi ban eiii");
-        gtk_label_set_text(alert, "Sai mat khau roi ban eiii");
+        printf("\nWrong password");
+        gtk_label_set_text(alert, "Wrong password");
         onNoti();
     }
 

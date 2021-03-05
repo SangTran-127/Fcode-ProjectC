@@ -99,9 +99,10 @@ static gint noOpenWindow = 1000;
 /*Show products*/
 Product databaseProducts[500];
 Product showedProducts[500];
-static int firstIndex = 0;
+static int firstIndex = 2;
 GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
 GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
+GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10; //img gio hang
 /*Sign in*/
 
 static Customer customer;
@@ -739,6 +740,30 @@ void change10Product(){
     gtk_label_set_text(GTK_LABEL(id9), tmpStr);
     strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+9].id, tmpStr, 10);
     gtk_label_set_text(GTK_LABEL(id10), tmpStr);
+    /*Imagecovers/1.png"*/
+    char* tmpString = malloc(200);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img1), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+1].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img2), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+2].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img3), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+3].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img4), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+4].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img5), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+5].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img6), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+6].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img7), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+7].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img8), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+8].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img9), tmpStr);
+    strcpy(tmpStr, "covers/"); itoa(showedProducts[firstIndex+9].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(img10), tmpStr);
+
+
 }
 
 void copyProducts(){
@@ -1274,7 +1299,6 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     GtkWidget *hboxContainer, *hboxSearch, *hboxPage, *boxTop, *vboxContain; //container
     GtkWidget *GridItem;
     GtkWidget *box1, *box2, *box3, *box4, *box5, *box6, *box7, *box8, *box9, *box10; //box_gio_hang
-    GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10; //img gio hang
     GtkWidget *searchLabel;
     GtkWidget *searchProducts;
     GtkWidget *searchButton;
@@ -1382,16 +1406,16 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     buttonAdd9 = gtk_button_new_from_icon_name("list-add", 0);
     buttonAdd10 = gtk_button_new_from_icon_name("list-add", 0);
 
-    img1 = gtk_image_new_from_file("covers/0001.png");
-    img2 = gtk_image_new_from_file("covers/0001.png");
-    img3 = gtk_image_new_from_file("covers/0001.png");
-    img4 = gtk_image_new_from_file("covers/0001.png");
-    img5 = gtk_image_new_from_file("covers/0001.png");
-    img6 = gtk_image_new_from_file("covers/0001.png");
-    img7 = gtk_image_new_from_file("covers/0001.png");
-    img8 = gtk_image_new_from_file("covers/0001.png");
-    img9 = gtk_image_new_from_file("covers/0001.png");
-    img10 = gtk_image_new_from_file("covers/0001.png");
+    img1 = gtk_image_new_from_file("covers/1.png");
+    img2 = gtk_image_new_from_file("covers/1.png");
+    img3 = gtk_image_new_from_file("covers/1.png");
+    img4 = gtk_image_new_from_file("covers/1.png");
+    img5 = gtk_image_new_from_file("covers/1.png");
+    img6 = gtk_image_new_from_file("covers/1.png");
+    img7 = gtk_image_new_from_file("covers/1.png");
+    img8 = gtk_image_new_from_file("covers/1.png");
+    img9 = gtk_image_new_from_file("covers/1.png");
+    img10 = gtk_image_new_from_file("covers/1.png");
 
     box1 = gtk_vbox_new(0, 0);
     box2 = gtk_vbox_new(0, 0);

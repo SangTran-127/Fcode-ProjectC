@@ -13,7 +13,7 @@ Product databaseProducts[500];
 int numberOfProducts = 0;
 
 void cloneProducts(){
-    numberOfProducts = 1;
+    numberOfProducts = 0;
     FILE *fp = fopen("products.csv", "r");
     char* str = malloc(1000);
     while (fgets(str, 1000, fp) != NULL)

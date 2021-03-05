@@ -98,7 +98,10 @@ static gint noCloseWindow = 1000;
 static gint noOpenWindow = 1000;
 /*Show products*/
 Product databaseProducts[500];
-
+Product showedProducts[500];
+static int firstIndex = 0;
+GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
+GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
 /*Sign in*/
 
 static Customer customer;
@@ -204,7 +207,7 @@ static void s12()
 static void s94()
 {
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
-    gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
+    gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
 }
 static void s95()
 {
@@ -636,11 +639,12 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
 
 /*Show Products*/
 void cloneProducts(){
-    numberOfProducts = 1;
-    char* str = malloc(1000);
+    numberOfProducts = 0;
     FILE *fp = fopen("products.csv", "r");
-    while (fgets(str, 60, fp) != NULL)
+    char* str = malloc(1000);
+    while (fgets(str, 1000, fp) != NULL)
     {
+        printf("\n================");
         databaseProducts[numberOfProducts].id = 0;
         databaseProducts[numberOfProducts].supplier = 0;
         databaseProducts[numberOfProducts].price = 0;
@@ -653,6 +657,7 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].id = databaseProducts[numberOfProducts].id * 10 + tmp;
             pos++;
         }
+        printf("\n%d", databaseProducts[numberOfProducts].id);
         pos++;
         strcpy(databaseProducts[numberOfProducts].name, "");
         while (str[pos] != ',')
@@ -661,6 +666,7 @@ void cloneProducts(){
             strcat(databaseProducts[numberOfProducts].name, &tmp);
             pos++;
         }
+        printf("\n%s", databaseProducts[numberOfProducts].name);
         pos++;
         while (str[pos] != ',')
         {
@@ -668,13 +674,7 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].supplier = databaseProducts[numberOfProducts].supplier * 10 + tmp;
             pos++;
         }
-        pos++;
-        while (str[pos] != ',')
-        {
-            int tmp = (int)str[pos] - '0';
-            databaseProducts[numberOfProducts].supplier = databaseProducts[numberOfProducts].supplier * 10 + tmp;
-            pos++;
-        }
+        printf("\n%d", databaseProducts[numberOfProducts].supplier);
         pos++;
         while (str[pos] != ',')
         {
@@ -682,6 +682,7 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].price = databaseProducts[numberOfProducts].price * 10 + tmp;
             pos++;
         }
+        printf("\n%d", databaseProducts[numberOfProducts].price);
         pos++;
         while (str[pos] != ',')
         {
@@ -689,17 +690,72 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].discount = databaseProducts[numberOfProducts].discount * 10 + tmp;
             pos++;
         }
+        printf("\n%d", databaseProducts[numberOfProducts].discount);
         pos++;
-        while (str[pos] != ',')
+        while (str[pos] != 0)
         {
             int tmp = (int)str[pos] - '0';
             databaseProducts[numberOfProducts].quantity = databaseProducts[numberOfProducts].quantity * 10 + tmp;
             pos++;
         }
         pos++;
+        printf("\n%d", databaseProducts[numberOfProducts].quantity);
         numberOfProducts++;
     }
     fclose(fp);
+}
+
+void change10Product(){
+    /*Name*/
+    gtk_label_set_text(GTK_LABEL(product1), showedProducts[firstIndex].name);
+    gtk_label_set_text(GTK_LABEL(product2), showedProducts[firstIndex+1].name);
+    gtk_label_set_text(GTK_LABEL(product3), showedProducts[firstIndex+2].name);
+    gtk_label_set_text(GTK_LABEL(product4), showedProducts[firstIndex+3].name);
+    gtk_label_set_text(GTK_LABEL(product5), showedProducts[firstIndex+4].name);
+    gtk_label_set_text(GTK_LABEL(product6), showedProducts[firstIndex+5].name);
+    gtk_label_set_text(GTK_LABEL(product7), showedProducts[firstIndex+6].name);
+    gtk_label_set_text(GTK_LABEL(product8), showedProducts[firstIndex+7].name);
+    gtk_label_set_text(GTK_LABEL(product9), showedProducts[firstIndex+8].name);
+    gtk_label_set_text(GTK_LABEL(product10), showedProducts[firstIndex+9].name);
+    /*ID*/
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id1), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+1].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id2), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+2].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id3), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+3].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id4), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+4].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id5), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+5].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id6), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+6].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id7), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+7].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id8), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+8].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id9), tmpStr);
+    strcpy(tmpStr, ""); itoa(showedProducts[firstIndex+9].id, tmpStr, 10);
+    gtk_label_set_text(GTK_LABEL(id10), tmpStr);
+}
+
+void copyProducts(){
+    int id;
+    char* name;
+    int supplier;
+    int price;
+    double discount;
+    int quantity;
+    for(int i = 0; i <= numberOfProducts - 1; i++){
+        showedProducts[i].id = databaseProducts[i].id;
+        strcpy(showedProducts[i].name, databaseProducts[i].name);
+        showedProducts[i].supplier = databaseProducts[i].supplier;
+        showedProducts[i].price = databaseProducts[i].price;
+        showedProducts[i].discount = databaseProducts[i].discount;
+        showedProducts[i].quantity = databaseProducts[i].quantity;
+    }
 }
 /****************************************************************** GUI THREAD */
 /*Openning window*/
@@ -1222,8 +1278,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     GtkWidget *searchLabel;
     GtkWidget *searchProducts;
     GtkWidget *searchButton;
-    GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
-    GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
+
 
     GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
 
@@ -1327,16 +1382,16 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     buttonAdd9 = gtk_button_new_from_icon_name("list-add", 0);
     buttonAdd10 = gtk_button_new_from_icon_name("list-add", 0);
 
-    img1 = gtk_image_new_from_file("images/0001.png");
-    img2 = gtk_image_new_from_file("images/0001.png");
-    img3 = gtk_image_new_from_file("images/0001.png");
-    img4 = gtk_image_new_from_file("images/0001.png");
-    img5 = gtk_image_new_from_file("images/0001.png");
-    img6 = gtk_image_new_from_file("images/0001.png");
-    img7 = gtk_image_new_from_file("images/0001.png");
-    img8 = gtk_image_new_from_file("images/0001.png");
-    img9 = gtk_image_new_from_file("images/0001.png");
-    img10 = gtk_image_new_from_file("images/0001.png");
+    img1 = gtk_image_new_from_file("covers/0001.png");
+    img2 = gtk_image_new_from_file("covers/0001.png");
+    img3 = gtk_image_new_from_file("covers/0001.png");
+    img4 = gtk_image_new_from_file("covers/0001.png");
+    img5 = gtk_image_new_from_file("covers/0001.png");
+    img6 = gtk_image_new_from_file("covers/0001.png");
+    img7 = gtk_image_new_from_file("covers/0001.png");
+    img8 = gtk_image_new_from_file("covers/0001.png");
+    img9 = gtk_image_new_from_file("covers/0001.png");
+    img10 = gtk_image_new_from_file("covers/0001.png");
 
     box1 = gtk_vbox_new(0, 0);
     box2 = gtk_vbox_new(0, 0);
@@ -1456,6 +1511,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
 	gtk_window_set_resizable(GTK_WINDOW(showProductsWindow), FALSE);
 	gtk_window_set_position(GTK_WINDOW(showProductsWindow), GTK_WIN_POS_CENTER);
 	gtk_container_add(showProductsWindow, hboxContainer);
+    change10Product();
 }
 /*Show Information*/
 static void showInforActivate(GtkApplication *app, gpointer data) {
@@ -1540,6 +1596,11 @@ int main(int argc, char **argv)
     for(int i  = 0; i < 500; i++){
         databaseProducts[i].name = malloc(200);
     }
+    for(int i  = 0; i < 500; i++){
+        showedProducts[i].name = malloc(200);
+    }
+    cloneProducts();
+    copyProducts();
     /*show Information*/
     g_signal_connect(app, "activate", G_CALLBACK(showInforActivate), NULL);
     /*supplierMapActivate*/

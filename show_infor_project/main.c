@@ -35,6 +35,7 @@ static void activate(GtkApplication *app, gpointer data) {
     addressLabel = gtk_label_new("Your address: ");
     dobLabel = gtk_label_new("Your date of birth: ");
     gtk_widget_set_name(pictureInfor, "pictureInfor");
+
     nameInforLabelShow = gtk_label_new("William Henry Gates III");
     addressLabelShow = gtk_label_new("500 5th Ave N, Seattle, WA 98109, United States");
     dobLabelShow = gtk_label_new("28/08/1955");

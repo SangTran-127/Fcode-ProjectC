@@ -28,6 +28,10 @@ typedef struct
 {
     int id;
     char* name;
+    int supplier;
+    int price;
+    double discount;
+    int quantity;
 } Product;
 
 typedef struct
@@ -86,17 +90,14 @@ typedef struct
 /*7*/ static GtkWidget *signUpWindow;
 /*8*/ static GtkWidget *showProductsWindow;
 /*9*/ static GtkWidget *supplierMapWindow;
+/*10*/ static GtkWidget *showInforWindow;
 
 
 /****************************************************************** GLOBAL VARIABLES */
 static gint noCloseWindow = 1000;
 static gint noOpenWindow = 1000;
-/*Show hang*/
-/*Product * products = malloc();
-void searchProduct(char * key, char * category){
-    ""
-}
-Product * current_products =
+/*Show products*/
+Product databaseProducts[500];
 
 /*Sign in*/
 
@@ -107,12 +108,17 @@ static int numberOfProducts;
 /*Sign up*/
 static Customer newAccount;
 GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
-
+GtkWidget *monthSpinButton, *yearSpinButton, *daySpinButton;
 /*Change pwd*/
 GtkWidget *oldPasswordChangeEntry, *newPasswordChangeEntry, *confirmNewPasswordChangeEntry;
 
 /*Notification*/
 GtkWidget *alert;
+/*Show Information*/
+static char* yourFullName;
+static char* yourAddress;
+static char* yourDOB;
+GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow;
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
@@ -123,12 +129,8 @@ void signIn_entry_callback(GtkWidget *widget, gpointer data);
 
 /*Sign up*/
 static void signUpActivate(GtkApplication *app, gpointer user_data);
-static void signUp_img_callback(GtkWidget *widget, GdkEvent *event, gpointer user_data);
-static void signUp_cancel_callback(GtkWidget *widget, gpointer user_data);
-static void signUp_clear_callback(GtkWidget *widget, gpointer user_data);
-static void signUp_add_callback(GtkWidget *widget, gpointer user_data);
-static void signUp_get_datestamp(gchar *ds);
-static gint signUp_get_next_id(void);
+static void signUp_clear_callback();
+static void signUp_enter_callback();
 /****************************************************************** CALLBACKS */
 static void onNoti()
 {
@@ -179,7 +181,11 @@ static void s31()
 static void s43()
 {
     gtk_widget_hide(GTK_WIDGET(changePwdWindow));
-    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    if(customer.type == 0){
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    }else{
+        gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+    }
 }
 static void s23()
 {
@@ -210,6 +216,31 @@ static void s34()
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
 }
+static void s10_x()
+{
+    gtk_widget_hide(GTK_WIDGET(showInforWindow));
+    if(customer.type == 0){
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    }else{
+        gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+    }
+}
+static void s910()
+{
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_label_set_text(GTK_LABEL(nameInforLabelShow), yourFullName);
+    gtk_label_set_text(GTK_LABEL(addressLabelShow), yourAddress);
+    gtk_label_set_text(GTK_LABEL(dobLabelShow), yourDOB);
+    gtk_widget_show_all(GTK_WIDGET(showInforWindow));
+}
+static void s310()
+{
+    gtk_widget_hide(GTK_WIDGET(customerMapWindow));
+    gtk_label_set_text(GTK_LABEL(nameInforLabelShow), yourFullName);
+    gtk_label_set_text(GTK_LABEL(addressLabelShow), yourAddress);
+    gtk_label_set_text(GTK_LABEL(dobLabelShow), yourDOB);
+    gtk_widget_show_all(GTK_WIDGET(showInforWindow));
+}
 static void s98()
 {
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
@@ -239,6 +270,7 @@ static void s53()
 /*Sign in*/
 int findAccount(char *inputEmail)
 {
+    numberOfCustomers = 0;
     FILE *fp = fopen("customers.csv", "r");
     char *tmpStr = malloc(100);
     strcpy(tmpStr, inputEmail);
@@ -257,6 +289,7 @@ int findAccount(char *inputEmail)
         printf("\n%s", str);
         if (strstr(str, tmpStr) == NULL)
         {
+            numberOfCustomers++;
             continue;
         }
         int pos = 0;
@@ -351,6 +384,7 @@ int findAccount(char *inputEmail)
     strcpy(customer.firstName, "");
     strcpy(customer.lastName, "");
     strcpy(customer.pwd, "");
+    printf("\nkkkkkkkkkkkkkkkkkkkk  %d", numberOfCustomers);
     return 0;
 }
 
@@ -366,6 +400,18 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
         if (strcmp(entry_password, customer.pwd) == 0)
         {
             signIn_clear_callback(action, parameter, data);
+            strcpy(yourFullName, customer.firstName);
+            strcat(yourFullName, " ");
+            strcat(yourFullName, customer.lastName);
+            strcpy(yourAddress, customer.address);
+            strcpy(yourDOB, "");
+            char* tmpStr = malloc(200);
+            strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
+            strcat(yourDOB, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
+            strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
+            strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
             s23();
         }
         else
@@ -405,27 +451,81 @@ void signIn_entry_callback(GtkWidget *widget, gpointer data)
 
 /*Sign up*/
 
-void signUp_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
+static void signUp_enter_callback()
 {
-    GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
-    char* firstName = gtk_entry_get_text(GTK_ENTRY(oldPasswordChangeEntry));
+    char* firstName = gtk_entry_get_text(GTK_ENTRY(firstNameEntry));
     char* lastName = gtk_entry_get_text(GTK_ENTRY(lastNameEntry));
     char* email = gtk_entry_get_text(GTK_ENTRY(emailEntry));
     char* password = gtk_entry_get_text(GTK_ENTRY(passwordEntry));
     char* reenterPassword = gtk_entry_get_text(GTK_ENTRY(reenterPasswordEntry));
-    if(1 == 1){
+    int day = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(daySpinButton));
+    int month = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(monthSpinButton));
+    int year = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(yearSpinButton));
+    printf("\n%s", firstName);
+    printf("\n%s", lastName);
+    printf("\n%s", email);
+    printf("\n%s", password);
+    printf("\n%s", reenterPassword);
+    printf("\n%d", day);
+    printf("\n%d", month);
+    printf("\n%d", year);
+    if(findAccount(email) == 0){
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
+            int xxx = findAccount("");
             printf("\nOke ban nha");
+            char* newInfor = malloc(200);
+            strcpy(newInfor, "");
+            char* tmpStr = malloc(20);
+            itoa(numberOfCustomers + 1, tmpStr, 10);
+            strcat(newInfor, tmpStr);
+            strcat(newInfor, ","); strcat(newInfor, email);
+            strcat(newInfor, ","); strcat(newInfor, password);
+            strcat(newInfor, ","); strcat(newInfor, firstName);
+            strcat(newInfor, ","); strcat(newInfor, lastName);
+            strcpy(tmpStr, ""); itoa(day, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(month, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(year, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcat(newInfor, ","); strcat(newInfor, "");
+            strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcat(newInfor, ",");
+            strcpy(customer.pwd, password);
+            changeLine(numberOfCustomers + 1, newInfor);
+            numberOfCustomers++;
+            gtk_entry_set_text(GTK_ENTRY(firstNameEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(lastNameEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(emailEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
+            gtk_entry_set_text(GTK_ENTRY(reenterPasswordEntry), "");
+            gtk_label_set_text(alert, "Doi thanh cong");
             onNoti();
         }else{
             printf("\nKhong trung kia ma");
+            gtk_label_set_text(alert, "Khong trung kia ma");
+            onNoti();
         }
     }else{
-        printf("\nSai mat khau roi ban eiii");
+        printf("\nMail nay co roi nha");
+        gtk_label_set_text(alert, "Mail nay co roi nha");
+        onNoti();
     }
-
 }
 
+static void signUp_clear_callback(){
+    gtk_entry_set_text(GTK_ENTRY(firstNameEntry),"");
+    gtk_entry_set_text(GTK_ENTRY(lastNameEntry),"");
+    gtk_entry_set_text(GTK_ENTRY(emailEntry),"");
+    gtk_entry_set_text(GTK_ENTRY(passwordEntry),"");
+    gtk_entry_set_text(GTK_ENTRY(reenterPasswordEntry),"");
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(yearSpinButton), 1990);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(monthSpinButton), 1);
+    gtk_spin_button_set_value(GTK_SPIN_BUTTON(daySpinButton), 1);
+}
 /*Change pwd*/
 int changeLine(int line, char* inputString){
     /* File pointer to hold reference of input file */
@@ -532,6 +632,73 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
         onNoti();
     }
 
+}
+
+/*Show Products*/
+void cloneProducts(){
+    numberOfProducts = 1;
+    FILE *fp = fopen("products.csv", "r");
+    while (fgets(str, 60, fp) != NULL)
+    {
+        databaseProducts[numberOfProducts].id = 0;
+        databaseProducts[numberOfProducts].supplier = 0;
+        databaseProducts[numberOfProducts].price = 0;
+        databaseProducts[numberOfProducts].discount = 0;
+        databaseProducts[numberOfProducts].quantity = 0;
+        int pos = 0;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].id = databaseProducts[numberOfProducts].id * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        strcpy(databaseProducts[numberOfProducts].name, "");
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos];
+            strcat(databaseProducts[numberOfProducts].name, &tmp);
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].supplier = databaseProducts[numberOfProducts].supplier * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].supplier = databaseProducts[numberOfProducts].supplier * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].price = databaseProducts[numberOfProducts].price * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].discount = databaseProducts[numberOfProducts].discount * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].quantity = databaseProducts[numberOfProducts].quantity * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        numberOfProducts++;
+    }
+    fclose(fp);
 }
 /****************************************************************** GUI THREAD */
 /*Openning window*/
@@ -707,9 +874,7 @@ static void signUpActivate(GtkApplication *app, gpointer data)
     GtkWidget *changeOption, *registerBackground;
     GtkWidget *registerLabel, *inforRegisterLabel, *askRegisterLabel, *dayLabel, *monthLabel, *yearLabel, *imgLabel;
     GtkWidget *vboxRegisterContainer, *headerBox, *userNamehBox, *dateRegisterBox, *boxAllRegister, *imgBox;
-    GtkWidget *firstNameEntry, *lastNameEntry, *emailEntry, *passwordEntry, *reenterPasswordEntry;
     GtkWidget *registerButton, *backRegisterButton, *imgButton, *clearButton;
-    GtkWidget *monthSpinButton, *yearSpinButton, *daySpinButton;
     boxAllRegister = gtk_hbox_new(0, 10);
     firstNameEntry = gtk_entry_new();
     lastNameEntry = gtk_entry_new();
@@ -730,12 +895,14 @@ static void signUpActivate(GtkApplication *app, gpointer data)
     inforRegisterLabel = gtk_label_new("Create your account. It's free and only takes a minute");
     registerButton = gtk_button_new_with_label("Register Now");
     gtk_widget_set_name(registerButton, "registerButton");
+    g_signal_connect(G_OBJECT(registerButton), "clicked", G_CALLBACK(signUp_enter_callback), NULL);
     askRegisterLabel = gtk_label_new("Wanna change your option?");
     backRegisterButton = gtk_button_new_with_label("Back");
     g_signal_connect(G_OBJECT(backRegisterButton), "clicked", G_CALLBACK(s71), NULL);
 
     clearButton = gtk_button_new_with_label("Clear");
     gtk_widget_set_name(clearButton, "clearButton");
+    g_signal_connect(G_OBJECT(clearButton), "clicked", G_CALLBACK(signUp_clear_callback), NULL);
     gtk_widget_set_name(backRegisterButton,"backRegisterButton");
     gtk_entry_set_placeholder_text(firstNameEntry, "First name");
     gtk_entry_set_placeholder_text(lastNameEntry, "Last name");
@@ -810,6 +977,7 @@ static void customerMapActivate(GtkApplication *app, gpointer user_data)
     shoppingButton = gtk_button_new_with_label("Go shopping");
     g_signal_connect(G_OBJECT(shoppingButton), "clicked", G_CALLBACK(s38), NULL);
     showInforButton = gtk_button_new_with_label("Show informatiom");
+    g_signal_connect(G_OBJECT(showInforButton), "clicked", G_CALLBACK(s310), NULL);
     logoutButton = gtk_button_new_with_label("Log out");
     g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s31), NULL);
 
@@ -860,7 +1028,8 @@ static void supplierMapActivate(GtkApplication *app, gpointer user_data)
     g_signal_connect(G_OBJECT(changeInforButton), "clicked", G_CALLBACK(s95), NULL);
     shoppingButton = gtk_button_new_with_label("See your products");
     g_signal_connect(G_OBJECT(shoppingButton), "clicked", G_CALLBACK(s98), NULL);
-    showInforButton = gtk_button_new_with_label("Show informatiom");
+    showInforButton = gtk_button_new_with_label("Show information");
+    g_signal_connect(G_OBJECT(showInforButton), "clicked", G_CALLBACK(s910), NULL);
     logoutButton = gtk_button_new_with_label("Log out");
     g_signal_connect(G_OBJECT(logoutButton), "clicked", G_CALLBACK(s91), NULL);
 
@@ -948,9 +1117,9 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
 
 static void changeInformationActivate(GtkApplication *app, gpointer user_data)
 {
-    GtkWidget *addressChangeInforLabel, *nameChangeInforLabel, *phoneChangeInforLabel;
+    GtkWidget *addressChangeInforLabel, *firstNameChangeInforLabel, *lastNameChangeInforLabel;
 
-    GtkWidget *addressChangeInforEntry, *nameChangeInforEntry, *phoneChangeInforEntry;
+    GtkWidget *addressChangeInforEntry, *firstNameChangeInforEntry, *lastNameChangeInforEntry;
 
     GtkWidget *updateChangeInforButton, *backChangeInforButton;
     GtkWidget *askBackChangeInforLabel;
@@ -962,14 +1131,14 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     //
     changeInforImg = gtk_image_new_from_file("change_infor.png");
     addressChangeInforEntry = gtk_entry_new();
-    nameChangeInforEntry = gtk_entry_new();
-    phoneChangeInforEntry = gtk_entry_new();
+    firstNameChangeInforEntry = gtk_entry_new();
+    lastNameChangeInforEntry = gtk_entry_new();
     gtk_entry_set_icon_from_icon_name(addressChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "emblem-mail");
     gtk_entry_set_placeholder_text(addressChangeInforEntry, "Enter your address");
-    gtk_entry_set_icon_from_icon_name(nameChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "contact-new");
-    gtk_entry_set_placeholder_text(nameChangeInforEntry, "Enter your full name");
-    gtk_entry_set_icon_from_icon_name(phoneChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "phone");
-    gtk_entry_set_placeholder_text(phoneChangeInforEntry, "Enter your phone number");
+    gtk_entry_set_icon_from_icon_name(firstNameChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "contact-new");
+    gtk_entry_set_placeholder_text(firstNameChangeInforEntry, "Enter your first name");
+    gtk_entry_set_icon_from_icon_name(lastNameChangeInforEntry, GTK_ENTRY_ICON_PRIMARY, "phone");
+    gtk_entry_set_placeholder_text(lastNameChangeInforEntry, "Enter your last name");
     //
     askBackChangeInforLabel = gtk_label_new("Change your mind ?");
     backChangeInforButton = gtk_button_new_with_label("Back");
@@ -981,15 +1150,15 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     gtk_box_pack_end(hboxFooter, backChangeInforButton, 0, 0, 0);
 
     addressChangeInforLabel = gtk_label_new("Address: ");
-    nameChangeInforLabel = gtk_label_new("Full name: ");
-    phoneChangeInforLabel = gtk_label_new("Phone number: ");
+    firstNameChangeInforLabel = gtk_label_new("First name: ");
+    lastNameChangeInforLabel = gtk_label_new("Last name: ");
     updateChangeInforButton = gtk_button_new_with_label("Update");
 
     //
-    gtk_grid_attach(gridChangeInfor, nameChangeInforLabel, 0, 0, 1, 1);
-    gtk_grid_attach(gridChangeInfor, nameChangeInforEntry, 1, 0, 1, 1);
-    gtk_grid_attach(gridChangeInfor, phoneChangeInforLabel, 0, 1, 1, 1);
-    gtk_grid_attach(gridChangeInfor, phoneChangeInforEntry, 1, 1, 1, 1);
+    gtk_grid_attach(gridChangeInfor, firstNameChangeInforLabel, 0, 0, 1, 1);
+    gtk_grid_attach(gridChangeInfor, firstNameChangeInforEntry, 1, 0, 1, 1);
+    gtk_grid_attach(gridChangeInfor, lastNameChangeInforLabel, 0, 1, 1, 1);
+    gtk_grid_attach(gridChangeInfor, lastNameChangeInforEntry, 1, 1, 1, 1);
     gtk_grid_attach(gridChangeInfor, addressChangeInforLabel, 0, 2, 1, 1);
     gtk_grid_attach(gridChangeInfor, addressChangeInforEntry, 1, 2, 1, 1);
     gtk_grid_attach(gridChangeInfor, updateChangeInforButton, 1, 3, 1, 1);
@@ -1287,6 +1456,60 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
 	gtk_window_set_position(GTK_WINDOW(showProductsWindow), GTK_WIN_POS_CENTER);
 	gtk_container_add(showProductsWindow, hboxContainer);
 }
+/*Show Information*/
+static void showInforActivate(GtkApplication *app, gpointer data) {
+    GtkWidget *containerShowInfor, *headerTiku, *mainSectionInfor, *mainInfor;
+    GtkWidget *pictureInfor, *backShowInforButton;
+    GtkWidget *headerLabel, *nameInforLabel, *addressLabel, *dobLabel;
+    GtkWidget *headerLabelShow;
+    GtkWidget *welcomeChangeInforLabel, *nameShopLabel;
+    backShowInforButton = gtk_button_new_with_label("Back");
+    gtk_widget_set_name(backShowInforButton, "backShowInforButton");
+    g_signal_connect(G_OBJECT(backShowInforButton), "clicked", G_CALLBACK(s10_x), NULL);
+    welcomeChangeInforLabel = gtk_label_new("Welcome back!");
+    nameShopLabel = gtk_label_new("Tiku");
+    headerTiku = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(headerTiku, welcomeChangeInforLabel, 0, 0, 0);
+    gtk_box_pack_end(headerTiku, nameShopLabel, 0, 0, 0);
+    gtk_widget_set_name(headerTiku, "headerTiku");
+
+    pictureInfor = gtk_image_new_from_file("person.png");
+    nameInforLabel = gtk_label_new("Your full name: ");
+    addressLabel = gtk_label_new("Your address: ");
+    dobLabel = gtk_label_new("Your date of birth: ");
+    gtk_widget_set_name(pictureInfor, "pictureInfor");
+    nameInforLabelShow = gtk_label_new(yourFullName);
+    addressLabelShow = gtk_label_new(yourAddress);
+    dobLabelShow = gtk_label_new(yourDOB);
+    mainSectionInfor = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(mainSectionInfor, nameInforLabel,0, 0, 10);
+    gtk_box_pack_start(mainSectionInfor, nameInforLabelShow,0, 0, 0);
+    gtk_box_pack_start(mainSectionInfor, addressLabel,0, 0, 10);
+    gtk_box_pack_start(mainSectionInfor, addressLabelShow,0, 0, 0);
+    gtk_box_pack_start(mainSectionInfor, dobLabel,0, 0, 10);
+    gtk_box_pack_start(mainSectionInfor, dobLabelShow,0, 0, 0);
+    gtk_box_pack_end(mainSectionInfor, backShowInforButton, 0, 0, 10);
+    gtk_widget_set_name(mainSectionInfor, "mainSectionInfor");
+    gtk_widget_set_name(welcomeChangeInforLabel, "welcomeChangeInforLabel");
+    gtk_widget_set_name(nameShopLabel, "nameShopLabel");
+    gtk_widget_set_name(nameInforLabel, "nameInforLabel");
+    gtk_widget_set_name(addressLabel, "addressLabel");
+    gtk_widget_set_name(dobLabel, "dobLabel");
+    mainInfor = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(mainInfor, pictureInfor, 0, 0, 0);
+    gtk_box_pack_end(mainInfor, mainSectionInfor, 0, 0, 0);
+
+    containerShowInfor = gtk_vbox_new(0, 0);
+    gtk_box_pack_start(containerShowInfor, headerTiku, 0, 0, 0);
+    gtk_box_pack_start(containerShowInfor , mainInfor, 0, 0, 0);
+    gtk_widget_set_name(containerShowInfor, "containerShowInfor");
+    showInforWindow = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(showInforWindow), "Show Information");
+    gtk_window_set_default_size(GTK_WINDOW(showInforWindow),500,200);
+    gtk_window_set_resizable(GTK_WINDOW(showInforWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(showInforWindow), GTK_WIN_POS_CENTER);
+    gtk_container_add(showInforWindow, containerShowInfor);
+}
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
@@ -1299,15 +1522,27 @@ int main(int argc, char **argv)
     customer.lastName = malloc(200);
     customer.pwd = malloc(200);
     customer.address = malloc(200);
+    yourFullName = malloc(200);
+    strcpy(yourFullName, "");
+    yourAddress = malloc(200);
+    strcpy(yourAddress, "");
+    yourDOB = malloc(200);
+    strcpy(yourDOB, "");
     /*sign up*/
     newAccount.email = malloc(200);
     newAccount.firstName = malloc(200);
     newAccount.lastName = malloc(200);
     newAccount.pwd = malloc(200);
     newAccount.address = malloc(200);
+    /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*show products*/
+    for(int i  = 0; i < 500; i++){
+        databaseProducts[i].name = malloc(200);
+    }
+    /*show Information*/
+    g_signal_connect(app, "activate", G_CALLBACK(showInforActivate), NULL);
     /*supplierMapActivate*/
     g_signal_connect(app, "activate", G_CALLBACK(supplierMapActivate), NULL);
-    /*Khúc này là gọi ra hết tất cả cửa sổ*/
     /*show products window*/
     g_signal_connect(app, "activate", G_CALLBACK(showProductsActivate), NULL);
     /*notification window*/

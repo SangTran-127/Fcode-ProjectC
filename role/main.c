@@ -471,7 +471,6 @@ static void signUp_enter_callback()
     printf("\n%d", year);
     if(findAccount(email) == 0){
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
-<<<<<<< HEAD
             int xxx = findAccount("");
             printf("\nSuccessfully");
             char* newInfor = malloc(200);
@@ -511,18 +510,9 @@ static void signUp_enter_callback()
             onNoti();
         }
     }else{
-        printf("\nMail is avaiable");
-        gtk_label_set_text(alert, "Mail is avaiable");
+        printf("\nMail is not available");
+        gtk_label_set_text(alert, "Mail is not available");
         onNoti();
-=======
-            printf("\nSuccessfully");
-            onNoti();
-        }else{
-            printf("\nPassword does not match");
-        }
-    }else{
-        printf("\nWrong password");
->>>>>>> 8760c97a1e8429aa1d6d56b8285e4dd15199f3a1
     }
 }
 
@@ -647,6 +637,7 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
 /*Show Products*/
 void cloneProducts(){
     numberOfProducts = 1;
+    char* str = malloc(1000);
     FILE *fp = fopen("products.csv", "r");
     while (fgets(str, 60, fp) != NULL)
     {

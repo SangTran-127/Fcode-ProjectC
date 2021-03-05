@@ -503,16 +503,16 @@ static void signUp_enter_callback()
             gtk_entry_set_text(GTK_ENTRY(emailEntry), "");
             gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
             gtk_entry_set_text(GTK_ENTRY(reenterPasswordEntry), "");
-            gtk_label_set_text(alert, "Doi thanh cong");
+            gtk_label_set_text(alert, "Successfully");
             onNoti();
         }else{
-            printf("\nKhong trung kia ma");
-            gtk_label_set_text(alert, "Khong trung kia ma");
+            printf("\nPassword does not match");
+            gtk_label_set_text(alert, "Password does not match");
             onNoti();
         }
     }else{
-        printf("\nMail nay co roi nha");
-        gtk_label_set_text(alert, "Mail nay co roi nha");
+        printf("\nMail is avaiable");
+        gtk_label_set_text(alert, "Mail is avaiable");
         onNoti();
 =======
             printf("\nSuccessfully");

@@ -41,7 +41,8 @@ Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is
      Change the directory to complie by Copy *C:\msys64\mingw64* and Paste into **Compiler's installation directory**
      <space><space>
 # ABOUT TIKU 
-   
-    Tiku Shopping is created based on GTK so it quite visual and easy to interact and
+   Tiku Shopping is created based on GTK so it quite visual and easy to interact and
    it owns the basic features of sales software such as register, login, buys, sells, deletes...
     There are some pages about Tiku
+   
+    

@@ -162,7 +162,7 @@ static void s17()
 static void s38()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
@@ -226,7 +226,7 @@ static void s_end()
         gtk_entry_set_text(GTK_ENTRY(entryAddress), "");
         gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
         gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
-        gtk_label_set_text(alert, "Ordered successfully\nplease continue your shopping");
+        gtk_label_set_text(alert, "Ordered successfully\nPlease continue your shopping");
         onNoti();
     }else{
         gtk_label_set_text(alert, "Please enter your complete information");
@@ -899,7 +899,7 @@ static void add1(){
         gtk_text_buffer_set_text (buffer, itemListText, -1);
         numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -919,7 +919,7 @@ static void add2(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -939,7 +939,7 @@ static void add3(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -959,7 +959,7 @@ static void add4(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -979,7 +979,7 @@ static void add5(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -999,7 +999,7 @@ static void add6(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1019,7 +1019,7 @@ static void add7(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1039,7 +1039,7 @@ static void add8(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1059,7 +1059,7 @@ static void add9(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1079,7 +1079,7 @@ static void add10(){
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }

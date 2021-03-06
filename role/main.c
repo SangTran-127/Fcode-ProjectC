@@ -224,7 +224,7 @@ static void s_end()
         gtk_entry_set_text(GTK_ENTRY(entryReciName), "");
         gtk_entry_set_text(GTK_ENTRY(entryPhone), "");
         gtk_entry_set_text(GTK_ENTRY(entryAddress), "");
-        gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
+        gtk_text_buffer_set_text (buffer, "    You have not selected any items", -1);
         gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
         gtk_label_set_text(alert, "Ordered successfully\nplease continue your shopping");
         onNoti();
@@ -338,9 +338,10 @@ static void s11_8()
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
 }
 void delChar(char* str, int pos){
-    for(int i = pos; i <= strlen(str) - 1; i++){
+    for(int i = pos; i <= strlen(str) - 2; i++){
         str[i] = str[i + 1];
     }
+    str[strlen(str)-1] = 0;
 }
 
 /*Sign in*/
@@ -1086,22 +1087,26 @@ static void add10(){
 
 static void showProducts_delete_callback(){
     char *entry_id = gtk_entry_get_text(GTK_ENTRY(idDelEntry));
-    if(strcmp(entry_id, "") != 0){
+    strcat(entry_id, "\n");
+    if(strlen(entry_id) > 0){
         int pos = 0;
-        while(entry_id[pos] != '\0'){
+        while(entry_id[pos] != '\n'){
             if(entry_id[pos] < '0' || entry_id[pos] > '9'){
                 delChar(entry_id, pos);
                 continue;
             }
             pos++;
         }
+
         pos = atoi(entry_id);
+        printf("\n----->%d", pos);
         if(pos >= 1 && pos <= numberOfItem){
             for(int i = pos-1; i <= numberOfItem - 2; i++){
                 itemList[i] = itemList[i + 1];
             }
             numberOfItem--;
             strcpy(itemListText, "");
+            printf("\nitemListText = %d", itemListText);
             for(int i = 0; i <= numberOfItem - 1; i++){
                 strcat(itemListText, "------------------------\nID: ");
                 char* tmpStr = malloc(200);
@@ -1115,6 +1120,8 @@ static void showProducts_delete_callback(){
                 strcat(itemListText, ".00$\n");
                 gtk_text_buffer_set_text (buffer, itemListText, -1);
             }
+            gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
+        }else{
             gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
         }
     }else{
@@ -1664,7 +1671,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     textView = gtk_text_view_new();
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textView));
     gtk_text_view_set_wrap_mode(textView, GTK_WRAP_WORD);
-    gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
+    gtk_text_buffer_set_text (buffer, "    You have not selected any items", -1);
     gtk_text_view_set_editable(textView, FALSE);
     //
     searchLabel = gtk_label_new("Search product: ");

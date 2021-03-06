@@ -55,5 +55,5 @@ Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is
    1. Thu Trang Le: <https://github.com/Nabilee1703>
    2. Truong Le Tuan Kiet: <https://github.com/zhangliejunjie>
    3. Tran Quang Sang: <https://github.com/SangTran-127>
-   #SOURCES:
+   # SOURCES:
    <https://developer.gnome.org/gtk3/stable>

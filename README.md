@@ -46,5 +46,9 @@ Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is
     There are some pages about Tiku:
 ![landing-page](https://scontent.xx.fbcdn.net/v/t1.15752-0/p403x403/157286771_465619201147936_1269036079253581960_n.png?_nc_cat=111&ccb=1-3&_nc_sid=aee45a&_nc_ohc=Dsa56UCXlCsAX9T3A-F&_nc_ad=z-m&_nc_cid=0&_nc_ht=scontent.xx&_nc_tp=30&oh=7c2760f3d1d4f3c51d067dec3f81f4d0&oe=60680154)
     
+   Register page: 
+   ![register](https://scontent-xsp1-2.xx.fbcdn.net/v/t1.15752-9/156672158_2844349535884843_2310462908160987914_n.png?_nc_cat=102&ccb=1-3&_nc_sid=ae9488&_nc_ohc=ZdNnUMElWdkAX_OMScl&_nc_ht=scontent-xsp1-2.xx&oh=faf32fbab597fc4e920087b30fc7c27f&oe=606ADE43)
    
+   Shopping page:
+   ![shopping](https://scontent-xsp1-2.xx.fbcdn.net/v/t1.15752-9/154993359_254786026146072_7907272442281241891_n.png?_nc_cat=104&ccb=1-3&_nc_sid=ae9488&_nc_ohc=lJwjviM3dz8AX_GfAYb&_nc_ht=scontent-xsp1-2.xx&oh=8160d4be3389f9364464805eb6c53a7c&oe=6044A37C)
     

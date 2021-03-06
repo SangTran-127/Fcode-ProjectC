@@ -162,7 +162,7 @@ static void s17()
 static void s38()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));

@@ -43,6 +43,7 @@ Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is
 # ABOUT TIKU 
    Tiku Shopping is created based on GTK so it quite visual and easy to interact and
    it owns the basic features of sales software such as register, login, buys, sells, deletes...
-    There are some pages about Tiku
+    There are some pages about Tiku:
+![landing-page](https://scontent-xsp1-2.xx.fbcdn.net/v/t1.15752-9/154993359_254786026146072_7907272442281241891_n.png?_nc_cat=104&ccb=1-3&_nc_sid=ae9488&_nc_ohc=lJwjviM3dz8AX_GfAYb&_nc_ht=scontent-xsp1-2.xx&oh=ff5c39d357779edf0d662dbf82d07c5d&oe=606A6E7C)
    
     

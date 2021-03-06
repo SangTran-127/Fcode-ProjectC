@@ -784,7 +784,7 @@ void copyProducts(){
 }
 
 static void next_page(){
-    if(firstIndex + 1 <= numberOfProducts){
+    if(firstIndex + 1 <= numberOfProducts - 9){
         firstIndex += 10;
         change10Product();
     }

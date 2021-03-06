@@ -132,6 +132,7 @@ static char* yourDOB;
 GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow;
 /*Payment*/
 GtkWidget *moneyTotal, *moneyDiscount, *moneyCost;
+GtkWidget *entryReciName, *entryAddress, *entryPhone;
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
@@ -208,14 +209,28 @@ static void s43()
 }
 static void s_end()
 {
-    if(1 == 1){
+    char *entry_reciname = gtk_entry_get_text(GTK_ENTRY(entryReciName));
+    printf("\n'%s'", entry_reciname);
+    char *entry_address = gtk_entry_get_text(GTK_ENTRY(entryAddress));
+    printf("\n'%s'", entry_address);
+    char *entry_phone = gtk_entry_get_text(GTK_ENTRY(entryPhone));
+    printf("\n'%s'", entry_phone);
+    if(strcmp(entry_reciname, "") != 0 && strcmp(entry_address, "") != 0 && strcmp(entry_phone, "") != 0){
         gtk_widget_hide(GTK_WIDGET(paymentWindow));
         firstIndex = 0;
         change10Product();
         numberOfItem = 0;
         strcpy(itemListText, "");
+        gtk_entry_set_text(GTK_ENTRY(entryReciName), "");
+        gtk_entry_set_text(GTK_ENTRY(entryPhone), "");
+        gtk_entry_set_text(GTK_ENTRY(entryAddress), "");
         gtk_text_buffer_set_text (buffer, "Ban chua chon mon hang nao ca", -1);
         gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+        gtk_label_set_text(alert, "Dat hang thanh cong\nMoi mua sam tiep");
+        onNoti();
+    }else{
+        gtk_label_set_text(alert, "Nhap day du thong tin di ma");
+        onNoti();
     }
 }
 static void s811()
@@ -1949,7 +1964,7 @@ static void paymentActivate(GtkApplication *app, gpointer data) {
     GtkWidget *gridPayment, *vbox;
     GtkWidget *helloLabel, *userReciNameLabel, *addressLabel, *phoneLabel, *paymentLabel, *couponLabel, *totalbillLabel, *discountLabel, *costLabel;
     GtkWidget *buttonBackPayment, *buttonPayment, *buttonPayment2, *buttonCoupon, *buttonOrder;
-    GtkWidget *entryReciName, *entryAddress, *entryPhone, *entryCoupon;
+    GtkWidget *entryCoupon;
     load_css();
     paymentWindow = gtk_application_window_new(app);
     gtk_window_set_title(GTK_WINDOW(paymentWindow), "payment");

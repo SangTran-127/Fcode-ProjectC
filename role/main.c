@@ -193,7 +193,7 @@ static void s71()
 static void s31()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
@@ -224,26 +224,26 @@ static void s_end()
         gtk_entry_set_text(GTK_ENTRY(entryReciName), "");
         gtk_entry_set_text(GTK_ENTRY(entryPhone), "");
         gtk_entry_set_text(GTK_ENTRY(entryAddress), "");
-        gtk_text_buffer_set_text (buffer, "Ban chua chon mon hang nao ca", -1);
+        gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
         gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
-        gtk_label_set_text(alert, "Dat hang thanh cong\nMoi mua sam tiep");
+        gtk_label_set_text(alert, "Ordered successfully\nplease continue your shopping");
         onNoti();
     }else{
-        gtk_label_set_text(alert, "Nhap day du thong tin di ma");
+        gtk_label_set_text(alert, "Please enter your complete information");
         onNoti();
     }
 }
 static void s811()
 {
     if(customer.type == 1){
-        gtk_label_set_text(alert, "Ban la supplier nen khong mua duoc nha");
+        gtk_label_set_text(alert, "Can not buy, you are the supplier of this item");
         onNoti();
     }else if(numberOfItem > 0){
         calcCost();
         gtk_widget_hide(GTK_WIDGET(showProductsWindow));
         gtk_widget_show_all(GTK_WIDGET(paymentWindow));
     }else{
-        gtk_label_set_text(alert, "Chua chon mon nao ma doi dat gi ma");
+        gtk_label_set_text(alert, "You have not selected any items");
         onNoti();
     }
 }
@@ -304,7 +304,7 @@ static void s310()
 static void s98()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
@@ -312,7 +312,7 @@ static void s98()
 static void s91()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
@@ -1664,7 +1664,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     textView = gtk_text_view_new();
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textView));
     gtk_text_view_set_wrap_mode(textView, GTK_WRAP_WORD);
-    gtk_text_buffer_set_text (buffer, "Ban chua chon mon hang nao", -1);
+    gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
     gtk_text_view_set_editable(textView, FALSE);
     //
     searchLabel = gtk_label_new("Search product: ");

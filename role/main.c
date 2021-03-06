@@ -593,7 +593,7 @@ int changeLine(int line, char* inputString){
     strcpy(newline, inputString);
     strcat(newline, "\n");
     int count;
-    strcpy(path, "C:\\msys64\\home\\snowi\\Fcode-ProjectC\\role\\customers.csv");
+    strcpy(path, "customers.csv");
     /* Remove extra new line character from stdin */
     fflush(stdin);
     /*  Open all required files */

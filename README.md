@@ -6,6 +6,7 @@ To use Tiku Shopping, you need to install the GTK platform on your computer firs
 then install CodeBlocks to run program with MSYS2.
 There are various methods to install GTK on development machines.
 Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is one of our suggested ways.
+<space><space>
 HOW TO INSTALL GTK3(h2)
 1. Install MSYS2
     * Step 1: Download the installer: 
@@ -38,6 +39,7 @@ HOW TO INSTALL GTK3(h2)
         * C:\msys64\mingw64\include\atk-1.0
     * Step 3: Compiler -> Toolchain executables -> Compiler's installation directory
      Change the directory to complie by Copy *C:\msys64\mingw64* and Paste into **Compiler's installation directory**
+     <space><space>
 HOW TO USE TIKU 
     Tiku Shopping is created based on GTK so it quite visual and easy to interact and it owns the basic features of sales software such as register, login, buys, sells, deletes...
     <space><space>

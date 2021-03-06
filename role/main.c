@@ -104,6 +104,7 @@ static int firstIndex = 0;
 GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
 GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
 GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10; //img gio hang
+GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
 char* itemListText;
 GtkTextBuffer *buffer;
 /*Sign in*/
@@ -744,6 +745,37 @@ void change10Product(){
     gtk_label_set_text(GTK_LABEL(id9), tmpStr);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].id, tmpStr, 10);
     gtk_label_set_text(GTK_LABEL(id10), tmpStr);
+    /**/
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price1), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+1]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price2), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+2]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price3), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+3]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price4), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+4]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price5), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+5]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price6), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+6]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price7), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+7]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price8), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+8]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price9), tmpStr);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].price, tmpStr, 10);
+    strcat(tmpStr, ".00$");
+    gtk_label_set_text(GTK_LABEL(price10), tmpStr);
     /*Imagecovers/1.png"*/
     char* tmpString = malloc(200);
     strcpy(tmpStr, "covers/"); itoa(databaseProducts[showedProducts[firstIndex]].id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
@@ -785,7 +817,7 @@ static void previous_page(){
 }
 
 static void add1(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].id, tmpStr, 10);
@@ -800,7 +832,7 @@ static void add1(){
     numberOfItem++;
 }
 static void add2(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+1]].id, tmpStr, 10);
@@ -815,7 +847,7 @@ static void add2(){
     numberOfItem++;
 }
 static void add3(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+2]].id, tmpStr, 10);
@@ -830,7 +862,7 @@ static void add3(){
     numberOfItem++;
 }
 static void add4(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+3]].id, tmpStr, 10);
@@ -845,7 +877,7 @@ static void add4(){
     numberOfItem++;
 }
 static void add5(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+4]].id, tmpStr, 10);
@@ -860,7 +892,7 @@ static void add5(){
     numberOfItem++;
 }
 static void add6(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+5]].id, tmpStr, 10);
@@ -875,7 +907,7 @@ static void add6(){
     numberOfItem++;
 }
 static void add7(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+6]].id, tmpStr, 10);
@@ -890,7 +922,7 @@ static void add7(){
     numberOfItem++;
 }
 static void add8(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+7]].id, tmpStr, 10);
@@ -905,7 +937,7 @@ static void add8(){
     numberOfItem++;
 }
 static void add9(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+8]].id, tmpStr, 10);
@@ -920,7 +952,7 @@ static void add9(){
     numberOfItem++;
 }
 static void add10(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id;
+    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].id, tmpStr, 10);
@@ -1456,7 +1488,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     GtkWidget *searchButton;
     GtkWidget *nextPage, *previousPage;
 
-    GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
+
 
     GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8, *buttonAdd9, *buttonAdd10;
 

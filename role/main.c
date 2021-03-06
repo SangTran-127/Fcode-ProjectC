@@ -1390,7 +1390,7 @@ static void signUpActivate(GtkApplication *app, gpointer data)
     gtk_box_pack_start(boxAllRegister, vboxRegisterContainer, 0, 0, 0);
     gtk_widget_set_name(boxAllRegister,"boxAllRegister");
     signUpWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(signUpWindow), "Register-Form");
+	gtk_window_set_title(GTK_WINDOW(signUpWindow), "Register Form");
 	gtk_window_set_default_size(GTK_WINDOW(signUpWindow), 500, 500);
 	gtk_window_set_resizable(GTK_WINDOW(signUpWindow), FALSE);
 	gtk_window_set_position(GTK_WINDOW(signUpWindow), GTK_WIN_POS_CENTER);
@@ -1903,7 +1903,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     gtk_widget_set_name(hboxSearch, "hboxSearch");
     gtk_widget_set_name(vboxContain, "vboxContain");
     showProductsWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(showProductsWindow), "shopping cart");
+	gtk_window_set_title(GTK_WINDOW(showProductsWindow), "Shopping cart");
 	gtk_window_set_default_size(GTK_WINDOW(showProductsWindow),1000, 700);
 	gtk_window_set_resizable(GTK_WINDOW(showProductsWindow), FALSE);
 	gtk_window_set_position(GTK_WINDOW(showProductsWindow), GTK_WIN_POS_CENTER);
@@ -1974,7 +1974,7 @@ static void paymentActivate(GtkApplication *app, gpointer data) {
     GtkWidget *entryCoupon;
     load_css();
     paymentWindow = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW(paymentWindow), "payment");
+    gtk_window_set_title(GTK_WINDOW(paymentWindow), "Payment");
     gtk_window_set_default_size(GTK_WINDOW(paymentWindow),500,500);
     gtk_window_set_resizable(GTK_WINDOW(paymentWindow), FALSE);
     gtk_window_set_position(GTK_WINDOW(paymentWindow), GTK_WIN_POS_CENTER);

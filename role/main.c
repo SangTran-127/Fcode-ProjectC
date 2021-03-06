@@ -81,16 +81,17 @@ typedef struct
 } signUp_appWidgets;
 
 /****************************************************************** WINDOWS */
-/*1*/ static GtkWidget *openWindow;
-/*2*/ static GtkWidget *signInWindow;
-/*3*/ static GtkWidget *customerMapWindow;
-/*4*/ static GtkWidget *changePwdWindow;
-/*5*/ static GtkWidget *changeInformationWindow;
-/*6*/ static GtkWidget *notiWindow;
-/*7*/ static GtkWidget *signUpWindow;
-/*8*/ static GtkWidget *showProductsWindow;
-/*9*/ static GtkWidget *supplierMapWindow;
+/*01*/ static GtkWidget *openWindow;
+/*02*/ static GtkWidget *signInWindow;
+/*03*/ static GtkWidget *customerMapWindow;
+/*04*/ static GtkWidget *changePwdWindow;
+/*05*/ static GtkWidget *changeInformationWindow;
+/*06*/ static GtkWidget *notiWindow;
+/*07*/ static GtkWidget *signUpWindow;
+/*08*/ static GtkWidget *showProductsWindow;
+/*09*/ static GtkWidget *supplierMapWindow;
 /*10*/ static GtkWidget *showInforWindow;
+/*11*/ static GtkWidget *paymentWindow;
 
 
 /****************************************************************** GLOBAL VARIABLES */
@@ -107,6 +108,7 @@ GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10;
 GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
 char* itemListText;
 GtkTextBuffer *buffer;
+GtkWidget *idDelEntry;
 /*Sign in*/
 
 static Customer customer;
@@ -202,6 +204,19 @@ static void s43()
         gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
     }
 }
+static void s811()
+{
+    if(customer.type == 1){
+        gtk_label_set_text(alert, "Ban la supplier nen khong mua duoc nha");
+        onNoti();
+    }else if(numberOfItem > 0){
+     gtk_widget_hide(GTK_WIDGET(showProductsWindow));
+        gtk_widget_show_all(GTK_WIDGET(paymentWindow));
+    }else{
+        gtk_label_set_text(alert, "Chua chon mon nao ma doi dat gi ma");
+        onNoti();
+    }
+}
 static void s23()
 {
     gtk_widget_hide(GTK_WIDGET(signInWindow));
@@ -286,6 +301,12 @@ static void s53()
 {
     gtk_widget_hide(GTK_WIDGET(changeInformationWindow));
     gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+}
+
+void delChar(char* str, int pos){
+    for(int i = pos; i <= strlen(str) - 1; i++){
+        str[i] = str[i + 1];
+    }
 }
 
 /*Sign in*/
@@ -832,7 +853,7 @@ static void add1(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -847,7 +868,7 @@ static void add2(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+1]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -862,7 +883,7 @@ static void add3(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+2]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -877,7 +898,7 @@ static void add4(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+3]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -892,7 +913,7 @@ static void add5(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+4]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -907,7 +928,7 @@ static void add6(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+5]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -922,7 +943,7 @@ static void add7(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+6]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -937,7 +958,7 @@ static void add8(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+7]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -952,7 +973,7 @@ static void add9(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+8]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -967,7 +988,7 @@ static void add10(){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].id, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
@@ -979,6 +1000,33 @@ static void add10(){
     numberOfItem++;
 }
 
+static void showProducts_delete_callback(){
+    char *entry_id = gtk_entry_get_text(GTK_ENTRY(idDelEntry));
+    char* tmpStr = malloc(10000);
+    if(strcmp(entry_id, "") != 0){
+        int pos = 0;
+        while(entry_id[pos] != '\0'){
+            if(entry_id[pos] < '0' || entry_id[pos] > '9'){
+                delChar(entry_id, pos);
+                continue;
+            }
+            pos++;
+        }
+        strcpy(tmpStr, entry_id); strcpy(entry_id, "------------------------\nID: ");
+        strcat(entry_id, tmpStr);
+        tmpStr = strstr(itemListText, entry_id);
+        for(int i = 1; i <= 29; i++){
+            delChar(tmpStr, 0);
+        }
+        pos = 0;
+        while(tmpStr[pos] != '-' && tmpStr[pos] != '\0'){
+            delChar(tmpStr, pos);
+        }
+        printf("\n%s", tmpStr);
+        gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
+
+    }
+}
 /****************************************************************** GUI THREAD */
 /*Openning window*/
 static void activate(GtkApplication *app, gpointer data)
@@ -1145,7 +1193,6 @@ static void signInActivate(GtkApplication *app, gpointer data)
 
     //gtk_widget_show_all(GTK_WIDGET(signInWindow));
 }
-
 /*Sign up window*/
 static void signUpActivate(GtkApplication *app, gpointer data)
 {
@@ -1491,7 +1538,7 @@ static void notiActivate(GtkApplication *app, gpointer data) {
 static void showProductsActivate(GtkApplication *app, gpointer data)
 {
     GtkWidget *menuLabel;
-    GtkWidget *textView, *leftSidevBox, *gridButton, *idDelEntry, *confirmDelButton, *backShowCartButton, *paymentButton;
+    GtkWidget *textView, *leftSidevBox, *gridButton, *confirmDelButton, *backShowCartButton, *paymentButton;
     GtkWidget *hboxContainer, *hboxSearch, *hboxPage, *boxTop, *vboxContain; //container
     GtkWidget *GridItem;
     GtkWidget *box1, *box2, *box3, *box4, *box5, *box6, *box7, *box8, *box9, *box10; //box_gio_hang
@@ -1525,10 +1572,11 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     gridButton = gtk_grid_new();
     confirmDelButton = gtk_button_new_with_label("Delete");
     gtk_widget_set_name(confirmDelButton, "Delete");
+    g_signal_connect(G_OBJECT(confirmDelButton), "clicked", G_CALLBACK(showProducts_delete_callback), NULL);
     backShowCartButton = gtk_button_new_with_label("Back");
     paymentButton = gtk_button_new_with_label("Payment");
     idDelEntry = gtk_entry_new();
-    gtk_entry_set_placeholder_text(idDelEntry,"Enter ID that you want to Delete");
+    gtk_entry_set_placeholder_text(idDelEntry,"Enter product's ID       ");
     gtk_widget_set_name(idDelEntry, "delId");
     gtk_grid_attach(gridButton, idDelEntry, 0, 0, 2, 1);
     gtk_grid_attach(gridButton, confirmDelButton, 3, 0, 1, 1);
@@ -1547,6 +1595,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     gtk_widget_set_name(backShowCartButton, "backCart");
     g_signal_connect(G_OBJECT(backShowCartButton), "clicked", G_CALLBACK(s83), NULL);
     gtk_widget_set_name(paymentButton, "paymentButton");
+    g_signal_connect(G_OBJECT(paymentButton), "clicked", G_CALLBACK(s811), NULL);
     id1 = gtk_label_new("ID1");
     gtk_widget_set_name(id1, "id1");
     id2 = gtk_label_new("ID2");
@@ -1800,12 +1849,94 @@ static void showInforActivate(GtkApplication *app, gpointer data) {
     gtk_window_set_position(GTK_WINDOW(showInforWindow), GTK_WIN_POS_CENTER);
     gtk_container_add(showInforWindow, containerShowInfor);
 }
+/*Payment*/
+static void paymentActivate(GtkApplication *app, gpointer data) {
+    GtkWidget *containerBox;
+    GtkWidget *gridPayment, *vbox;
+    GtkWidget *helloLabel, *userReciNameLabel, *addressLabel, *phoneLabel, *paymentLabel, *couponLabel, *totalbillLabel, *discountLabel, *costLabel, *moneyTotal, *moneyDiscount, *moneyCost;
+    GtkWidget *buttonBackPayment, *buttonPayment, *buttonPayment2, *buttonCoupon, *buttonOrder;
+    GtkWidget *entryReciName, *entryAddress, *entryPhone, *entryCoupon;
+    load_css();
+    paymentWindow = gtk_application_window_new(app);
+    gtk_window_set_title(GTK_WINDOW(paymentWindow), "payment");
+    gtk_window_set_default_size(GTK_WINDOW(paymentWindow),500,500);
+    gtk_window_set_resizable(GTK_WINDOW(paymentWindow), FALSE);
+    gtk_window_set_position(GTK_WINDOW(paymentWindow), GTK_WIN_POS_CENTER);
+    containerBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
+    helloLabel = gtk_label_new("Hello Customer!");
+    userReciNameLabel = gtk_label_new("Recipient's name: ");
+    addressLabel = gtk_label_new("Delivery address: ");
+    phoneLabel = gtk_label_new("Phone number: ");
+    paymentLabel = gtk_label_new("Payment method: ");
+    couponLabel = gtk_label_new("Coupon: ");
+    totalbillLabel = gtk_label_new("Total bill: ");
+    discountLabel = gtk_label_new("Discount: ");
+    costLabel = gtk_label_new("Total cost: ");
+    moneyTotal = gtk_label_new("$100.00");
+    moneyDiscount = gtk_label_new(" - $80.00");
+    moneyCost = gtk_label_new("$20.00");
+    buttonPayment = gtk_radio_button_new_with_label(NULL, "Cash on delivery");
+    buttonPayment2 = gtk_radio_button_new_with_label(gtk_radio_button_get_group(GTK_RADIO_BUTTON(buttonPayment)), "Credit card");
+    buttonBackPayment = gtk_button_new_with_label("Back");
+    gtk_widget_set_name(buttonBackPayment, "buttonBackPayment");
+    buttonCoupon = gtk_button_new_with_label("Add the coupon");
+    gtk_widget_set_name(buttonCoupon, "buttonCoupon");
+    buttonOrder = gtk_button_new_with_label("ORDER NOW");
+    //gtk_button_set_always_show_image (GTK_BUTTON(buttonOrder), TRUE);
+    entryReciName = gtk_entry_new();
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entryReciName), GTK_ENTRY_ICON_PRIMARY, "contact-new");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(entryReciName), "Type your name");
+    entryAddress = gtk_entry_new();
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entryAddress), GTK_ENTRY_ICON_PRIMARY, "emblem-mail");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(entryAddress), "Type your home address");
+    entryPhone = gtk_entry_new();
+    gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entryPhone), GTK_ENTRY_ICON_PRIMARY, "phone");
+    gtk_entry_set_placeholder_text(GTK_ENTRY(entryPhone), "Type your phone number");
+    entryCoupon = gtk_entry_new();
+    gridPayment = gtk_grid_new();
+    gtk_grid_set_row_spacing(gridPayment, 20);
+    gtk_grid_set_column_spacing(gridPayment, 20);
+    gtk_grid_attach(gridPayment, helloLabel, 0, 0, 1, 1);
+    gtk_grid_attach(gridPayment, buttonBackPayment, 2, 0, 1, 1);
+    gtk_grid_attach(gridPayment, userReciNameLabel, 0, 1, 1, 1);
+    gtk_grid_attach(gridPayment, entryReciName, 1, 1, 2, 1);
+    gtk_grid_attach(gridPayment, addressLabel, 0, 2, 1, 1);
+    gtk_grid_attach(gridPayment, entryAddress, 1, 2, 2, 1);
+    gtk_grid_attach(gridPayment, phoneLabel, 0, 3, 1, 1);
+    gtk_grid_attach(gridPayment, entryPhone, 1, 3, 2, 1);
+    gtk_grid_attach(gridPayment, paymentLabel, 0, 4, 1, 1);
+    gtk_grid_attach(gridPayment, buttonPayment, 1, 4, 1, 1);
+    gtk_grid_attach(gridPayment, buttonPayment2, 2, 4, 1, 1);
+    gtk_grid_attach(gridPayment, couponLabel, 0, 5, 1, 1);
+    gtk_grid_attach(gridPayment, entryCoupon, 1, 5, 1, 1);
+    gtk_grid_attach(gridPayment, buttonCoupon, 2, 5, 1, 1);
+    gtk_grid_attach(gridPayment, totalbillLabel, 0, 6, 1, 1);
+    gtk_grid_attach(gridPayment, moneyTotal, 1, 6, 2, 1);
+    gtk_grid_attach(gridPayment, discountLabel, 0, 7, 1, 1);
+    gtk_grid_attach(gridPayment, moneyDiscount, 1, 7, 2, 1);
+    gtk_grid_attach(gridPayment, costLabel, 0, 8, 1, 1);
+    gtk_grid_attach(gridPayment, moneyCost, 1, 8, 2, 1);
+    gtk_grid_attach(gridPayment, buttonOrder, 1, 9, 1, 1);
+    gtk_widget_set_name(moneyCost, "moneyCost");
+    gtk_widget_set_name(moneyDiscount, "moneyDiscount");
+    gtk_widget_set_name(moneyTotal, "moneyTotal");
+    gtk_widget_set_name(gridPayment, "gridPayment");
+    gtk_widget_set_name(buttonOrder, "buttonOrder");
+    gtk_widget_set_name(entryAddress, "entryAddress");
+    gtk_widget_set_name(entryCoupon, "entryCoupon");
+    gtk_widget_set_name(entryPhone, "entryPhone");
+    gtk_widget_set_name(entryReciName, "entryReciName");
+    gtk_container_add(GTK_CONTAINER(paymentWindow), gridPayment);
+}
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)
 {
     GtkAllocation *app;
     int status;
     app = gtk_application_new("app.shopping.cart", G_APPLICATION_FLAGS_NONE);
+    /*Khúc này là gọi ra hết tất cả cửa sổ*/
+    /*Payment*/
+    g_signal_connect(app, "activate", G_CALLBACK(paymentActivate), NULL);
     /*Sign in*/
     customer.email = malloc(200);
     customer.firstName = malloc(200);
@@ -1824,7 +1955,6 @@ int main(int argc, char **argv)
     newAccount.lastName = malloc(200);
     newAccount.pwd = malloc(200);
     newAccount.address = malloc(200);
-    /*Khúc này là gọi ra hết tất cả cửa sổ*/
     /*show products*/
     for(int i  = 0; i < 500; i++){
         databaseProducts[i].name = malloc(200);

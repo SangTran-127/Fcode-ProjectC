@@ -1125,7 +1125,7 @@ static void showProducts_delete_callback(){
 void calcCost(){
     int total = 0;
     for(int i = 0; i <= numberOfItem - 1; i++){
-        total += databaseProducts[showedProducts[i]].price;
+        total += databaseProducts[itemList[i]].price;
     }
     char* tmpStr = malloc(200);
     char* tmpString = malloc(200);

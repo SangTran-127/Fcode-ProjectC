@@ -130,6 +130,8 @@ static char* yourFullName;
 static char* yourAddress;
 static char* yourDOB;
 GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow;
+/*Payment*/
+GtkWidget *moneyTotal, *moneyDiscount, *moneyCost;
 
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
@@ -204,13 +206,26 @@ static void s43()
         gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
     }
 }
+static void s_end()
+{
+    if(1 == 1){
+        gtk_widget_hide(GTK_WIDGET(paymentWindow));
+        firstIndex = 0;
+        change10Product();
+        numberOfItem = 0;
+        strcpy(itemListText, "");
+        gtk_text_buffer_set_text (buffer, "Ban chua chon mon hang nao ca", -1);
+        gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+    }
+}
 static void s811()
 {
     if(customer.type == 1){
         gtk_label_set_text(alert, "Ban la supplier nen khong mua duoc nha");
         onNoti();
     }else if(numberOfItem > 0){
-     gtk_widget_hide(GTK_WIDGET(showProductsWindow));
+        calcCost();
+        gtk_widget_hide(GTK_WIDGET(showProductsWindow));
         gtk_widget_show_all(GTK_WIDGET(paymentWindow));
     }else{
         gtk_label_set_text(alert, "Chua chon mon nao ma doi dat gi ma");
@@ -302,7 +317,11 @@ static void s53()
     gtk_widget_hide(GTK_WIDGET(changeInformationWindow));
     gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
 }
-
+static void s11_8()
+{
+    gtk_widget_hide(GTK_WIDGET(paymentWindow));
+    gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
+}
 void delChar(char* str, int pos){
     for(int i = pos; i <= strlen(str) - 1; i++){
         str[i] = str[i + 1];
@@ -850,21 +869,27 @@ static void previous_page(){
 }
 
 static void add1(){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+    if(numberOfItem < 9){
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add2(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -878,8 +903,13 @@ static void add2(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add3(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -893,8 +923,13 @@ static void add3(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add4(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -908,8 +943,13 @@ static void add4(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add5(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -923,8 +963,13 @@ static void add5(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add6(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -938,8 +983,13 @@ static void add6(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add7(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -953,8 +1003,13 @@ static void add7(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add8(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -968,8 +1023,13 @@ static void add8(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add9(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -983,8 +1043,13 @@ static void add9(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 static void add10(){
+    if(numberOfItem < 9){
     itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
     strcat(itemListText, "------------------------\nID: ");
     char* tmpStr = malloc(200);
@@ -998,11 +1063,14 @@ static void add10(){
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
+    }else{
+        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        onNoti();
+    }
 }
 
 static void showProducts_delete_callback(){
     char *entry_id = gtk_entry_get_text(GTK_ENTRY(idDelEntry));
-    char* tmpStr = malloc(10000);
     if(strcmp(entry_id, "") != 0){
         int pos = 0;
         while(entry_id[pos] != '\0'){
@@ -1012,21 +1080,46 @@ static void showProducts_delete_callback(){
             }
             pos++;
         }
-        strcpy(tmpStr, entry_id); strcpy(entry_id, "------------------------\nID: ");
-        strcat(entry_id, tmpStr);
-        tmpStr = strstr(itemListText, entry_id);
-        for(int i = 1; i <= 29; i++){
-            delChar(tmpStr, 0);
+        pos = atoi(entry_id);
+        if(pos >= 1 && pos <= numberOfItem){
+            for(int i = pos; i <= numberOfItem - 2; i++){
+                itemList[i] = itemList[i + 1];
+            }
+            numberOfItem--;
+            strcpy(itemListText, "");
+            for(int i = 0; i <= numberOfItem - 1; i++){
+                strcat(itemListText, "------------------------\nID: ");
+                char* tmpStr = malloc(200);
+                strcpy(tmpStr, ""); itoa(i+1, tmpStr, 10);
+                strcat(itemListText, tmpStr);
+                strcat(itemListText, "\nName: ");
+                strcat(itemListText, databaseProducts[itemList[i]].name);
+                strcat(itemListText, "\nPrice: ");
+                strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[i]].price, tmpStr, 10);
+                strcat(itemListText, tmpStr);
+                strcat(itemListText, ".00$\n");
+                gtk_text_buffer_set_text (buffer, itemListText, -1);
+            }
+            gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
         }
-        pos = 0;
-        while(tmpStr[pos] != '-' && tmpStr[pos] != '\0'){
-            delChar(tmpStr, pos);
-        }
-        printf("\n%s", tmpStr);
+    }else{
         gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
-
     }
 }
+/*Payment window*/
+void calcCost(){
+    int total = 0;
+    for(int i = 0; i <= numberOfItem - 1; i++){
+        total += databaseProducts[showedProducts[i]].price;
+    }
+    char* tmpStr = malloc(200);
+    char* tmpString = malloc(200);
+    strcpy(tmpStr, "$"); itoa(total, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".00");
+    printf("\n%s", tmpStr);
+    gtk_label_set_text(GTK_LABEL(moneyCost), tmpStr);
+    gtk_label_set_text(GTK_LABEL(moneyTotal), tmpStr);
+}
+
 /****************************************************************** GUI THREAD */
 /*Openning window*/
 static void activate(GtkApplication *app, gpointer data)
@@ -1851,9 +1944,10 @@ static void showInforActivate(GtkApplication *app, gpointer data) {
 }
 /*Payment*/
 static void paymentActivate(GtkApplication *app, gpointer data) {
+
     GtkWidget *containerBox;
     GtkWidget *gridPayment, *vbox;
-    GtkWidget *helloLabel, *userReciNameLabel, *addressLabel, *phoneLabel, *paymentLabel, *couponLabel, *totalbillLabel, *discountLabel, *costLabel, *moneyTotal, *moneyDiscount, *moneyCost;
+    GtkWidget *helloLabel, *userReciNameLabel, *addressLabel, *phoneLabel, *paymentLabel, *couponLabel, *totalbillLabel, *discountLabel, *costLabel;
     GtkWidget *buttonBackPayment, *buttonPayment, *buttonPayment2, *buttonCoupon, *buttonOrder;
     GtkWidget *entryReciName, *entryAddress, *entryPhone, *entryCoupon;
     load_css();
@@ -1873,15 +1967,17 @@ static void paymentActivate(GtkApplication *app, gpointer data) {
     discountLabel = gtk_label_new("Discount: ");
     costLabel = gtk_label_new("Total cost: ");
     moneyTotal = gtk_label_new("$100.00");
-    moneyDiscount = gtk_label_new(" - $80.00");
+    moneyDiscount = gtk_label_new(" - $00.00");
     moneyCost = gtk_label_new("$20.00");
     buttonPayment = gtk_radio_button_new_with_label(NULL, "Cash on delivery");
     buttonPayment2 = gtk_radio_button_new_with_label(gtk_radio_button_get_group(GTK_RADIO_BUTTON(buttonPayment)), "Credit card");
     buttonBackPayment = gtk_button_new_with_label("Back");
     gtk_widget_set_name(buttonBackPayment, "buttonBackPayment");
+    g_signal_connect(G_OBJECT(buttonBackPayment), "clicked", G_CALLBACK(s11_8), NULL);
     buttonCoupon = gtk_button_new_with_label("Add the coupon");
     gtk_widget_set_name(buttonCoupon, "buttonCoupon");
     buttonOrder = gtk_button_new_with_label("ORDER NOW");
+    g_signal_connect(G_OBJECT(buttonOrder), "clicked", G_CALLBACK(s_end), NULL);
     //gtk_button_set_always_show_image (GTK_BUTTON(buttonOrder), TRUE);
     entryReciName = gtk_entry_new();
     gtk_entry_set_icon_from_icon_name(GTK_ENTRY(entryReciName), GTK_ENTRY_ICON_PRIMARY, "contact-new");

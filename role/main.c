@@ -170,7 +170,6 @@ static void s38()
 static void s83()
 {
     gtk_widget_hide(GTK_WIDGET(showProductsWindow));
-    printf("\ns83: customer.type: %d", customer.type);
     if(customer.type == 0){
         gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
     }else if(customer.type == 1){
@@ -210,11 +209,8 @@ static void s43()
 static void s_end()
 {
     char *entry_reciname = gtk_entry_get_text(GTK_ENTRY(entryReciName));
-    printf("\n'%s'", entry_reciname);
     char *entry_address = gtk_entry_get_text(GTK_ENTRY(entryAddress));
-    printf("\n'%s'", entry_address);
     char *entry_phone = gtk_entry_get_text(GTK_ENTRY(entryPhone));
-    printf("\n'%s'", entry_phone);
     if(strcmp(entry_reciname, "") != 0 && strcmp(entry_address, "") != 0 && strcmp(entry_phone, "") != 0){
         gtk_widget_hide(GTK_WIDGET(paymentWindow));
         firstIndex = 0;
@@ -363,7 +359,6 @@ int findAccount(char *inputEmail)
     strcpy(tmpStr, str);
     while (fgets(str, 60, fp) != NULL)
     {
-        printf("\n%s", str);
         if (strstr(str, tmpStr) == NULL)
         {
             numberOfCustomers++;
@@ -389,14 +384,12 @@ int findAccount(char *inputEmail)
         }
         strcpy(customer.email, inputEmail);
         pos++;
-        printf("\n%s", customer.email);
         while (str[pos] != ',')
         {
             int tmp = (int)str[pos];
             strcat(customer.pwd, &tmp);
             pos++;
         }
-        printf("\n%s", customer.pwd);
         pos++;
         while (str[pos] != ',')
         {
@@ -405,7 +398,6 @@ int findAccount(char *inputEmail)
             pos++;
         }
         pos++;
-        printf("\n%d", customer.id);
         while (str[pos] != ',')
         {
             int tmp = (int)str[pos];
@@ -444,14 +436,12 @@ int findAccount(char *inputEmail)
         pos++;
         customer.type = (int)str[pos] - '0';
         pos += 2;
-        printf("\n-------%c", str[pos]);
         while (str[pos] != ',')
         {
             int tmp = (int)str[pos] - '0';
             customer.tikuCoin = customer.tikuCoin * 10 + tmp;
             pos++;
         }
-        printf("\n%d", customer.tikuCoin);
         fclose(fp);
         return 1;
     }
@@ -461,7 +451,6 @@ int findAccount(char *inputEmail)
     strcpy(customer.firstName, "");
     strcpy(customer.lastName, "");
     strcpy(customer.pwd, "");
-    printf("\nkkkkkkkkkkkkkkkkkkkk  %d", numberOfCustomers);
     return 0;
 }
 
@@ -538,18 +527,9 @@ static void signUp_enter_callback()
     int day = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(daySpinButton));
     int month = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(monthSpinButton));
     int year = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(yearSpinButton));
-    printf("\n%s", firstName);
-    printf("\n%s", lastName);
-    printf("\n%s", email);
-    printf("\n%s", password);
-    printf("\n%s", reenterPassword);
-    printf("\n%d", day);
-    printf("\n%d", month);
-    printf("\n%d", year);
     if(findAccount(email) == 0){
         if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
             int xxx = findAccount("");
-            printf("\nSuccessfully");
             char* newInfor = malloc(200);
             strcpy(newInfor, "");
             char* tmpStr = malloc(20);
@@ -582,12 +562,10 @@ static void signUp_enter_callback()
             gtk_label_set_text(alert, "Successfully");
             onNoti();
         }else{
-            printf("\nPassword does not match");
             gtk_label_set_text(alert, "Password does not match");
             onNoti();
         }
     }else{
-        printf("\nMail is not available");
         gtk_label_set_text(alert, "Mail is not available");
         onNoti();
     }
@@ -625,8 +603,6 @@ int changeLine(int line, char* inputString){
     if (fPtr == NULL || fTemp == NULL)
     {
         /* Unable to open file hence exit */
-        printf("\nUnable to open file.\n");
-        printf("Please check whether file exists and you have read/write privilege.\n");
         return 0;
     }
 
@@ -658,7 +634,6 @@ int changeLine(int line, char* inputString){
     /* Rename temporary file as original file */
     rename("inp.c", path);
 
-    printf("\nSuccessfully replaced '%d' line with '%s'.", line, newline);
 
     return 0;
 }
@@ -669,7 +644,6 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
     char *entryConfirmPwd = gtk_entry_get_text(GTK_ENTRY(confirmNewPasswordChangeEntry));
     if(strcmp(entryOldPwd, customer.pwd) == 0){
         if(strcmp(entryNewPwd, entryConfirmPwd) == 0 && strcmp(entryNewPwd, "") != 0){
-            printf("\nSuccessfully");
             char* newInfor = malloc(200);
             strcpy(newInfor, "");
             char* tmpStr = malloc(20);
@@ -699,12 +673,10 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
             gtk_label_set_text(alert, "Successfully");
             onNoti();
         }else{
-            printf("\nPassword does not match");
             gtk_label_set_text(alert, "Password does not match");
             onNoti();
         }
     }else{
-        printf("\nWrong password");
         gtk_label_set_text(alert, "Wrong password");
         onNoti();
     }
@@ -718,7 +690,6 @@ void cloneProducts(){
     char* str = malloc(1000);
     while (fgets(str, 1000, fp) != NULL)
     {
-        printf("\n================");
         databaseProducts[numberOfProducts].id = 0;
         databaseProducts[numberOfProducts].supplier = 0;
         databaseProducts[numberOfProducts].price = 0;
@@ -731,7 +702,6 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].id = databaseProducts[numberOfProducts].id * 10 + tmp;
             pos++;
         }
-        printf("\n%d", databaseProducts[numberOfProducts].id);
         pos++;
         strcpy(databaseProducts[numberOfProducts].name, "");
         while (str[pos] != ',')
@@ -740,7 +710,6 @@ void cloneProducts(){
             strcat(databaseProducts[numberOfProducts].name, &tmp);
             pos++;
         }
-        printf("\n%s", databaseProducts[numberOfProducts].name);
         pos++;
         while (str[pos] != ',')
         {
@@ -748,7 +717,6 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].supplier = databaseProducts[numberOfProducts].supplier * 10 + tmp;
             pos++;
         }
-        printf("\n%d", databaseProducts[numberOfProducts].supplier);
         pos++;
         while (str[pos] != ',')
         {
@@ -756,7 +724,6 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].price = databaseProducts[numberOfProducts].price * 10 + tmp;
             pos++;
         }
-        printf("\n%d", databaseProducts[numberOfProducts].price);
         pos++;
         while (str[pos] != ',')
         {
@@ -764,7 +731,6 @@ void cloneProducts(){
             databaseProducts[numberOfProducts].discount = databaseProducts[numberOfProducts].discount * 10 + tmp;
             pos++;
         }
-        printf("\n%d", databaseProducts[numberOfProducts].discount);
         pos++;
         while (str[pos] != 0)
         {
@@ -773,7 +739,6 @@ void cloneProducts(){
             pos++;
         }
         pos++;
-        printf("\n%d", databaseProducts[numberOfProducts].quantity);
         numberOfProducts++;
     }
     fclose(fp);
@@ -1099,14 +1064,12 @@ static void showProducts_delete_callback(){
         }
 
         pos = atoi(entry_id);
-        printf("\n----->%d", pos);
         if(pos >= 1 && pos <= numberOfItem){
             for(int i = pos-1; i <= numberOfItem - 2; i++){
                 itemList[i] = itemList[i + 1];
             }
             numberOfItem--;
             strcpy(itemListText, "");
-            printf("\nitemListText = %d", itemListText);
             for(int i = 0; i <= numberOfItem - 1; i++){
                 strcat(itemListText, "------------------------\nID: ");
                 char* tmpStr = malloc(200);
@@ -1137,7 +1100,6 @@ void calcCost(){
     char* tmpStr = malloc(200);
     char* tmpString = malloc(200);
     strcpy(tmpStr, "$"); itoa(total, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".00");
-    printf("\n%s", tmpStr);
     gtk_label_set_text(GTK_LABEL(moneyCost), tmpStr);
     gtk_label_set_text(GTK_LABEL(moneyTotal), tmpStr);
 }

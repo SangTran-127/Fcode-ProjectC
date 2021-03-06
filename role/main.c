@@ -156,6 +156,9 @@ static void s17()
 }
 static void s38()
 {
+    numberOfItem = 0;
+    strcpy(itemListText, "Ban chua chon mon hang nao");
+    gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
 }
@@ -184,6 +187,9 @@ static void s71()
 }
 static void s31()
 {
+    numberOfItem = 0;
+    strcpy(itemListText, "Ban chua chon mon hang nao");
+    gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
@@ -252,11 +258,17 @@ static void s310()
 }
 static void s98()
 {
+    numberOfItem = 0;
+    strcpy(itemListText, "Ban chua chon mon hang nao");
+    gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
 }
 static void s91()
 {
+    numberOfItem = 0;
+    strcpy(itemListText, "Ban chua chon mon hang nao");
+    gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
@@ -827,7 +839,7 @@ static void add1(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -842,7 +854,7 @@ static void add2(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+1]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -857,7 +869,7 @@ static void add3(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+2]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -872,7 +884,7 @@ static void add4(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+3]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -887,7 +899,7 @@ static void add5(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+4]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -902,7 +914,7 @@ static void add6(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+5]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -917,7 +929,7 @@ static void add7(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+6]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -932,7 +944,7 @@ static void add8(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+7]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -947,7 +959,7 @@ static void add9(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+8]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }
@@ -962,7 +974,7 @@ static void add10(){
     strcat(itemListText, "\nPrice: ");
     strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
-    strcat(itemListText, "\n");
+    strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
 }

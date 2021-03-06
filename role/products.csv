@@ -1,6 +1,6 @@
 1,The Alchemist,1,6,0,100
 2,Im Bann des Magiers,1,7,0,50
-3,Die Gully Detektive ,1,7,0,20
+3,Die Gully Detektive,1,7,0,20
 4,Crocs Tie Dye Clog,2,23,0,50
 5,Carhartt Boot,2,36,0,50
 6,Reef Phantoms Sandal,2,5,0,100
@@ -30,7 +30,7 @@
 30,Bamboo Mesh Socks,8,1,0,1200
 31,Samsung Galaxy White,9,727,0,250
 32,Xiaomi Redmi Global,9,199,0,150
-33,OnePlus 8 5G UW ,9,625,0,50
+33,OnePlus 8 5G UW,9,625,0,50
 34,Apple AirPods Pro,9,312,0,600
 35,TOZO Wireless Earbuds,9,56,0,400
 36,Sony Stereo Headphones,9,14,0,300
@@ -39,24 +39,24 @@
 39,Cetaphil Cleanser,10,14,0,1000
 40,Lenovo IdeaPad 3,11,955,0,300
 41, HP Touchscreen Laptop,11,1127,0,200
-42,Acrylic Paint ,12,16,0,300
+42,Acrylic Paint,12,16,0,300
 43,Maybelline Lipstick,13,22,0,600
 44,NYX Makeup Eyebrow,13,11,0,200
 45,Poreless Putty Primer,13,12,0,420
 46,Mueller Hand Blender,14,30,0,100
 47,Magic Bullet Blender,14,30,0,200
-48,Aroma Rice Cooker ,14,38,0,50
+48,Aroma Rice Cooker,14,38,0,50
 49,Buffalo Rice Cooker,14,129,0,20
 50,Pana Microwave Oven,15,109,0,65
 51,WINIA Microwave Oven,15,68,0,100
 52,PAUDIN Kitchen Knife,16,28,0,100
 53,Global Vegetable Knife,16,89,0,100
-54,BGT Cutting Board ,17,20,0,60
+54,BGT Cutting Board,17,20,0,60
 55,Cutting Board Set,17,17,0,80
 56,iBayam Kitchen Scissors,17,12,0,200
 57,Gibson Dinnerware Set,18,50,0,30
 58, Luxurious Dish Set,18,57,0,50
-59,Steel Silverware Cutlery,18,30,0,120
+59,Silverware Cutlery,18,30,0,120
 60,Dinosaur Cookie Cutter,19,11,0,600
 61,300 Baking Cups,19,7,0,15000
 62,Fox Marble Rolling Pin ,20,19,0,200
@@ -69,7 +69,7 @@
 69,Homissue Bookcase,21,65,0,60
 70,Furinno 3-Tier Bookcase,21,29,0,150
 71,Fabric Computer Chair,21,168,0,520
-72,Basics Office Desk Chair ,21,138,0,500
+72,Basics Office Chair,21,138,0,500
 73,Seiko Wood Wall Clock,22,35,0,200
 74,Modern Wall Clock,22,29,0,100
 75,Vintage Wall Clock,22,69,0,20
@@ -77,8 +77,8 @@
 77,AXTEE Desk Light Lamp,22,13,0,60
 78,Tomshine Floor Lamp,22,52,0,50
 79,Novogratz Floor Lamp,22,122,0,60
-80,Oneach Floor Lamp ,22,74,0,90
-81,YOOFOSS Face Towel ,23,11,0,600
+80,Oneach Floor Lamp,22,74,0,90
+81,YOOFOSS Face Towel,23,11,0,600
 82,Coverlet Bedding Set,23,78,0,400
 83,Mady Coverlet Bedding,23,120,0,100
 84,2 Pack Bed Pillows,23,34,0,200
@@ -90,13 +90,13 @@
 90,The NorthFace Backpack,25,58,0,300
 91,Minnie Backpack,25,124,0,150
 92,Vera Bradley Backpack,25,65,0,100
-93,Peppa Pig Backpack ,25,20,0,60
+93,Peppa Pig Backpack,25,20,0,60
 94,Minnie Backpack 2,25,94,0,60
 95,Mexican Dog Clothes,26,27,0,100
 96,The Dog Face Raincoat,26,16,0,100
 97,Anime Ninja Costume,26,20,0,100
-98,Woof Dog Hoodie ,26,18,0,90
-99,Meihejia Cowboy Jacket ,26,12,0,20
+98,Woof Dog Hoodie,26,18,0,90
+99,Meihejia Cowboy Jacket,26,12,0,20
 100,Vehomy Banana Hat Cat,26,16,0,50
 101,Huy Bui so cool,27,0,0,1
 102,Thien Duc handsome,27,0,0,1

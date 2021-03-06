@@ -162,7 +162,7 @@ static void s17()
 static void s38()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "Ban chua chon mon hang nao");
+    strcpy(itemListText, "You have not selected any items");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
@@ -226,7 +226,7 @@ static void s_end()
         gtk_entry_set_text(GTK_ENTRY(entryAddress), "");
         gtk_text_buffer_set_text (buffer, "You have not selected any items", -1);
         gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
-        gtk_label_set_text(alert, "Ordered successfully\nplease continue your shopping");
+        gtk_label_set_text(alert, "Ordered successfully\nPlease continue your shopping");
         onNoti();
     }else{
         gtk_label_set_text(alert, "Please enter your complete information");
@@ -893,13 +893,13 @@ static void add1(){
         strcat(itemListText, "\nName: ");
         strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
         strcat(itemListText, "\nPrice: ");
-        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex]].price, tmpStr, 10);
         strcat(itemListText, tmpStr);
         strcat(itemListText, ".00$\n");
         gtk_text_buffer_set_text (buffer, itemListText, -1);
         numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -913,13 +913,13 @@ static void add2(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+1]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -933,13 +933,13 @@ static void add3(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+2]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -953,13 +953,13 @@ static void add4(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+3]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -973,13 +973,13 @@ static void add5(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+4]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -993,13 +993,13 @@ static void add6(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+5]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1013,13 +1013,13 @@ static void add7(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+6]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1033,13 +1033,13 @@ static void add8(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+7]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1053,13 +1053,13 @@ static void add9(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+8]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1073,13 +1073,13 @@ static void add10(){
     strcat(itemListText, "\nName: ");
     strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
     strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+    strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[firstIndex+9]].price, tmpStr, 10);
     strcat(itemListText, tmpStr);
     strcat(itemListText, ".00$\n");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You can only buy less than 9 items");
         onNoti();
     }
 }
@@ -1097,7 +1097,7 @@ static void showProducts_delete_callback(){
         }
         pos = atoi(entry_id);
         if(pos >= 1 && pos <= numberOfItem){
-            for(int i = pos-1; i <= numberOfItem - 2; i++){
+            for(int i = pos; i <= numberOfItem - 2; i++){
                 itemList[i] = itemList[i + 1];
             }
             numberOfItem--;
@@ -1110,7 +1110,7 @@ static void showProducts_delete_callback(){
                 strcat(itemListText, "\nName: ");
                 strcat(itemListText, databaseProducts[itemList[i]].name);
                 strcat(itemListText, "\nPrice: ");
-                strcpy(tmpStr, ""); itoa(databaseProducts[itemList[i]].price, tmpStr, 10);
+                strcpy(tmpStr, ""); itoa(databaseProducts[showedProducts[i]].price, tmpStr, 10);
                 strcat(itemListText, tmpStr);
                 strcat(itemListText, ".00$\n");
                 gtk_text_buffer_set_text (buffer, itemListText, -1);
@@ -1125,7 +1125,7 @@ static void showProducts_delete_callback(){
 void calcCost(){
     int total = 0;
     for(int i = 0; i <= numberOfItem - 1; i++){
-        total += databaseProducts[itemList[i]].price;
+        total += databaseProducts[showedProducts[i]].price;
     }
     char* tmpStr = malloc(200);
     char* tmpString = malloc(200);

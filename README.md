@@ -24,9 +24,9 @@ HOW TO INSTALL GTK3(h2)
     * Step 2: Run the downloaded installer. 
         Accept the default options.
 3. Set up GTK library into CodeBlocks to compile 
-    -Step 1: Open CodeBlocks -> Compiler settings -> Linker settings -> Other linker options
+    * Step 1: Open CodeBlocks -> Compiler settings -> Linker settings -> Other linker options
      Copy *`pkg-config --libs gtk+-3.0`* and Paste into Other linker options
-    -Step 2: Compiler settings -> Search directories 
+    * Step 2: Compiler settings -> Search directories 
      Copy and add these lines
         * C:\msys64\mingw64\include\gtk-3.0
         * C:\msys64\mingw64\include\glib-2.0
@@ -36,7 +36,7 @@ HOW TO INSTALL GTK3(h2)
         * C:\msys64\mingw64\include\cairo
         * C:\msys64\mingw64\include\gdk-pixbuf-2.0
         * C:\msys64\mingw64\include\atk-1.0
-    -Step 3: Compiler -> Toolchain executables -> Compiler's installation directory
+    * Step 3: Compiler -> Toolchain executables -> Compiler's installation directory
      Change the directory to complie by Copy *C:\msys64\mingw64* and Paste into **Compiler's installation directory**
 HOW TO USE TIKU 
     Tiku Shopping is created based on GTK so it quite visual and easy to interact and it owns the basic features of sales software such as register, login, buys, sells, deletes...

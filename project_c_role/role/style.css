@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #vBoxRoleContainer {
     margin: 10px;
     padding: 10px;
@@ -20,4 +21,28 @@
     border: 1px solid black;
     color: white;
     background: #23689b;
+=======
+#vBoxRoleContainer {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #585858;
+}
+#chooseBuyButton {
+    border: 1px solid tomato;
+    color: tomato;
+}
+#chooseSaleButton {
+    border: 1px solid #23689b;
+    color: #23689b;
+}
+#chooseBuyButton:hover {
+    border: 1px solid black;
+    color: white;
+    background: tomato;
+}
+#chooseSaleButton:hover {
+    border: 1px solid black;
+    color: white;
+    background: #23689b;
+>>>>>>> Stashed changes
 }

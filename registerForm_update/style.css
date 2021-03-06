@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 #boxAllRegister {
     margin: 20px;
 }
@@ -36,3 +37,43 @@
     background: orange;
 
 }
+=======
+#boxAllRegister {
+    margin: 20px;
+}
+#registerLabel {
+    font-size: 1.5rem;
+    font-style: italic;
+}
+#chooseBuyButton, #chooseSaleButton {
+    background: #23689b;
+    color: white;
+}
+#chooseSaleButton {
+    padding-left: 30px;
+    padding-right: 30px;
+}
+#chooseBuyButton:hover, #chooseSaleButton:hover {
+    background: tomato;
+    color: white;
+}
+#backRegisterButton {
+    background: transparent;
+    border: 1px solid #585858;
+    color: #585858;
+}
+#backRegisterButton:hover {
+    background: #585858;
+    border: 1px solid black;
+    color: white;
+}
+#clearButton {
+    background: tomato;
+    border: 1px solid black;
+    color: white;
+}
+#clearButton:hover {
+    background: orange;
+
+}
+>>>>>>> Stashed changes

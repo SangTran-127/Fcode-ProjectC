@@ -1,4 +1,11 @@
+<<<<<<< Updated upstream
 # depslib dependency file v1.0
 1613832808 source:c:\msys64\mingw64\project_c_role\role\main.c
 	<gtk/gtk.h>
 
+=======
+# depslib dependency file v1.0
+1613832808 source:c:\msys64\mingw64\project_c_role\role\main.c
+	<gtk/gtk.h>
+
+>>>>>>> Stashed changes

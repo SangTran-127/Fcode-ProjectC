@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # depslib dependency file v1.0
 1615008350 source:c:\msys64\mingw64\registerform\main.c
 	<gtk/gtk.h>
@@ -5,3 +6,12 @@
 1615008543 source:c:\msys64\mingw64\registerform_update\main.c
 	<gtk/gtk.h>
 
+=======
+# depslib dependency file v1.0
+1615008350 source:c:\msys64\mingw64\registerform\main.c
+	<gtk/gtk.h>
+
+1615008543 source:c:\msys64\mingw64\registerform_update\main.c
+	<gtk/gtk.h>
+
+>>>>>>> Stashed changes

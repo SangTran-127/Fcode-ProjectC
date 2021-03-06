@@ -7,7 +7,7 @@ then install CodeBlocks to run program with MSYS2.
 There are various methods to install GTK on development machines.
 Using MSYS2 which provides a UNIX-like environment for Windows to install GTK is one of our suggested ways.
 <space><space>
-HOW TO INSTALL GTK3(h2)
+HOW TO INSTALL GTK3 (h2)
 1. Install MSYS2
     * Step 1: Download the installer: 
     http://repo.msys2.org/distrib/x86_64/msys2-x86_64-20190524.exe 

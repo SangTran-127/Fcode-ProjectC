@@ -99,7 +99,7 @@ static gint noOpenWindow = 1000;
 /*Show products*/
 Product databaseProducts[500];
 Product showedProducts[500];
-static int firstIndex = 2;
+static int firstIndex = 0;
 GtkWidget *product1, *product2, *product3, *product4, *product5, *product6, *product7, *product8, *product9, *product10;
 GtkWidget *id1, *id2, *id3, *id4, *id5, *id6, *id7, *id8, *id9, *id10;
 GtkWidget *img1, *img2, *img3, *img4, *img5, *img6, *img7, *img8, *img9, *img10; //img gio hang
@@ -782,6 +782,21 @@ void copyProducts(){
         showedProducts[i].quantity = databaseProducts[i].quantity;
     }
 }
+
+static void next_page(){
+    if(firstIndex + 1 <= numberOfProducts){
+        firstIndex += 10;
+        change10Product();
+    }
+}
+
+static void previous_page(){
+    if(firstIndex + 1 >= 10){
+        firstIndex -= 10;
+        change10Product();
+    }
+}
+
 /****************************************************************** GUI THREAD */
 /*Openning window*/
 static void activate(GtkApplication *app, gpointer data)
@@ -1302,13 +1317,13 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     GtkWidget *searchLabel;
     GtkWidget *searchProducts;
     GtkWidget *searchButton;
-
+    GtkWidget *nextPage, *previousPage;
 
     GtkWidget *price1, *price2, *price3, *price4, *price5, *price6, *price7, *price8, *price9, *price10;
 
     GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8, *buttonAdd9, *buttonAdd10;
 
-    GtkWidget *nextPage, *previousPage;
+
     //
     textView = gtk_text_view_new();
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textView));
@@ -1519,6 +1534,8 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
     gtk_box_pack_start(hboxSearch, searchButton, 0, 0, 0);
     gtk_box_pack_end(hboxSearch, nextPage, 0, 0, 0);
     gtk_box_pack_end(hboxSearch, previousPage, 0, 0, 0);
+    g_signal_connect(G_OBJECT(nextPage), "clicked", G_CALLBACK(next_page), NULL);
+    g_signal_connect(G_OBJECT(previousPage), "clicked", G_CALLBACK(previous_page), NULL);
 
     vboxContain = gtk_vbox_new(0, 0);
     gtk_box_pack_start(vboxContain, hboxSearch, 0, 0, 0);

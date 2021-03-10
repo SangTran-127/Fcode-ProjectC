@@ -32,6 +32,8 @@ typedef struct
     int price;
     double discount;
     int quantity;
+    int category;
+    int state;
 } Product;
 
 typedef struct
@@ -92,6 +94,7 @@ typedef struct
 /*09*/ static GtkWidget *supplierMapWindow;
 /*10*/ static GtkWidget *showInforWindow;
 /*11*/ static GtkWidget *paymentWindow;
+/*12*/ static GtkWidget *productManagerWindow;
 
 
 /****************************************************************** GLOBAL VARIABLES */
@@ -115,6 +118,7 @@ static Customer customer;
 static int numberOfCustomers;
 static int numberOfProducts;
 static int numberOfItem;
+static int numberOfShow;
 
 /*Sign up*/
 static Customer newAccount;
@@ -133,7 +137,10 @@ GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow;
 /*Payment*/
 GtkWidget *moneyTotal, *moneyDiscount, *moneyCost;
 GtkWidget *entryReciName, *entryAddress, *entryPhone;
-
+/*Change Information*/
+GtkWidget *addressChangeInforEntry, *firstNameChangeInforEntry, *lastNameChangeInforEntry;
+/*Products Managerment*/
+GtkWidget *helloManageLabel;
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
 int findAccount(char *inputEmail);
@@ -186,6 +193,7 @@ static void s18()
 }
 static void s71()
 {
+    signUp_clear_callback();
     gtk_widget_hide(GTK_WIDGET(signUpWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
@@ -264,6 +272,9 @@ static void s94()
 }
 static void s95()
 {
+    gtk_entry_set_text(GTK_ENTRY(firstNameChangeInforEntry), customer.firstName);
+    gtk_entry_set_text(GTK_ENTRY(lastNameChangeInforEntry), customer.lastName);
+    gtk_entry_set_text(GTK_ENTRY(addressChangeInforEntry), customer.address);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
 }
@@ -271,6 +282,16 @@ static void s34()
 {
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
+}
+static void s912()
+{
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, "Hello ");
+    strcat(tmpStr, customer.firstName); strcat(tmpStr, " ");
+    strcat(tmpStr, customer.lastName); strcat(tmpStr, "!");
+    gtk_label_set_text(GTK_LABEL(helloManageLabel), tmpStr);
+    gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
+    gtk_widget_show_all(GTK_WIDGET(productManagerWindow));
 }
 static void s10_x()
 {
@@ -283,6 +304,18 @@ static void s10_x()
 }
 static void s910()
 {
+    strcpy(yourFullName, customer.firstName);
+    strcat(yourFullName, " ");
+    strcat(yourFullName, customer.lastName);
+    strcpy(yourAddress, customer.address);
+    strcpy(yourDOB, "");
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
+    strcat(yourDOB, tmpStr);
+    strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
+    strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
+    strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
+    strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_label_set_text(GTK_LABEL(nameInforLabelShow), yourFullName);
     gtk_label_set_text(GTK_LABEL(addressLabelShow), yourAddress);
@@ -291,6 +324,18 @@ static void s910()
 }
 static void s310()
 {
+    strcpy(yourFullName, customer.firstName);
+    strcat(yourFullName, " ");
+    strcat(yourFullName, customer.lastName);
+    strcpy(yourAddress, customer.address);
+    strcpy(yourDOB, "");
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
+    strcat(yourDOB, tmpStr);
+    strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
+    strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
+    strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
+    strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_label_set_text(GTK_LABEL(nameInforLabelShow), yourFullName);
     gtk_label_set_text(GTK_LABEL(addressLabelShow), yourAddress);
@@ -318,8 +363,16 @@ static void s41()
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(openWindow));
 }
+static void s129()
+{
+    gtk_widget_hide(GTK_WIDGET(productManagerWindow));
+    gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+}
 static void s35()
 {
+    gtk_entry_set_text(GTK_ENTRY(firstNameChangeInforEntry), customer.firstName);
+    gtk_entry_set_text(GTK_ENTRY(lastNameChangeInforEntry), customer.lastName);
+    gtk_entry_set_text(GTK_ENTRY(addressChangeInforEntry), customer.address);
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
 }
@@ -340,6 +393,36 @@ void delChar(char* str, int pos){
     str[strlen(str)-1] = 0;
 }
 
+int validMail(char *test)
+{
+    int i;
+    char *pos1, *pos2;
+    char *ch;
+
+    for (i = 0, ch = test; *ch; *ch++)
+    {
+        if (*ch == '@')
+        {
+            pos1 = ch;
+            i++;
+        }
+    }
+    pos2 = ch;
+    if (i == 1)
+    {
+        while (pos1 - test && ch - pos1 > 1)
+        {
+            if ((pos2 - ch) > 2 && *ch == '.')
+            {
+                return 1;
+            }
+            ch--;
+        }
+    }
+
+    return 0;
+}
+
 /*Sign in*/
 int findAccount(char *inputEmail)
 {
@@ -357,11 +440,13 @@ int findAccount(char *inputEmail)
     strcat(tmpStr, ",");
     strcat(str, tmpStr);
     strcpy(tmpStr, str);
-    while (fgets(str, 60, fp) != NULL)
+    printf("\n==> '%s'", tmpStr);
+    while (fgets(str, 1000, fp) != NULL)
     {
         if (strstr(str, tmpStr) == NULL)
         {
             numberOfCustomers++;
+            printf("\n%d: '%s'",numberOfCustomers, str);
             continue;
         }
         int pos = 0;
@@ -435,13 +520,14 @@ int findAccount(char *inputEmail)
         }
         pos++;
         customer.type = (int)str[pos] - '0';
-        pos += 2;
-        while (str[pos] != ',')
+        /*pos += 2;
+        while (str[pos] != '\0')
         {
             int tmp = (int)str[pos] - '0';
             customer.tikuCoin = customer.tikuCoin * 10 + tmp;
             pos++;
         }
+        printf("\n(%d)", customer.tikuCoin);*/
         fclose(fp);
         return 1;
     }
@@ -478,6 +564,7 @@ void signIn_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer 
             strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
             strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
             strcat(yourDOB, "/"); strcat(yourDOB, tmpStr);
+            printf("\n%d", customer.tikuCoin);
             s23();
         }
         else
@@ -527,46 +614,54 @@ static void signUp_enter_callback()
     int day = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(daySpinButton));
     int month = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(monthSpinButton));
     int year = (int) gtk_spin_button_get_value(GTK_SPIN_BUTTON(yearSpinButton));
-    if(findAccount(email) == 0){
-        if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
-            int xxx = findAccount("");
-            char* newInfor = malloc(200);
-            strcpy(newInfor, "");
-            char* tmpStr = malloc(20);
-            itoa(numberOfCustomers + 1, tmpStr, 10);
-            strcat(newInfor, tmpStr);
-            strcat(newInfor, ","); strcat(newInfor, email);
-            strcat(newInfor, ","); strcat(newInfor, password);
-            strcat(newInfor, ","); strcat(newInfor, firstName);
-            strcat(newInfor, ","); strcat(newInfor, lastName);
-            strcpy(tmpStr, ""); itoa(day, tmpStr, 10);
-            strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcpy(tmpStr, ""); itoa(month, tmpStr, 10);
-            strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcpy(tmpStr, ""); itoa(year, tmpStr, 10);
-            strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcat(newInfor, ","); strcat(newInfor, "");
-            strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
-            strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
-            strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcat(newInfor, ",");
-            strcpy(customer.pwd, password);
-            changeLine(numberOfCustomers + 1, newInfor);
-            numberOfCustomers++;
-            gtk_entry_set_text(GTK_ENTRY(firstNameEntry), "");
-            gtk_entry_set_text(GTK_ENTRY(lastNameEntry), "");
-            gtk_entry_set_text(GTK_ENTRY(emailEntry), "");
-            gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
-            gtk_entry_set_text(GTK_ENTRY(reenterPasswordEntry), "");
-            gtk_label_set_text(alert, "Successfully");
-            onNoti();
+    if(validMail(email)){
+        if(findAccount(email) == 0){
+            if(strcmp(password, reenterPassword) == 0 && strcmp(password, "") != 0){
+                int xxx = findAccount("@@");
+                char* newInfor = malloc(200);
+                strcpy(newInfor, "");
+                char* tmpStr = malloc(20);
+                itoa(numberOfCustomers + 1, tmpStr, 10);
+                strcat(newInfor, tmpStr);
+                strcat(newInfor, ","); strcat(newInfor, email);
+                strcat(newInfor, ","); strcat(newInfor, password);
+                strcat(newInfor, ","); strcat(newInfor, firstName);
+                strcat(newInfor, ","); strcat(newInfor, lastName);
+                strcpy(tmpStr, ""); itoa(day, tmpStr, 10);
+                strcat(newInfor, ","); strcat(newInfor, tmpStr);
+                strcpy(tmpStr, ""); itoa(month, tmpStr, 10);
+                strcat(newInfor, ","); strcat(newInfor, tmpStr);
+                strcpy(tmpStr, ""); itoa(year, tmpStr, 10);
+                strcat(newInfor, ","); strcat(newInfor, tmpStr);
+                strcat(newInfor, ","); strcat(newInfor, "");
+                strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
+                strcat(newInfor, ","); strcat(newInfor, tmpStr);
+                strcpy(tmpStr, ""); itoa(0, tmpStr, 10);
+                strcat(newInfor, ","); strcat(newInfor, tmpStr);
+                strcat(newInfor, "\n\n");
+                strcpy(customer.pwd, password);
+                printf("\n(%d)", numberOfCustomers);
+                printf("\n'%s'", newInfor);
+                changeLine(numberOfCustomers + 1, newInfor);
+                changeLine(numberOfCustomers + 2, ",@@,");
+                numberOfCustomers++;
+                gtk_entry_set_text(GTK_ENTRY(firstNameEntry), "");
+                gtk_entry_set_text(GTK_ENTRY(lastNameEntry), "");
+                gtk_entry_set_text(GTK_ENTRY(emailEntry), "");
+                gtk_entry_set_text(GTK_ENTRY(passwordEntry), "");
+                gtk_entry_set_text(GTK_ENTRY(reenterPasswordEntry), "");
+                gtk_label_set_text(alert, "Successfully");
+                onNoti();
+            }else{
+                gtk_label_set_text(alert, "Password does not match");
+                onNoti();
+            }
         }else{
-            gtk_label_set_text(alert, "Password does not match");
+            gtk_label_set_text(alert, "Mail is not available");
             onNoti();
         }
     }else{
-        gtk_label_set_text(alert, "Mail is not available");
+        gtk_label_set_text(alert, "Invalid mail");
         onNoti();
     }
 }
@@ -583,7 +678,6 @@ static void signUp_clear_callback(){
 }
 /*Change pwd*/
 int changeLine(int line, char* inputString){
-    /* File pointer to hold reference of input file */
     FILE * fPtr;
     FILE * fTemp;
     char path[100];
@@ -591,50 +685,29 @@ int changeLine(int line, char* inputString){
     char buffer[1000];
     char newline[1000];
     strcpy(newline, inputString);
-    strcat(newline, "\n");
     int count;
     strcpy(path, "customers.csv");
-    /* Remove extra new line character from stdin */
     fflush(stdin);
-    /*  Open all required files */
     fPtr  = fopen(path, "r");
     fTemp = fopen("inp.c", "w");
-    /* fopen() return NULL if unable to open file in given mode. */
     if (fPtr == NULL || fTemp == NULL)
     {
-        /* Unable to open file hence exit */
         return 0;
     }
-
-     /*
-     * Read line from source file and write to destination
-     * file after replacing given line.
-     */
     count = 0;
     while ((fgets(buffer, 1000, fPtr)) != NULL)
     {
         count++;
-
-        /* If current line is line to replace */
         if (count == line)
             fputs(newline, fTemp);
         else
             fputs(buffer, fTemp);
     }
 
-
-    /* Close all files to release resource */
     fclose(fPtr);
     fclose(fTemp);
-
-
-    /* Delete original source file */
     remove(path);
-
-    /* Rename temporary file as original file */
     rename("inp.c", path);
-
-
     return 0;
 }
 void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
@@ -664,7 +737,7 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
             strcat(newInfor, ","); strcat(newInfor, tmpStr);
             strcpy(tmpStr, ""); itoa(customer.tikuCoin, tmpStr, 10);
             strcat(newInfor, ","); strcat(newInfor, tmpStr);
-            strcat(newInfor, ",");
+            strcat(newInfor, "\n");
             strcpy(customer.pwd, entryConfirmPwd);
             changeLine(customer.id, newInfor);
             gtk_entry_set_text(GTK_ENTRY(oldPasswordChangeEntry), "");
@@ -683,6 +756,42 @@ void changePwd_enter_callback(GSimpleAction *action, GVariant *parameter, gpoint
 
 }
 
+void changeInfor_enter_callback(GSimpleAction *action, GVariant *parameter, gpointer data)
+{
+    char *firstName = gtk_entry_get_text(GTK_ENTRY(firstNameChangeInforEntry));
+    char *lastName = gtk_entry_get_text(GTK_ENTRY(lastNameChangeInforEntry));
+    char *address = gtk_entry_get_text(GTK_ENTRY(addressChangeInforEntry));
+            char* newInfor = malloc(200);
+            strcpy(newInfor, "");
+            char* tmpStr = malloc(20);
+            itoa(customer.id, tmpStr, 10);
+            strcat(newInfor, tmpStr);
+            strcat(newInfor, ","); strcat(newInfor, customer.email);
+            strcat(newInfor, ","); strcat(newInfor, customer.pwd);
+            strcat(newInfor, ","); strcat(newInfor, firstName);
+            strcpy(customer.firstName, firstName);
+            strcat(newInfor, ","); strcat(newInfor, lastName);
+            strcpy(customer.lastName, lastName);
+            strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.yob, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcat(newInfor, ","); strcat(newInfor, address);
+            strcpy(customer.address, address);
+            strcpy(tmpStr, ""); itoa(customer.type, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcpy(tmpStr, ""); itoa(customer.tikuCoin, tmpStr, 10);
+            strcat(newInfor, ","); strcat(newInfor, tmpStr);
+            strcat(newInfor, "\n");
+            changeLine(customer.id, newInfor);
+            gtk_entry_set_text(GTK_ENTRY(firstNameChangeInforEntry), customer.firstName);
+            gtk_entry_set_text(GTK_ENTRY(lastNameChangeInforEntry), customer.lastName);
+            gtk_entry_set_text(GTK_ENTRY(addressChangeInforEntry), customer.address);
+            gtk_label_set_text(alert, "Successfully");
+            onNoti();
+}
 /*Show Products*/
 void cloneProducts(){
     numberOfProducts = 0;
@@ -695,6 +804,8 @@ void cloneProducts(){
         databaseProducts[numberOfProducts].price = 0;
         databaseProducts[numberOfProducts].discount = 0;
         databaseProducts[numberOfProducts].quantity = 0;
+        databaseProducts[numberOfProducts].category = 0;
+        databaseProducts[numberOfProducts].state = 0;
         int pos = 0;
         while (str[pos] != ',')
         {
@@ -732,15 +843,30 @@ void cloneProducts(){
             pos++;
         }
         pos++;
-        while (str[pos] != 0)
+        while (str[pos] != ',')
         {
             int tmp = (int)str[pos] - '0';
             databaseProducts[numberOfProducts].quantity = databaseProducts[numberOfProducts].quantity * 10 + tmp;
             pos++;
         }
         pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].category = databaseProducts[numberOfProducts].category * 10 + tmp;
+            pos++;
+        }
+        pos++;
+        while (str[pos] != ',')
+        {
+            int tmp = (int)str[pos] - '0';
+            databaseProducts[numberOfProducts].state = databaseProducts[numberOfProducts].state * 10 + tmp;
+            pos++;
+        }
         numberOfProducts++;
     }
+    numberOfProducts--;
+    printf("\nnumberOfProducts: %d", numberOfProducts);
     fclose(fp);
 }
 
@@ -836,7 +962,8 @@ void change10Product(){
 }
 
 static void next_page(){
-    if(firstIndex + 1 <= numberOfProducts - 9){
+    printf("\nfirstIndex: %d", firstIndex);
+    if(firstIndex + 10 <= numberOfShow - 1){
         firstIndex += 10;
         change10Product();
     }
@@ -850,6 +977,9 @@ static void previous_page(){
 }
 
 static void add1(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
         strcat(itemListText, "------------------------\nID: ");
@@ -865,187 +995,214 @@ static void add1(){
         gtk_text_buffer_set_text (buffer, itemListText, -1);
         numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to buy less than 9 items");
         onNoti();
     }
 }
 static void add2(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add3(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add4(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add5(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add6(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add7(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add8(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add9(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
 static void add10(){
+    if(numberOfItem == 0){
+        strcpy(itemListText, "");
+    }
     if(numberOfItem < 9){
-    itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
-    strcat(itemListText, "------------------------\nID: ");
-    char* tmpStr = malloc(200);
-    strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, "\nName: ");
-    strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
-    strcat(itemListText, "\nPrice: ");
-    strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
-    strcat(itemListText, tmpStr);
-    strcat(itemListText, ".00$\n");
-    gtk_text_buffer_set_text (buffer, itemListText, -1);
-    numberOfItem++;
+        itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
+        strcat(itemListText, "------------------------\nID: ");
+        char* tmpStr = malloc(200);
+        strcpy(tmpStr, ""); itoa(numberOfItem+1, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, "\nName: ");
+        strcat(itemListText, databaseProducts[itemList[numberOfItem]].name);
+        strcat(itemListText, "\nPrice: ");
+        strcpy(tmpStr, ""); itoa(databaseProducts[itemList[numberOfItem]].price, tmpStr, 10);
+        strcat(itemListText, tmpStr);
+        strcat(itemListText, ".00$\n");
+        gtk_text_buffer_set_text (buffer, itemListText, -1);
+        numberOfItem++;
     }else{
-        gtk_label_set_text(alert, "Ban chi duoc mua it hon 9 mon");
+        gtk_label_set_text(alert, "You are only allowed to purchase less than 9 items");
         onNoti();
     }
 }
@@ -1081,8 +1238,11 @@ static void showProducts_delete_callback(){
                 strcpy(tmpStr, ""); itoa(databaseProducts[itemList[i]].price, tmpStr, 10);
                 strcat(itemListText, tmpStr);
                 strcat(itemListText, ".00$\n");
-                gtk_text_buffer_set_text (buffer, itemListText, -1);
             }
+            if(numberOfItem == 0){
+                strcpy(itemListText, "You have not selected any items");
+            }
+            gtk_text_buffer_set_text (buffer, itemListText, -1);
             gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
         }else{
             gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
@@ -1090,6 +1250,36 @@ static void showProducts_delete_callback(){
     }else{
         gtk_entry_set_text(GTK_ENTRY(idDelEntry), "");
     }
+}
+
+void searchProduct(char* key, int sup, int type){
+    numberOfShow = 0;
+    if(sup == 0 && type == 0){
+        for(int i = 0; i <= numberOfShow - 1; i++){
+            if(strstr(key, databaseProducts[i].name) != NULL){
+                showedProducts[numberOfShow] = i;
+                numberOfShow++;
+            }
+        }
+    }
+    if(sup == 0 && type != 0){
+        for(int i = 0; i <= numberOfShow - 1; i++){
+            if(strstr(key, databaseProducts[i].name) != NULL && databaseProducts[i].supplier == sup){
+                showedProducts[numberOfShow] = i;
+                numberOfShow++;
+            }
+        }
+    }
+    if(sup != 0 && type == 0){
+        for(int i = 0; i <= numberOfShow - 1; i++){
+            if(strstr(key, databaseProducts[i].name) != NULL && databaseProducts[i].category == type){
+                showedProducts[numberOfShow] = i;
+                numberOfShow++;
+            }
+        }
+    }
+    firstIndex = 0;
+    change10Product();
 }
 /*Payment window*/
 void calcCost(){
@@ -1102,6 +1292,152 @@ void calcCost(){
     strcpy(tmpStr, "$"); itoa(total, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".00");
     gtk_label_set_text(GTK_LABEL(moneyCost), tmpStr);
     gtk_label_set_text(GTK_LABEL(moneyTotal), tmpStr);
+}
+
+/*Products Management*/
+static void productsManagermentActivate(GtkApplication *app, gpointer data)
+{
+    //box
+    GtkWidget *section1, *section2, *section3;
+    GtkWidget *addPicture;
+    GtkWidget *headerManage, *containerMange, *mainSectionMange, *addBox, *changeBox, *updateBox;
+    GtkWidget *contentNameAdd, *contentPriceAdd, *contentIdChange, *contentNameChange, *contentPriceChange, *contentIdDelete, *contentIdUpdate, *contentPercent;
+    //label
+    GtkWidget *nameAddLabel, *nameChangeLabel, *priceAddLabel, *priceChangeLabel, *idChangeLabel, *idDeleteLabel, *idUpdateLabel, *percentSaleLabel;
+    GtkWidget *addPictureLabel, *addPictureButton;
+    //img
+    GtkWidget *img1, *img2, *img3;
+    //button
+    GtkWidget *backManageButton, *addManageButton, *changeManageButton, *deleteManageButton, *updateManageButton;
+    //entry
+    GtkWidget *nameAddEntry, *nameChangeEntry, *priceAddEntry, *priceChangeEntry, *idChangeEntry, *idDeleteEntry, *idUpdateEntry, *percentSaleEntry;
+    //khoi tao
+    helloManageLabel = gtk_label_new("Hello saler! ");
+    nameAddLabel = gtk_label_new("Name of product: ");
+    nameChangeLabel = gtk_label_new("Name of product: ");
+    priceAddLabel = gtk_label_new("Price: ");
+    priceChangeLabel = gtk_label_new("Price: ");
+    idChangeLabel = gtk_label_new("Id product: ");
+    idDeleteLabel = gtk_label_new("Id product: ");
+    idUpdateLabel = gtk_label_new("Id product: ");
+    percentSaleLabel = gtk_label_new("%sale: ");
+    addPictureLabel = gtk_label_new("Add your product image: ");
+    addPictureButton = gtk_button_new_from_icon_name("list-add", 0);
+    backManageButton = gtk_button_new_with_label("Back");
+    gtk_widget_set_name(backManageButton, "backManageButton");
+    g_signal_connect(G_OBJECT(backManageButton), "clicked", G_CALLBACK(s129), NULL);
+    addManageButton = gtk_button_new_with_label("Add");
+    gtk_widget_set_name(addManageButton, "addManageButton");
+    changeManageButton = gtk_button_new_with_label("Change");
+    gtk_widget_set_name(changeManageButton, "changeManageButton");
+    deleteManageButton = gtk_button_new_with_label("Delete");
+    gtk_widget_set_name(deleteManageButton, "deleteManageButton");
+    updateManageButton = gtk_button_new_with_label("Update");
+    gtk_widget_set_name(updateManageButton, "updateManageButton");
+
+    nameAddEntry = gtk_entry_new();
+    nameChangeEntry = gtk_entry_new();
+    priceAddEntry = gtk_entry_new();
+    priceChangeEntry = gtk_entry_new();
+    idChangeEntry = gtk_entry_new();
+    idDeleteEntry = gtk_entry_new();
+    idUpdateEntry = gtk_entry_new();
+    percentSaleEntry = gtk_entry_new();
+    //
+    contentNameAdd = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentNameAdd, nameAddLabel, 0, 0, 0);
+    gtk_box_pack_end(contentNameAdd, nameAddEntry, 0, 0, 0);
+    contentPriceAdd = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPriceAdd, priceAddLabel, 0, 0, 0);
+    //
+    contentNameChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentNameChange, nameChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentNameChange, nameChangeEntry, 0, 0, 0);
+    gtk_box_pack_end(contentPriceAdd, priceAddEntry, 0, 0, 0);
+    contentIdChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdChange, idChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdChange, idChangeEntry, 0, 0, 0);
+    contentPriceChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPriceChange, priceChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentPriceChange, priceChangeEntry, 0, 0, 0);
+    //
+    contentIdDelete = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdDelete, idDeleteLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdDelete, idDeleteEntry, 0, 0, 0);
+    contentIdUpdate = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdUpdate, idUpdateLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdUpdate, idUpdateEntry, 0, 0, 0);
+    contentPercent = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPercent, percentSaleLabel, 0, 0, 0);
+    gtk_box_pack_end(contentPercent, percentSaleEntry, 0, 0, 0);
+    addPicture = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(addPicture, addPictureLabel, 0, 0, 0);
+    gtk_box_pack_start(addPicture, addPictureButton, 0, 0, 0);
+    //
+    headerManage = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(headerManage, helloManageLabel, 0, 0, 0);
+    gtk_box_pack_end(headerManage, backManageButton, 0, 0, 0);
+
+    addBox = gtk_vbox_new(0, 10);
+    gtk_box_pack_start(addBox, contentNameAdd, 0, 0, 0);
+    gtk_box_pack_start(addBox, contentPriceAdd, 0, 0, 0);
+    gtk_box_pack_start(addBox, addPicture, 0 ,0, 0);
+    gtk_box_pack_start(addBox, addManageButton, 0, 0, 0);
+    gtk_widget_set_name(addBox, "addBox");
+
+    changeBox = gtk_vbox_new(0, 10);
+    gtk_box_pack_start(changeBox, contentIdChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, contentNameChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, contentPriceChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, changeManageButton, 0, 0, 0);
+    gtk_widget_set_name(changeBox, "changeBox");
+
+    updateBox = gtk_vbox_new(0, 5);
+    gtk_box_pack_start(updateBox, contentIdDelete, 0, 0, 0);
+    gtk_box_pack_start(updateBox, deleteManageButton, 0, 0, 0);
+    gtk_box_pack_start(updateBox, contentIdUpdate, 0, 0, 0);
+    gtk_box_pack_start(updateBox, contentPercent, 0, 0, 0);
+    gtk_box_pack_end(updateBox, updateManageButton, 0, 0, 0);
+    gtk_widget_set_name(updateBox, "updateBox");
+
+    /*
+    mainSectionMange = gtk_hbox_new(1, 0);
+    gtk_box_pack_start(mainSectionMange, addBox, 0, 0, 20);
+    gtk_box_pack_start(mainSectionMange, changeBox, 0, 0, 20);
+    gtk_box_pack_end(mainSectionMange, updateBox, 0, 0, 20);
+    */
+    img1 = gtk_image_new_from_file("img1.png");
+    img2 = gtk_image_new_from_file("img2.png");
+    img3 = gtk_image_new_from_file("img3.png");
+
+    section1 = gtk_hbox_new(1, 0);
+    section2 = gtk_hbox_new(1, 0);
+    section3 = gtk_hbox_new(1, 0);
+
+    gtk_box_pack_start(section1, img1, 0, 0, 0);
+    gtk_box_pack_start(section1, addBox, 0, 0, 0);
+
+    gtk_box_pack_start(section2, changeBox, 0, 0, 0);
+    gtk_box_pack_start(section2, img2, 0, 0, 0);
+
+    gtk_box_pack_start(section3, img3, 0, 0, 0);
+    gtk_box_pack_start(section3, updateBox, 0, 0, 0);
+
+    gtk_widget_set_name(headerManage, "headerManage");
+
+    containerMange = gtk_vbox_new(0, 5);
+    gtk_widget_set_name(containerMange, "containerManage");
+
+    gtk_box_pack_start(containerMange, headerManage, 0 , 0, 0);
+    gtk_box_pack_end(containerMange, section1, 0 ,0 ,0);
+    gtk_box_pack_end(containerMange, section2, 0 ,0 ,0);
+    gtk_box_pack_end(containerMange, section3, 0 ,0 ,0);
+    productManagerWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(productManagerWindow), "Saler site");
+	gtk_window_set_default_size(GTK_WINDOW(productManagerWindow),400, 200);
+	gtk_window_set_resizable(GTK_WINDOW(productManagerWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(productManagerWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(productManagerWindow, containerMange);
 }
 
 /****************************************************************** GUI THREAD */
@@ -1245,7 +1581,7 @@ static void signInActivate(GtkApplication *app, gpointer data)
     gtk_widget_show(headerbar);
     gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "F CODE SHOPPING");
     gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar),
-                                "Code the Circus");
+                                "Code the Dream");
     gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(headerbar), TRUE);
     gtk_window_set_titlebar(GTK_WINDOW(signInWindow), headerbar);
 
@@ -1425,6 +1761,7 @@ static void supplierMapActivate(GtkApplication *app, gpointer user_data)
     helloLabel = gtk_label_new("Hello customer!");
     balanceLabel = gtk_label_new("Balance: $0.00");
     buyHistoryButton = gtk_button_new_with_label("Products Managerment");
+    g_signal_connect(G_OBJECT(buyHistoryButton), "clicked", G_CALLBACK(s912), NULL);
     changePassButton = gtk_button_new_with_label("Change password");
     g_signal_connect(G_OBJECT(changePassButton), "clicked", G_CALLBACK(s94), NULL);
     changeInforButton = gtk_button_new_with_label("Change information");
@@ -1521,9 +1858,6 @@ static void changePwdActivate(GtkApplication *app, gpointer user_data)
 static void changeInformationActivate(GtkApplication *app, gpointer user_data)
 {
     GtkWidget *addressChangeInforLabel, *firstNameChangeInforLabel, *lastNameChangeInforLabel;
-
-    GtkWidget *addressChangeInforEntry, *firstNameChangeInforEntry, *lastNameChangeInforEntry;
-
     GtkWidget *updateChangeInforButton, *backChangeInforButton;
     GtkWidget *askBackChangeInforLabel;
     GtkWidget *gridChangeInfor, *containerChangeInfor, *hboxFooter;
@@ -1556,6 +1890,7 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     firstNameChangeInforLabel = gtk_label_new("First name: ");
     lastNameChangeInforLabel = gtk_label_new("Last name: ");
     updateChangeInforButton = gtk_button_new_with_label("Update");
+    g_signal_connect(G_OBJECT(updateChangeInforButton), "clicked", G_CALLBACK(changeInfor_enter_callback), NULL);
 
     //
     gtk_grid_attach(gridChangeInfor, firstNameChangeInforLabel, 0, 0, 1, 1);
@@ -2043,6 +2378,7 @@ int main(int argc, char **argv)
         showedProducts[i] = i;
     }
     cloneProducts();
+    numberOfShow = numberOfProducts;
     itemListText = malloc(1000);
     strcpy(itemListText, "");
     numberOfItem = 0;
@@ -2057,13 +2393,14 @@ int main(int argc, char **argv)
     /*Change Information Window*/
     g_signal_connect(app, "activate", G_CALLBACK(changeInformationActivate), NULL);
     /*Change pwd window*/
-
     g_signal_connect(app, "activate", G_CALLBACK(changePwdActivate), NULL);
     /*Sign Up*/
     g_signal_connect(app, "activate", G_CALLBACK(signUpActivate), NULL);
     /*Sign in*/
     appWidgets *wid = g_malloc(sizeof(appWidgets));
     g_signal_connect(app, "activate", G_CALLBACK(signInActivate), (gpointer)wid);
+    /*Products Managerment window*/
+    g_signal_connect(app, "activate", G_CALLBACK(productsManagermentActivate), NULL);
     /*Customer Map window*/
     g_signal_connect(app, "activate", G_CALLBACK(customerMapActivate), NULL);
     /*Open window*/

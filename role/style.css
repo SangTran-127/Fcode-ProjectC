@@ -325,3 +325,66 @@ window {
     border-bottom: 2px solid #8ac4d0;
     border-radius: 0%;
 }
+#containerManage {
+    margin: 20px;
+} 
+#addBox {
+    border: 2px solid #ffcc29;
+    padding: 5px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+#changeBox {
+    border: 2px solid tomato;
+    padding: 5px;
+    margin-left: 10px;
+}
+#updateBox {
+    border: 2px solid #6155a6; 
+    padding: 5px;
+}
+#updateManageButton, #deleteManageButton {
+    background: #6155a6;
+    color: white;
+    border:  0.5px solid black;
+    margin: 10px;
+    padding: 5px;
+}
+#changeManageButton {
+    background: tomato;
+    color: white;
+    border:  0.5px solid black;
+    margin: 10px;
+    padding: 5px;
+}
+#changeManageButton:hover {
+    background: blue;
+}
+#updateManageButton:hover {
+    background: blue;
+}
+#deleteManageButton:hover {
+    background: blue;
+}
+
+#addManageButton {
+    background: #ffcc29;
+    color: white;
+    border:  0.5px solid black;
+    margin: 10px;
+    padding: 5px;
+}
+#addManageButton:hover {
+    background: blue;
+}
+#backManageButton {
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 1px solid #585858;
+    background: transparent;
+    color: #585858;
+}
+#backManageButton:hover {
+    background:  #585858;
+    color: white;
+}

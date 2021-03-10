@@ -1,103 +1,111 @@
-1,The Alchemist,1,6,0,100
-2,Im Bann des Magiers,1,7,0,50
-3,Die Gully Detektive,1,7,0,20
-4,Crocs Tie Dye Clog,2,23,0,50
-5,Carhartt Boot,2,36,0,50
-6,Reef Phantoms Sandal,2,5,0,100
-7,Skechers Chukka Boot,3,29,0,70
-8,Jessica Prizma Pump,3,13,0,100
-9,SPIGA Leesa,3,21,0,30
-10,Badgley Pump,3,35,0,30
-11,Adrianna Halter Gown,1,52,0,30
-12,Calvin Klein Dress,1,17,0,100
-13,Relipop Short Dresses,1,12,0,50
-14,Essentials Surplice Dress,1,14,0,50
-15,Legendary Shirt,2,28,0,100
-16,Hanes Ultimate Tee,2,12,0,200
-17, Slim-Fit Shirt,2,10,0,100
-18,Billabong Tank Top,2,8,0,100
-19,Ascender Jacket,2,16,0,50
-20,Hoodies Fleece,2,37,0,100
-21,Swarovski Earrings,3,42,0,70
-22,Betsey Heart Necklace,3,20,0,50
-23, Fleece Pocket Pant,3,20,0,120
-24,Dickies Original Pant,3,35,0,250
-25,Wrangler Short,3,29,0,300
-26,Kanu Swim Trunks,3,18,0,210
-27,Roxy Oceanside Pant,1,7,0,100
-28,Casual Loose Leg Pants,1,8,0,100
-29,Vintage Liner Socks,1,6,0,350
-30,Bamboo Mesh Socks,1,1,0,1200
-31,Samsung Galaxy White,1,727,0,250
-32,Xiaomi Redmi Global,2,199,0,150
-33,OnePlus 8 5G UW,2,625,0,50
-34,Apple AirPods Pro,2,312,0,600
-35,TOZO Wireless Earbuds,2,56,0,400
-36,Sony Stereo Headphones,2,14,0,300
-37,Vitamin C +,2,17,0,700
-38,Listerine Mouthwash,3,19,0,1000
-39,Cetaphil Cleanser,3,14,0,1000
-40,Lenovo IdeaPad 3,3,955,0,300
-41, HP Touchscreen Laptop,3,1127,0,200
-42,Acrylic Paint,3,16,0,300
-43,Maybelline Lipstick,3,22,0,600
-44,NYX Makeup Eyebrow,1,11,0,200
-45,Poreless Putty Primer,1,12,0,420
-46,Mueller Hand Blender,1,30,0,100
-47,Magic Bullet Blender,1,30,0,200
-48,Aroma Rice Cooker,1,38,0,50
-49,Buffalo Rice Cooker,1,129,0,20
-50,Pana Microwave Oven,1,109,0,65
-51,WINIA Microwave Oven,1,68,0,100
-52,PAUDIN Kitchen Knife,1,28,0,100
-53,Global Vegetable Knife,1,89,0,100
-54,BGT Cutting Board,1,20,0,60
-55,Cutting Board Set,1,17,0,80
-56,iBayam Kitchen Scissors,1,12,0,200
-57,Gibson Dinnerware Set,2,50,0,30
-58, Luxurious Dish Set,2,57,0,50
-59,Silverware Cutlery,2,30,0,120
-60,Dinosaur Cookie Cutter,2,11,0,600
-61,300 Baking Cups,2,7,0,15000
-62,Fox Marble Rolling Pine,2,19,0,200
-63,Rachael Pots and Pans,2,134,0,365
-64,Lodge Cast Iron Skillet,2,22,0,400
-65,Oster Steel Cookware,2,34,0,210
-66,Smiry Tassel Tablecloth,2,30,0,450
-67,Household Table,2,88,0,100
-68,FURINO Computer Desk,2,68,0,50
-69,Homissue Bookcase,2,65,0,60
-70,Furinno 3-Tier Bookcase,2,29,0,150
-71,Fabric Computer Chair,2,168,0,520
-72,Basics Office Chair,2,138,0,500
-73,Seiko Wood Wall Clock,2,35,0,200
-74,Modern Wall Clock,2,29,0,100
-75,Vintage Wall Clock,2,69,0,20
-76,Bostitch Desk Lamp,3,29,0,30
-77,AXTEE Desk Light Lamp,3,13,0,60
-78,Tomshine Floor Lamp,3,52,0,50
-79,Novogratz Floor Lamp,3,122,0,60
-80,Oneach Floor Lamp,3,74,0,90
-81,YOOFOSS Face Towel,3,11,0,600
-82,Coverlet Bedding Set,3,78,0,400
-83,Mady Coverlet Bedding,3,120,0,100
-84,2 Pack Bed Pillows,3,34,0,200
-85,Tempur ProHi Pillow,3,91,0,300
-86,Holmes Clip Fan,3,10,0,600
-87,Lasko Pedestal Fan,3,31,0,400
-88,AquaOasis Humidifier,3,35,0,200
-89,Laptop Backpack,3,32,0,400
-90,The NorthFace Backpack,3,58,0,300
-91,Minnie Backpack,3,124,0,150
-92,Vera Bradley Backpack,3,65,0,100
-93,Peppa Pig Backpack,3,20,0,60
-94,Minnie Backpack 2,3,94,0,60
-95,Mexican Dog Clothes,3,27,0,100
-96,The Dog Face Raincoat,3,16,0,100
-97,Anime Ninja Costume,3,20,0,100
-98,Woof Dog Hoodie,3,18,0,90
-99,Meihejia Cowboy Jacket,3,12,0,20
-100,Vehomy Banana Hat Cat,3,16,0,50
-101,Huy Bui so cool,3,0,0,1
-102,Thien Duc handsome,3,0,0,1
-103,Lam Nguyen super cute,3,0,0,1
+1,The Alchemist,1,6,0,100,1,0
+2,Im Bann des Magiers,1,7,0,50,1,0
+3,Die Gully Detektive,1,7,0,20,1,0
+4,Crocs Tie Dye Clog,2,23,0,50,1,0
+5,Carhartt Boot,2,36,0,50,1,0
+6,Reef Phantoms Sandal,2,5,0,100,1,0
+7,Skechers Chukka Boot,3,29,0,70,1,0
+8,Jessica Prizma Pump,3,13,0,100,1,0
+9,SPIGA Leesa,3,21,0,30,1,0
+10,Badgley Pump,3,35,0,30,1,0
+11,Adrianna Halter Gown,1,52,0,30,1,0
+12,Calvin Klein Dress,1,17,0,100,1,0
+13,Relipop Short Dresses,1,12,0,50,1,0
+14,Essentials Surplice Dress,1,14,0,50,1,0
+15,Legendary Shirt,2,28,0,100,1,0
+16,Hanes Ultimate Tee,2,12,0,200,1,0
+17, Slim-Fit Shirt,2,10,0,100,1,0
+18,Billabong Tank Top,2,8,0,100,1,0
+19,Ascender Jacket,2,16,0,50,1,0
+20,Hoodies Fleece,2,37,0,100,1,0
+21,Swarovski Earrings,3,42,0,70,1,0
+22,Betsey Heart Necklace,3,20,0,50,1,0
+23, Fleece Pocket Pant,3,20,0,120,1,0
+24,Dickies Original Pant,3,35,0,250,1,0
+25,Wrangler Short,3,29,0,300,1,0
+26,Kanu Swim Trunks,3,18,0,210,1,0
+27,Roxy Oceanside Pant,1,7,0,100,1,0
+28,Casual Loose Leg Pants,1,8,0,100,1,0
+29,Vintage Liner Socks,1,6,0,350,1,0
+30,Bamboo Mesh Socks,1,1,0,1200,1,0
+31,Samsung Galaxy White,1,727,0,250,1,0
+32,Xiaomi Redmi Global,2,199,0,150,1,0
+33,OnePlus 8 5G UW,2,625,0,50,1,0
+34,Apple AirPods Pro,2,312,0,600,1,0
+35,TOZO Wireless Earbuds,2,56,0,400,1,0
+36,Sony Stereo Headphones,2,14,0,300,1,0
+37,Vitamin C +,2,17,0,700,1,0
+38,Listerine Mouthwash,3,19,0,1000,1,0
+39,Cetaphil Cleanser,3,14,0,1000,1,0
+40,Lenovo IdeaPad 3,3,955,0,300,1,0
+41, HP Touchscreen Laptop,3,1127,0,200,1,0
+42,Acrylic Paint,3,16,0,300,1,0
+43,Maybelline Lipstick,3,22,0,600,1,0
+44,NYX Makeup Eyebrow,1,11,0,200,1,0
+45,Poreless Putty Primer,1,12,0,420,1,0
+46,Mueller Hand Blender,1,30,0,100,1,0
+47,Magic Bullet Blender,1,30,0,200,1,0
+48,Aroma Rice Cooker,1,38,0,50,1,0
+49,Buffalo Rice Cooker,1,129,0,20,1,0
+50,Pana Microwave Oven,1,109,0,65,1,0
+51,WINIA Microwave Oven,1,68,0,100,1,0
+52,PAUDIN Kitchen Knife,1,28,0,100,1,0
+53,Global Vegetable Knife,1,89,0,100,1,0
+54,BGT Cutting Board,1,20,0,60,1,0
+55,Cutting Board Set,1,17,0,80,1,0
+56,iBayam Kitchen Scissors,1,12,0,200,1,0
+57,Gibson Dinnerware Set,2,50,0,30,1,0
+58, Luxurious Dish Set,2,57,0,50,1,0
+59,Silverware Cutlery,2,30,0,120,1,0
+60,Dinosaur Cookie Cutter,2,11,0,600,1,0
+61,300 Baking Cups,2,7,0,15000,1,0
+62,Fox Marble Rolling Pine,2,19,0,200,1,0
+63,Rachael Pots and Pans,2,134,0,365,1,0
+64,Lodge Cast Iron Skillet,2,22,0,400,1,0
+65,Oster Steel Cookware,2,34,0,210,1,0
+66,Smiry Tassel Tablecloth,2,30,0,450,1,0
+67,Household Table,2,88,0,100,1,0
+68,FURINO Computer Desk,2,68,0,50,1,0
+69,Homissue Bookcase,2,65,0,60,1,0
+70,Furinno 3-Tier Bookcase,2,29,0,150,1,0
+71,Fabric Computer Chair,2,168,0,520,1,0
+72,Basics Office Chair,2,138,0,500,1,0
+73,Seiko Wood Wall Clock,2,35,0,200,1,0
+74,Modern Wall Clock,2,29,0,100,1,0
+75,Vintage Wall Clock,2,69,0,20,1,0
+76,Bostitch Desk Lamp,3,29,0,30,1,0
+77,AXTEE Desk Light Lamp,3,13,0,60,1,0
+78,Tomshine Floor Lamp,3,52,0,50,1,0
+79,Novogratz Floor Lamp,3,122,0,60,1,0
+80,Oneach Floor Lamp,3,74,0,90,1,0
+81,YOOFOSS Face Towel,3,11,0,600,1,0
+82,Coverlet Bedding Set,3,78,0,400,1,0
+83,Mady Coverlet Bedding,3,120,0,100,1,0
+84,2 Pack Bed Pillows,3,34,0,200,1,0
+85,Tempur ProHi Pillow,3,91,0,300,1,0
+86,Holmes Clip Fan,3,10,0,600,1,0
+87,Lasko Pedestal Fan,3,31,0,400,1,0
+88,AquaOasis Humidifier,3,35,0,200,1,0
+89,Laptop Backpack,3,32,0,400,1,0
+90,The NorthFace Backpack,3,58,0,300,1,0
+91,Minnie Backpack,3,124,0,150,1,0
+92,Vera Bradley Backpack,3,65,0,100,1,0
+93,Peppa Pig Backpack,3,20,0,60,1,0
+94,Minnie Backpack 2,3,94,0,60,1,0
+95,Mexican Dog Clothes,3,27,0,100,1,0
+96,The Dog Face Raincoat,3,16,0,100,1,0
+97,Anime Ninja Costume,3,20,0,100,1,0
+98,Woof Dog Hoodie,3,18,0,90,1,0
+99,Meihejia Cowboy Jacket,3,12,0,20,1,0
+100,Vehomy Banana Hat Cat,3,16,0,50,1,0
+101,Huy Bui so cool,3,0,0,1,1,0
+102,Thien Duc handsome,3,0,0,1,1,0
+103,Lam Nguyen super cute,3,0,0,1,1,0
+104,Bridal Wedding Dress,3,9,0,20,1,0
+105,Rubie's Pet Costume,3,16,0,100,1,0
+106,Cat Doctor Costume,3,14,0,200,1,0
+107,Dog Wig Pet Costumes,3,11,0,100,1,0
+108,Gimilife Dog Costume,3,12,0,20,1,0
+109,Reversible Pet,3,18,0,50,1,0
+110,Rubie's Costume,3,20,0,50,1,0
+,`,

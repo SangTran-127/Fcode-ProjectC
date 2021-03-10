@@ -285,6 +285,11 @@ static void s34()
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changePwdWindow));
 }
+static void s21()
+{
+    gtk_widget_hide(GTK_WIDGET(signInWindow));
+    gtk_widget_show_all(GTK_WIDGET(openWindow));
+}
 static void s912()
 {
     char* tmpStr = malloc(200);
@@ -1492,8 +1497,8 @@ static void signInActivate(GtkApplication *app, gpointer data)
     gtk_window_set_titlebar(GTK_WINDOW(signInWindow), headerbar);
 
     // create Clear button
-    wid->clearbutton = gtk_button_new_with_label("Clear");
-    gtk_actionable_set_action_name(GTK_ACTIONABLE(wid->clearbutton), "app.clear");
+    wid->clearbutton = gtk_button_new_with_label("Back");
+    g_signal_connect(G_OBJECT(wid->clearbutton), "clicked", G_CALLBACK(s21), NULL);
     context = gtk_widget_get_style_context(wid->clearbutton);
     gtk_style_context_add_class(context, "text-button");
     gtk_style_context_add_class(context, "destructive-action");

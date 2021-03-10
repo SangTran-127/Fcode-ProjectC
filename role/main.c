@@ -133,7 +133,8 @@ GtkWidget *alert;
 static char* yourFullName;
 static char* yourAddress;
 static char* yourDOB;
-GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow;
+GtkWidget *nameInforLabelShow, *addressLabelShow, *dobLabelShow, *pictureInfor;
+
 /*Payment*/
 GtkWidget *moneyTotal, *moneyDiscount, *moneyCost;
 GtkWidget *entryReciName, *entryAddress, *entryPhone;
@@ -304,12 +305,15 @@ static void s10_x()
 }
 static void s910()
 {
+    char* tmpString = malloc(200);
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, "accCovers/"); itoa(customer.id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(pictureInfor), tmpStr);
     strcpy(yourFullName, customer.firstName);
     strcat(yourFullName, " ");
     strcat(yourFullName, customer.lastName);
     strcpy(yourAddress, customer.address);
     strcpy(yourDOB, "");
-    char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
     strcat(yourDOB, tmpStr);
     strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
@@ -324,12 +328,15 @@ static void s910()
 }
 static void s310()
 {
+    char* tmpString = malloc(200);
+    char* tmpStr = malloc(200);
+    strcpy(tmpStr, "accCovers/"); itoa(customer.id, tmpString, 10); strcat(tmpStr, tmpString); strcat(tmpStr, ".png");
+    gtk_image_set_from_file(GTK_IMAGE(pictureInfor), tmpStr);
     strcpy(yourFullName, customer.firstName);
     strcat(yourFullName, " ");
     strcat(yourFullName, customer.lastName);
     strcpy(yourAddress, customer.address);
     strcpy(yourDOB, "");
-    char* tmpStr = malloc(200);
     strcpy(tmpStr, ""); itoa(customer.dob, tmpStr, 10);
     strcat(yourDOB, tmpStr);
     strcpy(tmpStr, ""); itoa(customer.mob, tmpStr, 10);
@@ -1435,7 +1442,7 @@ static void signInActivate(GtkApplication *app, gpointer data)
     gtk_window_set_title(GTK_WINDOW(signInWindow), "Sign in");
     gtk_window_set_position(GTK_WINDOW(signInWindow), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(signInWindow), FALSE);
-    gtk_window_set_default_icon_from_file("icon.png", NULL);
+    gtk_window_set_default_icon_from_file("icon.jpg", NULL);
 
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(signInWindow), vbox);
@@ -1474,9 +1481,8 @@ static void signInActivate(GtkApplication *app, gpointer data)
     // create a headerbar
     headerbar = gtk_header_bar_new();
     gtk_widget_show(headerbar);
-    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "F CODE SHOPPING");
-    gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar),
-                                "Code the Dream");
+    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "TIKU SHOPPING");
+    gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar), "public class Tiku extends Tiki");
     gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(headerbar), TRUE);
     gtk_window_set_titlebar(GTK_WINDOW(signInWindow), headerbar);
 
@@ -2105,7 +2111,7 @@ static void showProductsActivate(GtkApplication *app, gpointer data)
 /*Show Information*/
 static void showInforActivate(GtkApplication *app, gpointer data) {
     GtkWidget *containerShowInfor, *headerTiku, *mainSectionInfor, *mainInfor;
-    GtkWidget *pictureInfor, *backShowInforButton;
+    GtkWidget *backShowInforButton;
     GtkWidget *headerLabel, *nameInforLabel, *addressLabel, *dobLabel;
     GtkWidget *headerLabelShow;
     GtkWidget *welcomeChangeInforLabel, *nameShopLabel;

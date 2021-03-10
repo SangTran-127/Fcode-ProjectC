@@ -1435,7 +1435,7 @@ static void signInActivate(GtkApplication *app, gpointer data)
     gtk_window_set_title(GTK_WINDOW(signInWindow), "Sign in");
     gtk_window_set_position(GTK_WINDOW(signInWindow), GTK_WIN_POS_CENTER);
     gtk_window_set_resizable(GTK_WINDOW(signInWindow), FALSE);
-    gtk_window_set_default_icon_from_file("icon.png", NULL);
+    gtk_window_set_default_icon_from_file("icon.jpg", NULL);
 
     vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
     gtk_container_add(GTK_CONTAINER(signInWindow), vbox);
@@ -1474,9 +1474,8 @@ static void signInActivate(GtkApplication *app, gpointer data)
     // create a headerbar
     headerbar = gtk_header_bar_new();
     gtk_widget_show(headerbar);
-    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "F CODE SHOPPING");
-    gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar),
-                                "Code the Dream");
+    gtk_header_bar_set_title(GTK_HEADER_BAR(headerbar), "TIKU SHOPPING");
+    gtk_header_bar_set_subtitle(GTK_HEADER_BAR(headerbar), "public class Tiku extends Tiki");
     gtk_header_bar_set_show_close_button(GTK_HEADER_BAR(headerbar), TRUE);
     gtk_window_set_titlebar(GTK_WINDOW(signInWindow), headerbar);
 

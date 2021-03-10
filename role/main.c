@@ -142,6 +142,7 @@ GtkWidget *entryReciName, *entryAddress, *entryPhone;
 GtkWidget *addressChangeInforEntry, *firstNameChangeInforEntry, *lastNameChangeInforEntry;
 /*Products Managerment*/
 GtkWidget *helloManageLabel;
+GtkWidget *nameAddEntry, *nameChangeEntry, *priceAddEntry, *priceChangeEntry, *idChangeEntry, *idDeleteEntry, *idUpdateEntry, *percentSaleEntry;
 /***************************************************************** PROTOTYPES */
 /*Sign in*/
 int findAccount(char *inputEmail);
@@ -384,10 +385,14 @@ static void s35()
     gtk_widget_hide(GTK_WIDGET(customerMapWindow));
     gtk_widget_show_all(GTK_WIDGET(changeInformationWindow));
 }
-static void s53()
+static void s5x()
 {
     gtk_widget_hide(GTK_WIDGET(changeInformationWindow));
-    gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    if(customer.type == 1){
+        gtk_widget_show_all(GTK_WIDGET(supplierMapWindow));
+    }else if(customer.type == 0){
+        gtk_widget_show_all(GTK_WIDGET(customerMapWindow));
+    }
 }
 static void s11_8()
 {
@@ -1780,7 +1785,7 @@ static void changeInformationActivate(GtkApplication *app, gpointer user_data)
     //
     askBackChangeInforLabel = gtk_label_new("Change your mind ?");
     backChangeInforButton = gtk_button_new_with_label("Back");
-    g_signal_connect(G_OBJECT(backChangeInforButton), "clicked", G_CALLBACK(s53), NULL);
+    g_signal_connect(G_OBJECT(backChangeInforButton), "clicked", G_CALLBACK(s5x), NULL);
     gtk_widget_set_name(backChangeInforButton, "backChangeInforButton");
 
     hboxFooter = gtk_hbox_new(0, 0);
@@ -2260,7 +2265,7 @@ static void productsManagermentActivate(GtkApplication *app, gpointer data)
     //button
     GtkWidget *backManageButton, *addManageButton, *changeManageButton, *deleteManageButton, *updateManageButton;
     //entry
-    GtkWidget *nameAddEntry, *nameChangeEntry, *priceAddEntry, *priceChangeEntry, *idChangeEntry, *idDeleteEntry, *idUpdateEntry, *percentSaleEntry;
+
     //khoi tao
     helloManageLabel = gtk_label_new("Hello saler! ");
     nameAddLabel = gtk_label_new("Name of product: ");

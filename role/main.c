@@ -345,7 +345,8 @@ static void s310()
 static void s98()
 {
     numberOfItem = 0;
-    strcpy(itemListText, "You have not selected any items");
+    searchProduct("\0", customer.id, 0);
+    strcpy(itemListText, "You can not buy anymore");
     gtk_text_buffer_set_text (buffer, itemListText, -1);
     gtk_widget_hide(GTK_WIDGET(supplierMapWindow));
     gtk_widget_show_all(GTK_WIDGET(showProductsWindow));
@@ -977,10 +978,10 @@ static void previous_page(){
 }
 
 static void add1(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1000,10 +1001,10 @@ static void add1(){
     }
 }
 static void add2(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+1]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1023,10 +1024,10 @@ static void add2(){
     }
 }
 static void add3(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+2]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1046,10 +1047,10 @@ static void add3(){
     }
 }
 static void add4(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+3]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1069,10 +1070,10 @@ static void add4(){
     }
 }
 static void add5(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+4]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1092,10 +1093,10 @@ static void add5(){
     }
 }
 static void add6(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+5]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1115,10 +1116,10 @@ static void add6(){
     }
 }
 static void add7(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+6]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1138,10 +1139,10 @@ static void add7(){
     }
 }
 static void add8(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+7]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1161,10 +1162,10 @@ static void add8(){
     }
 }
 static void add9(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+8]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1184,10 +1185,10 @@ static void add9(){
     }
 }
 static void add10(){
-    if(numberOfItem == 0){
-        strcpy(itemListText, "");
-    }
-    if(numberOfItem < 9){
+    if(numberOfItem < 9 && customer.type != 1){
+        if(numberOfItem == 0){
+            strcpy(itemListText, "");
+        }
         itemList[numberOfItem] = databaseProducts[showedProducts[firstIndex+9]].id-1;
         strcat(itemListText, "------------------------\nID: ");
         char* tmpStr = malloc(200);
@@ -1253,31 +1254,36 @@ static void showProducts_delete_callback(){
 }
 
 void searchProduct(char* key, int sup, int type){
+    printf("\nkey: '%s'", key);
+    printf("\nsupplier: (%d)", sup);
     numberOfShow = 0;
     if(sup == 0 && type == 0){
-        for(int i = 0; i <= numberOfShow - 1; i++){
-            if(strstr(key, databaseProducts[i].name) != NULL){
+        for(int i = 0; i <= numberOfProducts - 1; i++){
+            if(strstr(databaseProducts[i].name, key) != NULL){
                 showedProducts[numberOfShow] = i;
                 numberOfShow++;
             }
         }
     }
     if(sup == 0 && type != 0){
-        for(int i = 0; i <= numberOfShow - 1; i++){
-            if(strstr(key, databaseProducts[i].name) != NULL && databaseProducts[i].supplier == sup){
+        for(int i = 0; i <= numberOfProducts - 1; i++){
+            if(strstr(databaseProducts[i].name, key) != NULL && databaseProducts[i].category == type){
                 showedProducts[numberOfShow] = i;
                 numberOfShow++;
             }
         }
     }
     if(sup != 0 && type == 0){
-        for(int i = 0; i <= numberOfShow - 1; i++){
-            if(strstr(key, databaseProducts[i].name) != NULL && databaseProducts[i].category == type){
+        for(int i = 0; i <= numberOfProducts - 1; i++){
+            if(strstr(databaseProducts[i].name, key) != NULL && databaseProducts[i].supplier == sup){
                 showedProducts[numberOfShow] = i;
+                printf("\nsdf");
                 numberOfShow++;
             }
+
         }
     }
+    printf("\nnumberOfShow: (%d)", numberOfShow);
     firstIndex = 0;
     change10Product();
 }
@@ -1295,149 +1301,38 @@ void calcCost(){
 }
 
 /*Products Management*/
-static void productsManagermentActivate(GtkApplication *app, gpointer data)
-{
-    //box
-    GtkWidget *section1, *section2, *section3;
-    GtkWidget *addPicture;
-    GtkWidget *headerManage, *containerMange, *mainSectionMange, *addBox, *changeBox, *updateBox;
-    GtkWidget *contentNameAdd, *contentPriceAdd, *contentIdChange, *contentNameChange, *contentPriceChange, *contentIdDelete, *contentIdUpdate, *contentPercent;
-    //label
-    GtkWidget *nameAddLabel, *nameChangeLabel, *priceAddLabel, *priceChangeLabel, *idChangeLabel, *idDeleteLabel, *idUpdateLabel, *percentSaleLabel;
-    GtkWidget *addPictureLabel, *addPictureButton;
-    //img
-    GtkWidget *img1, *img2, *img3;
-    //button
-    GtkWidget *backManageButton, *addManageButton, *changeManageButton, *deleteManageButton, *updateManageButton;
-    //entry
-    GtkWidget *nameAddEntry, *nameChangeEntry, *priceAddEntry, *priceChangeEntry, *idChangeEntry, *idDeleteEntry, *idUpdateEntry, *percentSaleEntry;
-    //khoi tao
-    helloManageLabel = gtk_label_new("Hello saler! ");
-    nameAddLabel = gtk_label_new("Name of product: ");
-    nameChangeLabel = gtk_label_new("Name of product: ");
-    priceAddLabel = gtk_label_new("Price: ");
-    priceChangeLabel = gtk_label_new("Price: ");
-    idChangeLabel = gtk_label_new("Id product: ");
-    idDeleteLabel = gtk_label_new("Id product: ");
-    idUpdateLabel = gtk_label_new("Id product: ");
-    percentSaleLabel = gtk_label_new("%sale: ");
-    addPictureLabel = gtk_label_new("Add your product image: ");
-    addPictureButton = gtk_button_new_from_icon_name("list-add", 0);
-    backManageButton = gtk_button_new_with_label("Back");
-    gtk_widget_set_name(backManageButton, "backManageButton");
-    g_signal_connect(G_OBJECT(backManageButton), "clicked", G_CALLBACK(s129), NULL);
-    addManageButton = gtk_button_new_with_label("Add");
-    gtk_widget_set_name(addManageButton, "addManageButton");
-    changeManageButton = gtk_button_new_with_label("Change");
-    gtk_widget_set_name(changeManageButton, "changeManageButton");
-    deleteManageButton = gtk_button_new_with_label("Delete");
-    gtk_widget_set_name(deleteManageButton, "deleteManageButton");
-    updateManageButton = gtk_button_new_with_label("Update");
-    gtk_widget_set_name(updateManageButton, "updateManageButton");
+int changeLineV2(int line, char* inputString){
+    FILE * fPtr;
+    FILE * fTemp;
+    char path[100];
 
-    nameAddEntry = gtk_entry_new();
-    nameChangeEntry = gtk_entry_new();
-    priceAddEntry = gtk_entry_new();
-    priceChangeEntry = gtk_entry_new();
-    idChangeEntry = gtk_entry_new();
-    idDeleteEntry = gtk_entry_new();
-    idUpdateEntry = gtk_entry_new();
-    percentSaleEntry = gtk_entry_new();
-    //
-    contentNameAdd = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentNameAdd, nameAddLabel, 0, 0, 0);
-    gtk_box_pack_end(contentNameAdd, nameAddEntry, 0, 0, 0);
-    contentPriceAdd = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentPriceAdd, priceAddLabel, 0, 0, 0);
-    //
-    contentNameChange = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentNameChange, nameChangeLabel, 0, 0, 0);
-    gtk_box_pack_end(contentNameChange, nameChangeEntry, 0, 0, 0);
-    gtk_box_pack_end(contentPriceAdd, priceAddEntry, 0, 0, 0);
-    contentIdChange = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentIdChange, idChangeLabel, 0, 0, 0);
-    gtk_box_pack_end(contentIdChange, idChangeEntry, 0, 0, 0);
-    contentPriceChange = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentPriceChange, priceChangeLabel, 0, 0, 0);
-    gtk_box_pack_end(contentPriceChange, priceChangeEntry, 0, 0, 0);
-    //
-    contentIdDelete = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentIdDelete, idDeleteLabel, 0, 0, 0);
-    gtk_box_pack_end(contentIdDelete, idDeleteEntry, 0, 0, 0);
-    contentIdUpdate = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentIdUpdate, idUpdateLabel, 0, 0, 0);
-    gtk_box_pack_end(contentIdUpdate, idUpdateEntry, 0, 0, 0);
-    contentPercent = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(contentPercent, percentSaleLabel, 0, 0, 0);
-    gtk_box_pack_end(contentPercent, percentSaleEntry, 0, 0, 0);
-    addPicture = gtk_hbox_new(0, 10);
-    gtk_box_pack_start(addPicture, addPictureLabel, 0, 0, 0);
-    gtk_box_pack_start(addPicture, addPictureButton, 0, 0, 0);
-    //
-    headerManage = gtk_hbox_new(0, 0);
-    gtk_box_pack_start(headerManage, helloManageLabel, 0, 0, 0);
-    gtk_box_pack_end(headerManage, backManageButton, 0, 0, 0);
+    char buffer[1000];
+    char newline[1000];
+    strcpy(newline, inputString);
+    int count;
+    strcpy(path, "products.csv");
+    fflush(stdin);
+    fPtr  = fopen(path, "r");
+    fTemp = fopen("inp.c", "w");
+    if (fPtr == NULL || fTemp == NULL)
+    {
+        return 0;
+    }
+    count = 0;
+    while ((fgets(buffer, 1000, fPtr)) != NULL)
+    {
+        count++;
+        if (count == line)
+            fputs(newline, fTemp);
+        else
+            fputs(buffer, fTemp);
+    }
 
-    addBox = gtk_vbox_new(0, 10);
-    gtk_box_pack_start(addBox, contentNameAdd, 0, 0, 0);
-    gtk_box_pack_start(addBox, contentPriceAdd, 0, 0, 0);
-    gtk_box_pack_start(addBox, addPicture, 0 ,0, 0);
-    gtk_box_pack_start(addBox, addManageButton, 0, 0, 0);
-    gtk_widget_set_name(addBox, "addBox");
-
-    changeBox = gtk_vbox_new(0, 10);
-    gtk_box_pack_start(changeBox, contentIdChange, 0, 0, 0);
-    gtk_box_pack_start(changeBox, contentNameChange, 0, 0, 0);
-    gtk_box_pack_start(changeBox, contentPriceChange, 0, 0, 0);
-    gtk_box_pack_start(changeBox, changeManageButton, 0, 0, 0);
-    gtk_widget_set_name(changeBox, "changeBox");
-
-    updateBox = gtk_vbox_new(0, 5);
-    gtk_box_pack_start(updateBox, contentIdDelete, 0, 0, 0);
-    gtk_box_pack_start(updateBox, deleteManageButton, 0, 0, 0);
-    gtk_box_pack_start(updateBox, contentIdUpdate, 0, 0, 0);
-    gtk_box_pack_start(updateBox, contentPercent, 0, 0, 0);
-    gtk_box_pack_end(updateBox, updateManageButton, 0, 0, 0);
-    gtk_widget_set_name(updateBox, "updateBox");
-
-    /*
-    mainSectionMange = gtk_hbox_new(1, 0);
-    gtk_box_pack_start(mainSectionMange, addBox, 0, 0, 20);
-    gtk_box_pack_start(mainSectionMange, changeBox, 0, 0, 20);
-    gtk_box_pack_end(mainSectionMange, updateBox, 0, 0, 20);
-    */
-    img1 = gtk_image_new_from_file("img1.png");
-    img2 = gtk_image_new_from_file("img2.png");
-    img3 = gtk_image_new_from_file("img3.png");
-
-    section1 = gtk_hbox_new(1, 0);
-    section2 = gtk_hbox_new(1, 0);
-    section3 = gtk_hbox_new(1, 0);
-
-    gtk_box_pack_start(section1, img1, 0, 0, 0);
-    gtk_box_pack_start(section1, addBox, 0, 0, 0);
-
-    gtk_box_pack_start(section2, changeBox, 0, 0, 0);
-    gtk_box_pack_start(section2, img2, 0, 0, 0);
-
-    gtk_box_pack_start(section3, img3, 0, 0, 0);
-    gtk_box_pack_start(section3, updateBox, 0, 0, 0);
-
-    gtk_widget_set_name(headerManage, "headerManage");
-
-    containerMange = gtk_vbox_new(0, 5);
-    gtk_widget_set_name(containerMange, "containerManage");
-
-    gtk_box_pack_start(containerMange, headerManage, 0 , 0, 0);
-    gtk_box_pack_end(containerMange, section1, 0 ,0 ,0);
-    gtk_box_pack_end(containerMange, section2, 0 ,0 ,0);
-    gtk_box_pack_end(containerMange, section3, 0 ,0 ,0);
-    productManagerWindow = gtk_application_window_new(app);
-	gtk_window_set_title(GTK_WINDOW(productManagerWindow), "Saler site");
-	gtk_window_set_default_size(GTK_WINDOW(productManagerWindow),400, 200);
-	gtk_window_set_resizable(GTK_WINDOW(productManagerWindow), FALSE);
-	gtk_window_set_position(GTK_WINDOW(productManagerWindow), GTK_WIN_POS_CENTER);
-	gtk_container_add(productManagerWindow, containerMange);
+    fclose(fPtr);
+    fclose(fTemp);
+    remove(path);
+    rename("inp.c", path);
+    return 0;
 }
 
 /****************************************************************** GUI THREAD */
@@ -2342,6 +2237,151 @@ static void paymentActivate(GtkApplication *app, gpointer data) {
     gtk_widget_set_name(entryPhone, "entryPhone");
     gtk_widget_set_name(entryReciName, "entryReciName");
     gtk_container_add(GTK_CONTAINER(paymentWindow), gridPayment);
+}
+
+static void productsManagermentActivate(GtkApplication *app, gpointer data)
+{
+    //box
+    GtkWidget *section1, *section2, *section3;
+    GtkWidget *addPicture;
+    GtkWidget *headerManage, *containerMange, *mainSectionMange, *addBox, *changeBox, *updateBox;
+    GtkWidget *contentNameAdd, *contentPriceAdd, *contentIdChange, *contentNameChange, *contentPriceChange, *contentIdDelete, *contentIdUpdate, *contentPercent;
+    //label
+    GtkWidget *nameAddLabel, *nameChangeLabel, *priceAddLabel, *priceChangeLabel, *idChangeLabel, *idDeleteLabel, *idUpdateLabel, *percentSaleLabel;
+    GtkWidget *addPictureLabel, *addPictureButton;
+    //img
+    GtkWidget *img1, *img2, *img3;
+    //button
+    GtkWidget *backManageButton, *addManageButton, *changeManageButton, *deleteManageButton, *updateManageButton;
+    //entry
+    GtkWidget *nameAddEntry, *nameChangeEntry, *priceAddEntry, *priceChangeEntry, *idChangeEntry, *idDeleteEntry, *idUpdateEntry, *percentSaleEntry;
+    //khoi tao
+    helloManageLabel = gtk_label_new("Hello saler! ");
+    nameAddLabel = gtk_label_new("Name of product: ");
+    nameChangeLabel = gtk_label_new("Name of product: ");
+    priceAddLabel = gtk_label_new("Price: ");
+    priceChangeLabel = gtk_label_new("Price: ");
+    idChangeLabel = gtk_label_new("Id product: ");
+    idDeleteLabel = gtk_label_new("Id product: ");
+    idUpdateLabel = gtk_label_new("Id product: ");
+    percentSaleLabel = gtk_label_new("%sale: ");
+    addPictureLabel = gtk_label_new("Add your product image: ");
+    addPictureButton = gtk_button_new_from_icon_name("list-add", 0);
+    backManageButton = gtk_button_new_with_label("Back");
+    gtk_widget_set_name(backManageButton, "backManageButton");
+    g_signal_connect(G_OBJECT(backManageButton), "clicked", G_CALLBACK(s129), NULL);
+    addManageButton = gtk_button_new_with_label("Add");
+    gtk_widget_set_name(addManageButton, "addManageButton");
+    changeManageButton = gtk_button_new_with_label("Change");
+    gtk_widget_set_name(changeManageButton, "changeManageButton");
+    deleteManageButton = gtk_button_new_with_label("Delete");
+    gtk_widget_set_name(deleteManageButton, "deleteManageButton");
+    updateManageButton = gtk_button_new_with_label("Update");
+    gtk_widget_set_name(updateManageButton, "updateManageButton");
+
+    nameAddEntry = gtk_entry_new();
+    nameChangeEntry = gtk_entry_new();
+    priceAddEntry = gtk_entry_new();
+    priceChangeEntry = gtk_entry_new();
+    idChangeEntry = gtk_entry_new();
+    idDeleteEntry = gtk_entry_new();
+    idUpdateEntry = gtk_entry_new();
+    percentSaleEntry = gtk_entry_new();
+    //
+    contentNameAdd = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentNameAdd, nameAddLabel, 0, 0, 0);
+    gtk_box_pack_end(contentNameAdd, nameAddEntry, 0, 0, 0);
+    contentPriceAdd = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPriceAdd, priceAddLabel, 0, 0, 0);
+    //
+    contentNameChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentNameChange, nameChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentNameChange, nameChangeEntry, 0, 0, 0);
+    gtk_box_pack_end(contentPriceAdd, priceAddEntry, 0, 0, 0);
+    contentIdChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdChange, idChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdChange, idChangeEntry, 0, 0, 0);
+    contentPriceChange = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPriceChange, priceChangeLabel, 0, 0, 0);
+    gtk_box_pack_end(contentPriceChange, priceChangeEntry, 0, 0, 0);
+    //
+    contentIdDelete = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdDelete, idDeleteLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdDelete, idDeleteEntry, 0, 0, 0);
+    contentIdUpdate = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentIdUpdate, idUpdateLabel, 0, 0, 0);
+    gtk_box_pack_end(contentIdUpdate, idUpdateEntry, 0, 0, 0);
+    contentPercent = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(contentPercent, percentSaleLabel, 0, 0, 0);
+    gtk_box_pack_end(contentPercent, percentSaleEntry, 0, 0, 0);
+    addPicture = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(addPicture, addPictureLabel, 0, 0, 0);
+    gtk_box_pack_start(addPicture, addPictureButton, 0, 0, 0);
+    //
+    headerManage = gtk_hbox_new(0, 0);
+    gtk_box_pack_start(headerManage, helloManageLabel, 0, 0, 0);
+    gtk_box_pack_end(headerManage, backManageButton, 0, 0, 0);
+
+    addBox = gtk_vbox_new(0, 10);
+    gtk_box_pack_start(addBox, contentNameAdd, 0, 0, 0);
+    gtk_box_pack_start(addBox, contentPriceAdd, 0, 0, 0);
+    gtk_box_pack_start(addBox, addPicture, 0 ,0, 0);
+    gtk_box_pack_start(addBox, addManageButton, 0, 0, 0);
+    gtk_widget_set_name(addBox, "addBox");
+
+    changeBox = gtk_vbox_new(0, 10);
+    gtk_box_pack_start(changeBox, contentIdChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, contentNameChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, contentPriceChange, 0, 0, 0);
+    gtk_box_pack_start(changeBox, changeManageButton, 0, 0, 0);
+    gtk_widget_set_name(changeBox, "changeBox");
+
+    updateBox = gtk_vbox_new(0, 5);
+    gtk_box_pack_start(updateBox, contentIdDelete, 0, 0, 0);
+    gtk_box_pack_start(updateBox, deleteManageButton, 0, 0, 0);
+    gtk_box_pack_start(updateBox, contentIdUpdate, 0, 0, 0);
+    gtk_box_pack_start(updateBox, contentPercent, 0, 0, 0);
+    gtk_box_pack_end(updateBox, updateManageButton, 0, 0, 0);
+    gtk_widget_set_name(updateBox, "updateBox");
+
+    /*
+    mainSectionMange = gtk_hbox_new(1, 0);
+    gtk_box_pack_start(mainSectionMange, addBox, 0, 0, 20);
+    gtk_box_pack_start(mainSectionMange, changeBox, 0, 0, 20);
+    gtk_box_pack_end(mainSectionMange, updateBox, 0, 0, 20);
+    */
+    img1 = gtk_image_new_from_file("img1.png");
+    img2 = gtk_image_new_from_file("img2.png");
+    img3 = gtk_image_new_from_file("img3.png");
+
+    section1 = gtk_hbox_new(1, 0);
+    section2 = gtk_hbox_new(1, 0);
+    section3 = gtk_hbox_new(1, 0);
+
+    gtk_box_pack_start(section1, img1, 0, 0, 0);
+    gtk_box_pack_start(section1, addBox, 0, 0, 0);
+
+    gtk_box_pack_start(section2, changeBox, 0, 0, 0);
+    gtk_box_pack_start(section2, img2, 0, 0, 0);
+
+    gtk_box_pack_start(section3, img3, 0, 0, 0);
+    gtk_box_pack_start(section3, updateBox, 0, 0, 0);
+
+    gtk_widget_set_name(headerManage, "headerManage");
+
+    containerMange = gtk_vbox_new(0, 5);
+    gtk_widget_set_name(containerMange, "containerManage");
+
+    gtk_box_pack_start(containerMange, headerManage, 0 , 0, 0);
+    gtk_box_pack_end(containerMange, section1, 0 ,0 ,0);
+    gtk_box_pack_end(containerMange, section2, 0 ,0 ,0);
+    gtk_box_pack_end(containerMange, section3, 0 ,0 ,0);
+    productManagerWindow = gtk_application_window_new(app);
+	gtk_window_set_title(GTK_WINDOW(productManagerWindow), "Saler site");
+	gtk_window_set_default_size(GTK_WINDOW(productManagerWindow),400, 200);
+	gtk_window_set_resizable(GTK_WINDOW(productManagerWindow), FALSE);
+	gtk_window_set_position(GTK_WINDOW(productManagerWindow), GTK_WIN_POS_CENTER);
+	gtk_container_add(productManagerWindow, containerMange);
 }
 /****************************************************************** CALLBACKS */
 int main(int argc, char **argv)

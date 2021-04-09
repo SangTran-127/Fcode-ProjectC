@@ -45,23 +45,49 @@ static void activate(GtkApplication *app, gpointer data)
 
     GtkWidget *buttonAdd1, *buttonAdd2, *buttonAdd3, *buttonAdd4, *buttonAdd5, *buttonAdd6, *buttonAdd7, *buttonAdd8, *buttonAdd9, *buttonAdd10;
 
-    GtkWidget *nextPage, *previousPage;
+    GtkWidget *buttonComboSearch, *buttonComboSort, *sortByLabel, *sortBox;
+
+    GtkWidget *nextPage, *previousPage, *scrolled_bar;
     //
+
+    scrolled_bar = gtk_scrolled_window_new(NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_bar),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+    //gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 50);
+    //gtk_scrolled_window_set_min_content_width(scrolled_bar, 400);
+    //gtk_scrolled_window_set_min_content_height(scrolled_bar, 600);
+    sortByLabel = gtk_label_new("Sort by: ");
+    buttonComboSort = gtk_combo_box_new();
+    gtk_combo_box_text_append_text(buttonComboSort, "A");
+    gtk_combo_box_text_append_text(buttonComboSort, "B");
+    gtk_combo_box_text_append_text(buttonComboSort, "C");
+    gtk_combo_box_text_append_text(buttonComboSort, "D");
+
+    sortBox = gtk_hbox_new(0, 10);
+    gtk_box_pack_start(sortBox, sortByLabel, 0, 0, 0);
+    gtk_box_pack_start(sortBox, buttonComboSort, 0, 0, 0);
+
     textView = gtk_text_view_new();
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textView));
     gtk_text_view_set_wrap_mode(textView, GTK_WRAP_WORD);
     gtk_text_buffer_set_text (buffer, "                1                  Book1              $0", -1);
     gtk_text_view_set_editable(textView, FALSE);
+    gtk_container_add(GTK_CONTAINER(scrolled_bar), textView);
+    gtk_container_set_border_width (GTK_CONTAINER (scrolled_bar), 5);
     //
     searchLabel = gtk_label_new("Search product: ");
     searchButton = gtk_button_new_from_icon_name("system-search", 1);
     searchProducts = gtk_search_entry_new();
-    gtk_widget_set_name(searchProducts, "search");
+    gtk_widget_set_name(buttonComboSearch, "search");
+
 
     menuLabel = gtk_label_new("ID               NAME              PRICE");
     gtk_widget_set_name(menuLabel, "menuLabel");
     nextPage = gtk_button_new_with_label(">>>>>");
     previousPage = gtk_button_new_with_label("<<<<<");
+
+
 
     gridButton = gtk_grid_new();
     confirmDelButton = gtk_button_new_with_label("Delete");
@@ -81,7 +107,7 @@ static void activate(GtkApplication *app, gpointer data)
     gtk_widget_set_name(textView, "textView");
     leftSidevBox = gtk_vbox_new(0, 0);
     gtk_box_pack_start(leftSidevBox, menuLabel, 0, 0, 0);
-    gtk_box_pack_start(leftSidevBox, textView, TRUE, TRUE, 20);
+    gtk_box_pack_start(leftSidevBox, scrolled_bar, TRUE, TRUE, 20);
     gtk_box_pack_end(leftSidevBox, gridButton, 0, 0, 0);
 
     gtk_widget_set_name(leftSidevBox, "leftSidevBox");
@@ -252,9 +278,12 @@ static void activate(GtkApplication *app, gpointer data)
     hboxSearch = gtk_hbox_new(0, 0);
     gtk_box_pack_start(hboxSearch, searchLabel, 0, 0, 0);
     gtk_box_pack_start(hboxSearch, searchProducts, 0, 0, 0);
+    //gtk_box_pack_start(hboxSearch, buttonComboSearch, 0, 0, 0);
     gtk_box_pack_start(hboxSearch, searchButton, 0, 0, 0);
+    gtk_box_pack_start(hboxSearch, sortBox, 0, 0, 0);
     gtk_box_pack_end(hboxSearch, nextPage, 0, 0, 0);
     gtk_box_pack_end(hboxSearch, previousPage, 0, 0, 0);
+
 
     vboxContain = gtk_vbox_new(0, 0);
     gtk_box_pack_start(vboxContain, hboxSearch, 0, 0, 0);
